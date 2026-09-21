@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import { SiteImage as Image } from './components/site-image';
 import Link from 'next/link';
 import { IMAGES } from './lib/images';
 import { portalPath } from './lib/urls';

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { SiteImage as Image } from './site-image';
 import Link from 'next/link';
 import { portalPath } from '../lib/urls';
 

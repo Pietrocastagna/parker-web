@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+import { SiteImage as Image } from '../components/site-image';
 import { SiteHeader, SiteFooter, CookieBar } from '../components/site-chrome';
 import { PageHero, CtaBand, RelatedLinks } from '../components/page-chrome';
 import { PACKAGES } from '../lib/content';

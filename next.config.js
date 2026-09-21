@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const repo = 'parker-web';
 const isGhPages = process.env.GITHUB_PAGES === '1';
+const basePath = isGhPages ? `/${repo}` : '';
 
 const nextConfig = {
   reactStrictMode: true,
@@ -9,10 +10,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || basePath,
+  },
   ...(isGhPages
     ? {
-        basePath: `/${repo}`,
-        assetPrefix: `/${repo}/`,
+        basePath,
+        assetPrefix: `${basePath}/`,
       }
     : {}),
 };
