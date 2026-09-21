@@ -9,14 +9,19 @@ Sito pubblico Parker (vetrina). Da qui si entra nel portale (utente o admin).
 - Strisce blu non incluse · niente prelievo in banca · niente garage/lavaggio
 - Fuori zona → lista d’attesa
 
+## URL
+
+- Produzione (GitHub Pages): https://pietrocastagna.github.io/parker-web/
+- Portale: https://parker-portal.vercel.app
+- API: https://parker-api-jhmz.onrender.com/api
+
+(Per Vercel: importa questo repo, env come in `.env.example`, senza `GITHUB_PAGES`.)
+
 ## Env
 
 ```bash
 cp .env.example .env.local
 ```
-
-- `NEXT_PUBLIC_PORTAL_URL` → https://parker-portal.vercel.app
-- `NEXT_PUBLIC_API_BASE_URL` → https://parker-api-jhmz.onrender.com/api
 
 ## Dev
 
@@ -24,5 +29,3 @@ cp .env.example .env.local
 npm install
 npm run dev
 ```
-
-Apri http://localhost:3002

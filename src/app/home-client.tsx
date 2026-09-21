@@ -171,7 +171,7 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden bg-ink px-5 pb-20 pt-32 text-center sm:pt-40">
-        <Image src={IMAGES.hero} alt="" fill priority className="object-cover" sizes="100vw" />
+        <Image src={IMAGES.hero} alt="" fill priority unoptimized className="object-cover" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/55 to-black/35" />
         <div className="relative z-10 mx-auto max-w-3xl">
           <span className="mb-4 inline-block rounded-full border border-teal/40 bg-teal/15 px-4 py-1.5 text-xs font-semibold tracking-wide text-teal backdrop-blur-sm">
