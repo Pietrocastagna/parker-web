@@ -804,16 +804,16 @@ export default function HomePage() {
       </section>
 
       {/* Ranking teaser + foto */}
-      <section className="relative overflow-hidden px-5 py-20 sm:py-24">
+      <section className="relative overflow-hidden bg-ink px-5 py-20 sm:py-24">
         <Image
           src={IMAGES.skyline}
           alt=""
           fill
           unoptimized
-          className="object-cover"
+          className="object-cover opacity-40"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-ink/88" />
+        <div className="absolute inset-0 bg-ink/80" />
         <div className="relative mx-auto max-w-6xl text-white">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Ranking</p>
           <h2 className="mt-3 max-w-2xl font-display text-3xl font-bold sm:text-4xl">
