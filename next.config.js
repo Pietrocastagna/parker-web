@@ -5,6 +5,7 @@ const isGhPages = process.env.GITHUB_PAGES === '1';
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },
