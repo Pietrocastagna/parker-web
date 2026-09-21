@@ -18,7 +18,7 @@ export default function AboutPage() {
         eyebrow="About"
         title="Cos’è Parker e perché esiste"
         lead="Parker collega chi sta liberando un posto auto e chi lo sta cercando — nello stesso momento. Non è un garage e non è un parcometro: è uno scambio tra persone, con credito sul portale e mappa in app."
-        image={IMAGES.italyStreet}
+        image={IMAGES.streetParked}
       />
 
       <section className="px-5 py-16 sm:py-20">
@@ -117,7 +117,7 @@ export default function AboutPage() {
             </article>
           </div>
           <div className="mt-10 grid gap-3 sm:grid-cols-3">
-            {[IMAGES.rainStreet, IMAGES.evening, IMAGES.carsRow].map((src, i) => (
+            {[IMAGES.rainStreet, IMAGES.night, IMAGES.carsRow].map((src, i) => (
               <div key={i} className="overflow-hidden rounded-2xl">
                 <Image
                   src={src}

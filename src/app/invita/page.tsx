@@ -131,7 +131,7 @@ export default function InvitaPage() {
           <div className="mt-10 overflow-hidden rounded-2xl">
             <Image
               src={IMAGES.italyStreet}
-              alt="Strada in Italia"
+              alt="Strada urbana europea"
               width={1600}
               height={700}
               unoptimized

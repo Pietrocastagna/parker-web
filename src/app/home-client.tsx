@@ -86,22 +86,22 @@ const packages = [
 
 const situations = [
   {
-    img: IMAGES.morning,
+    img: IMAGES.keys,
     title: 'Mattina in uscita',
     body: 'Esci di casa o dall’ufficio: metti in vendita il posto mentre parti. Qualcuno in arrivo nella tua zona lo vede sulla mappa e può prenotarlo subito.',
   },
   {
-    img: IMAGES.evening,
+    img: IMAGES.night,
     title: 'Sera di rientro',
     body: 'Torni tardi, traffico, poche luci libere. Apri Parker, vedi i listing vicini con prezzo e distanza, prenoti e navighi al punto invece di girare a vuoto.',
   },
   {
-    img: IMAGES.italyStreet,
+    img: IMAGES.streetParked,
     title: 'Centro e strade strette',
     body: 'Nei centri storici e nelle zone a densità alta ogni posto conta. Lo scambio tra chi esce e chi arriva riduce i giri negli stessi isolati.',
   },
   {
-    img: IMAGES.crosswalk,
+    img: IMAGES.train,
     title: 'Appuntamento o stazione',
     body: 'Hai un orario: ospedale, treno, riunione. Un posto prenotato a prezzo fisso vale più di dieci minuti di ronda e di stress.',
   },
@@ -914,8 +914,8 @@ export default function HomePage() {
       <section className="px-5 py-16">
         <div className="mx-auto grid max-w-6xl gap-3 sm:grid-cols-3">
           {[
-            [IMAGES.city, 'Skyline urbano'],
-            [IMAGES.night, 'Città di sera'],
+            [IMAGES.streetParked, 'Auto in sosta'],
+            [IMAGES.parkingLot, 'Parcheggio'],
             [IMAGES.street, 'Guida in città'],
           ].map(([src, alt]) => (
             <div key={alt} className="overflow-hidden rounded-2xl">

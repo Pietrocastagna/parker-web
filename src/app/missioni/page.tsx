@@ -47,8 +47,8 @@ export default function MissioniPage() {
             </div>
             <div className="overflow-hidden rounded-2xl">
               <Image
-                src={IMAGES.crosswalk}
-                alt="Città e attraversamento"
+                src={IMAGES.streetParked}
+                alt="Auto in sosta in strada"
                 width={1200}
                 height={900}
                 unoptimized
@@ -132,8 +132,8 @@ export default function MissioniPage() {
           </div>
           <div className="overflow-hidden rounded-2xl">
             <Image
-              src={IMAGES.morning}
-              alt="Città al mattino"
+              src={IMAGES.parkingLot}
+              alt="Parcheggio"
               width={1200}
               height={800}
               unoptimized
