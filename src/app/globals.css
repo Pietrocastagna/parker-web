@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,7 +8,7 @@
   --ink: #0b1220;
   --teal: #00c9a7;
   --mark: #f5c518;
-  --paper: #f4f6f8;
+  --paper: #f7f8fa;
   --muted: #5a6570;
 }
 
@@ -32,4 +32,5 @@ h1,
 h2,
 h3 {
   font-family: Sora, Manrope, system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }

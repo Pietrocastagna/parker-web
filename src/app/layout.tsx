@@ -4,11 +4,11 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Parker — Smetti di girare. Qualcuno sta uscendo ora.',
   description:
-    'Scambio di parcheggi in tempo reale a Ladispoli. Da €1,20. Pacchetto Prova €4,99 sul portale. Le strisce blu non sono incluse.',
+    'Scambio di parcheggi in tempo reale in tutta Italia. Da €1,20. Pacchetto Prova €4,99 sul portale. Credito protetto Stripe.',
   openGraph: {
-    title: 'Parker — Ora a Ladispoli',
+    title: 'Parker — Scambia parcheggi in Italia',
     description:
-      'Smetti di girare. Qualcuno sta uscendo ora. Scambi da €1,20. Credito sul portale web.',
+      'Smetti di girare. Qualcuno sta uscendo ora. Da €1,20. Credito sul portale web.',
     type: 'website',
     locale: 'it_IT',
     siteName: 'Parker',
