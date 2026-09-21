@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { portalPath, siteHref } from '../lib/urls';
 
 const nav = [
-  { href: '/#problema', label: 'Il problema' },
-  { href: '/#come-funziona', label: 'Come funziona' },
-  { href: '/#prezzi', label: 'Prezzi' },
-  { href: '/#missioni', label: 'Missioni' },
+  { href: '/about', label: 'About' },
+  { href: '/come-funziona', label: 'Come funziona' },
+  { href: '/prezzi', label: 'Prezzi' },
+  { href: '/missioni', label: 'Missioni' },
   { href: '/ranking', label: 'Ranking' },
-  { href: '/#invita', label: 'Invita un amico' },
+  { href: '/invita', label: 'Invita' },
 ] as const;
 
 export function SiteHeader({ dark = false }: { dark?: boolean }) {
@@ -41,18 +41,12 @@ export function SiteHeader({ dark = false }: { dark?: boolean }) {
           <span className="text-teal">P</span>
           <span className={solid ? 'text-ink' : 'text-white'}>arker</span>
         </Link>
-        <nav className="hidden items-center gap-4 text-[12.5px] font-medium xl:flex">
-          {nav.map((item) =>
-            item.href.includes('#') ? (
-              <a key={item.href} href={siteHref(item.href)} className={linkCls}>
-                {item.label}
-              </a>
-            ) : (
-              <Link key={item.href} href={item.href} className={linkCls}>
-                {item.label}
-              </Link>
-            ),
-          )}
+        <nav className="hidden items-center gap-4 text-[12.5px] font-medium lg:flex">
+          {nav.map((item) => (
+            <Link key={item.href} href={item.href} className={linkCls}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
         <div className="flex shrink-0 items-center gap-2">
           <a
@@ -91,21 +85,24 @@ export function SiteFooter() {
         <div>
           <p className="mb-3 text-xs font-bold uppercase tracking-wider text-white/35">Prodotto</p>
           <div className="flex flex-col gap-2">
-            <a href={siteHref('/#come-funziona')} className="hover:text-white">
+            <Link href="/about" className="hover:text-white">
+              About
+            </Link>
+            <Link href="/come-funziona" className="hover:text-white">
               Come funziona
-            </a>
-            <a href={siteHref('/#prezzi')} className="hover:text-white">
-              Pacchetti
-            </a>
-            <a href={siteHref('/#missioni')} className="hover:text-white">
+            </Link>
+            <Link href="/prezzi" className="hover:text-white">
+              Prezzi
+            </Link>
+            <Link href="/missioni" className="hover:text-white">
               Missioni
-            </a>
+            </Link>
             <Link href="/ranking" className="hover:text-white">
               Ranking
             </Link>
-            <a href={siteHref('/#invita')} className="hover:text-white">
+            <Link href="/invita" className="hover:text-white">
               Invita un amico
-            </a>
+            </Link>
           </div>
         </div>
         <div>

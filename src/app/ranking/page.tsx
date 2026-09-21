@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SiteHeader, SiteFooter, CookieBar } from '../components/site-chrome';
+import { CtaBand, RelatedLinks } from '../components/page-chrome';
 import { portalPath } from '../lib/urls';
 import { IMAGES } from '../lib/images';
 
@@ -253,6 +254,15 @@ export default function RankingPage() {
         </div>
       </section>
 
+      <RelatedLinks
+        items={[
+          { href: '/missioni', label: 'Missioni', desc: 'Premi solo-swap, separati dal ranking.' },
+          { href: '/come-funziona', label: 'Come funziona', desc: 'Come gli scambi influenzano le stelle.' },
+          { href: '/invita', label: 'Invita un amico', desc: 'Gli inviti non dipendono dal ranking.' },
+        ]}
+      />
+
+      <CtaBand />
       <SiteFooter />
       <CookieBar />
     </main>

@@ -371,6 +371,12 @@ export default function HomePage() {
                 un prezzo fisso, con navigazione fino al punto. Meno giri a vuoto. Più scambio tra
                 persone.
               </p>
+              <Link
+                href="/about"
+                className="inline-flex pt-2 text-sm font-bold text-teal hover:underline"
+              >
+                Leggi tutta la pagina About →
+              </Link>
             </div>
             <div className="grid gap-4">
               <div className="overflow-hidden rounded-2xl">
@@ -548,6 +554,11 @@ export default function HomePage() {
                 </ol>
               </div>
             </article>
+          </div>
+          <div className="mt-10">
+            <Link href="/come-funziona" className="text-sm font-bold text-teal hover:underline">
+              Apri la guida completa Come funziona →
+            </Link>
           </div>
         </div>
       </section>
@@ -729,6 +740,12 @@ export default function HomePage() {
           </div>
 
           <div className="mt-8 text-center">
+            <Link
+              href="/prezzi"
+              className="mr-4 text-sm font-bold text-teal hover:underline"
+            >
+              Pagina Prezzi completa →
+            </Link>
             <a
               href={portalPath('/signup')}
               className="inline-flex rounded-full bg-teal px-7 py-3.5 text-sm font-bold text-ink hover:bg-[#00b896]"
@@ -758,7 +775,10 @@ export default function HomePage() {
                 Le trovi sul portale (e nel percorso account in app). Al completamento il premio
                 viene erogato in automatico quando le condizioni sono soddisfatte. Per i venditori
                 più attivi esistono anche traguardi più lunghi (trimestrali / annuali) con premi
-                dedicati: li vedi nel dettaglio missioni quando sei loggato.
+                dedicati: li vedi nel dettaglio missioni quando sei loggato.{' '}
+                <Link href="/missioni" className="font-bold text-teal hover:underline">
+                  Guida Missioni →
+                </Link>
               </p>
             </div>
             <div className="overflow-hidden rounded-2xl">
@@ -880,6 +900,12 @@ export default function HomePage() {
             >
               Registrati e apri Invita amici
             </a>
+            <Link
+              href="/invita"
+              className="mt-4 inline-flex text-sm font-bold text-teal hover:underline sm:mt-6 sm:ml-4"
+            >
+              Pagina Invita completa →
+            </Link>
           </div>
         </div>
       </section>
