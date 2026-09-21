@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { portalPath, siteHref } from '../lib/urls';
 
 const nav = [
+  { href: '/app', label: 'Scarica app' },
   { href: '/about', label: 'About' },
   { href: '/come-funziona', label: 'Come funziona' },
   { href: '/prezzi', label: 'Prezzi' },
@@ -85,6 +86,9 @@ export function SiteFooter() {
         <div>
           <p className="mb-3 text-xs font-bold uppercase tracking-wider text-white/35">Prodotto</p>
           <div className="flex flex-col gap-2">
+            <Link href="/app" className="hover:text-white">
+              Scarica app
+            </Link>
             <Link href="/about" className="hover:text-white">
               About
             </Link>

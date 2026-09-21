@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { SiteImage as Image } from './components/site-image';
 import Link from 'next/link';
 import { IMAGES } from './lib/images';
-import { portalPath } from './lib/urls';
+import { portalPath, siteHref } from './lib/urls';
 import { AppMapPreview } from './components/app-map-preview';
+import { StoreBadges } from './components/store-badges';
 import { SiteHeader, SiteFooter, CookieBar } from './components/site-chrome';
 import {
   ParkingSpotIllustration,
@@ -195,7 +196,15 @@ const referralSteps = [
 const faqs = [
   {
     q: 'Cosa fa Parker oggi, in concreto?',
-    a: 'Collega chi sta liberando un posto auto e chi lo sta cercando. Tu compri credito sul portale web con un pacchetto, usi la mappa in app per cercare o vendere, scambi a prezzo fisso. In questa fase non ci sono altri servizi oltre allo scambio tra automobilisti.',
+    a: 'L’app collega chi sta liberando un posto e chi lo cerca: mappa, prenota, naviga. Sul portale crei l’account (stesso dell’app) e compri i pacchetti di credito. In questa fase non ci sono altri servizi oltre allo scambio tra automobilisti.',
+  },
+  {
+    q: 'La registrazione vale per app e portale?',
+    a: 'Sì. Un solo account: stesse email e password. Ti registri da app o da portale; poi accedi su entrambi. Lo scambio è in app; i pacchetti di credito si comprano sul portale.',
+  },
+  {
+    q: 'Dove scarico l’app?',
+    a: 'Dalla pagina Scarica app del sito, o cercando Parker su App Store e Google Play (package Android com.swappark.parker). Appena le schede store sono pubbliche i pulsanti puntano ai link ufficiali.',
   },
   {
     q: 'Quanto costa uno scambio?',
@@ -283,26 +292,27 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-xl text-[1.08rem] leading-relaxed text-white/75">
               Parker mette in contatto chi sta lasciando un parcheggio e chi lo sta cercando —
-              nello stesso momento. Prezzo fisso sullo scambio, pacchetti di credito sul portale,
-              navigazione fino al punto. Una cosa sola, fatta bene.
+              nello stesso momento. Lo scambio avviene in <strong className="text-white">app</strong>
+              : mappa, prenota, naviga. Il portale serve per account e credito. Stesso login
+              ovunque.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <a
-                href={portalPath('/signup')}
+                href={siteHref('/app')}
                 className="inline-flex items-center justify-center rounded-full bg-teal px-7 py-3.5 text-sm font-bold text-ink hover:bg-[#00b896]"
               >
-                Registrati gratis
+                Scarica l’app
               </a>
               <a
-                href="#problema"
+                href={portalPath('/signup')}
                 className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
               >
-                Perché esiste Parker
+                Crea account
               </a>
             </div>
-            <p className="mt-8 max-w-lg text-xs leading-relaxed text-white/45">
-              Oggi: scambio tra automobilisti, wallet, ranking, missioni, invita un amico. Niente
-              altro inventato “in arrivo” su questa pagina.
+            <StoreBadges className="mt-6" variant="dark" />
+            <p className="mt-6 max-w-lg text-xs leading-relaxed text-white/45">
+              App = cuore dello scambio. Portale = pacchetti e gestione. Un solo account.
             </p>
           </div>
           <div className="hidden justify-self-end lg:block">
@@ -315,10 +325,10 @@ export default function HomePage() {
       <section className="border-b border-ink/8 bg-white">
         <div className="mx-auto grid max-w-6xl gap-0 sm:grid-cols-4">
           {[
-            ['Registrati', 'Crea l’account sul portale'],
-            ['Scegli un pacchetto', 'Prova, Carnet o piano'],
-            ['Apri la mappa', 'Cerca o vendi un posto'],
-            ['Scambia', 'Prezzo fisso, arrivi, chiudi'],
+            ['Scarica l’app', 'Mappa e scambi sul telefono'],
+            ['Crea account', 'Stesso login su app e portale'],
+            ['Ricarica sul portale', 'Prova, Carnet o piano'],
+            ['Scambia in app', 'Cerca o vendi, naviga, chiudi'],
           ].map(([t, d], i) => (
             <div
               key={t}
