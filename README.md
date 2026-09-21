@@ -1,7 +1,28 @@
 # parker-web
 
-Sito pubblico Parker (landing). Oggi la pagina è quella già in produzione nel portale (`/`). Qui la isoliamo per pubblicarla da sola su Vercel.
+Sito pubblico Parker (vetrina). Da qui si entra nel portale (utente o admin).
 
-Il prodotto **SITEBUILD** (builder siti verticali) è un altro repo, già esistente: https://github.com/Pietrocastagna/site-build — non va mescolato con Parker.
+## Messaggio
 
-Prossimo passo: far girare questa landing come sito autonomo (waitlist Ladispoli, come funziona, prezzi).
+- Solo scambio tra automobilisti, **ora a Ladispoli**
+- Swap da €1,20 · Prova €4,99 sul portale
+- Strisce blu non incluse · niente prelievo in banca · niente garage/lavaggio
+- Fuori zona → lista d’attesa
+
+## Env
+
+```bash
+cp .env.example .env.local
+```
+
+- `NEXT_PUBLIC_PORTAL_URL` → https://parker-portal.vercel.app
+- `NEXT_PUBLIC_API_BASE_URL` → https://parker-api-jhmz.onrender.com/api
+
+## Dev
+
+```bash
+npm install
+npm run dev
+```
+
+Apri http://localhost:3002
