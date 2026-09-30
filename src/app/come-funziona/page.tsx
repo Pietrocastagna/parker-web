@@ -1,197 +1,149 @@
 import type { Metadata } from 'next';
-import { SiteImage as Image } from '../components/site-image';
-import { SiteHeader, SiteFooter, CookieBar } from '../components/site-chrome';
-import { PageHero, CtaBand, RelatedLinks } from '../components/page-chrome';
-import { AppMapPreview } from '../components/app-map-preview';
+import Link from 'next/link';
+import { SiteHeader } from '../components/site-header';
+import { SiteFooter, CookieBanner } from '../components/site-footer';
 import {
-  ParkingSpotIllustration,
-  SwapSignalIllustration,
-  SwapExchangeIllustration,
-} from '../components/illustrations';
-import { IMAGES } from '../lib/images';
+  AssetSlot,
+  CTASection,
+  CreateAccountButton,
+  DownloadAppButton,
+  PageHero,
+  RelatedLinks,
+  SectionHeading,
+  StepCard,
+} from '../components/ui';
+import { AppMockup } from '../components/app-mockup';
 
 export const metadata: Metadata = {
-  title: 'Come funziona — Parker',
+  title: 'Come funziona ParkHub — Cerca, prenota, raggiungi',
   description:
-    'Come funziona Parker passo dopo passo: vendere, comprare, credito sul portale, mappa in app, navigazione e chiusura scambio.',
+    'Dal “sto uscendo” al posto prenotato. Prezzi fissi, navigazione e credito ParkHub. Flussi venditore e acquirente.',
 };
 
 export default function ComeFunzionaPage() {
   return (
-    <main className="min-h-screen bg-[#F5F6F8] text-ink">
+    <main className="min-h-screen bg-paper text-ink">
       <SiteHeader dark />
       <PageHero
-        eyebrow="Come funziona"
-        title="Dal credito allo scambio, senza aste"
-        lead="Ti registri, carichi un pacchetto sul portale, apri la mappa. Se esci pubblichi il posto; se cerchi lo prenoti e navighi. A chiusura il credito si muove. Prezzo fisso, sempre visibile prima di confermare."
-        image={IMAGES.mapHands}
-      />
+        eyebrow="Dal credito allo scambio"
+        title="Dal “sto uscendo” al posto prenotato. In pochi minuti."
+        lead="Niente aste, niente chat, niente trattative. ParkHub usa prezzi fissi e un flusso guidato per mettere in contatto chi esce e chi arriva."
+      >
+        <DownloadAppButton />
+        <CreateAccountButton light />
+      </PageHero>
 
-      <section className="px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Il ciclo in tre mosse</h2>
-          <p className="mt-3 max-w-2xl text-muted">
-            Il ciclo tipico dura pochi minuti. Non c’è negoziazione sul prezzo: scegli o accetti un
-            livello chiaro e procedi.
-          </p>
+      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto max-w-site">
+          <SectionHeading title="Segnala → Prenota → Completa" />
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                t: 'Segnali',
-                d: 'Pubblichi il posto mentre esci. Compari sulla mappa con il livello di prezzo disponibile sul tuo profilo.',
-                ill: <SwapSignalIllustration width={200} height={130} />,
-              },
-              {
-                t: 'Prenota',
-                d: 'Chi cerca vede distanza e prezzo, conferma col credito Parker. Tu ricevi notifica: qualcuno sta arrivando.',
-                ill: <ParkingSpotIllustration width={200} height={130} />,
-              },
-              {
-                t: 'Chiudi',
-                d: 'Navigazione fino al punto. A scambio completato chi ha venduto riceve credito da riusare; chi arriva parcheggia.',
-                ill: <SwapExchangeIllustration width={200} height={130} />,
-              },
-            ].map((s, i) => (
-              <article key={s.t} className="rounded-2xl border border-ink/8 bg-white p-6">
-                <div className="mb-3 flex justify-center">{s.ill}</div>
-                <p className="text-xs font-bold text-teal">Passo {i + 1}</p>
-                <h3 className="mt-1 font-display text-xl font-bold">{s.t}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.d}</p>
-              </article>
-            ))}
+            <StepCard step={1} title="Segnala" body="Pubblichi il posto mentre esci. Compari sulla mappa con il livello di prezzo disponibile." />
+            <StepCard step={2} title="Prenota" body="Chi cerca vede distanza e prezzo, conferma col credito. Tu ricevi notifica." />
+            <StepCard step={3} title="Completa" body="Navigazione fino al punto. A chiusura chi vende riceve credito; chi arriva parcheggia." />
           </div>
         </div>
       </section>
 
-      <section className="border-y border-ink/8 bg-white px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Se stai uscendo — venditore</h2>
-          <div className="mt-10 grid gap-8 lg:grid-cols-2 lg:items-start">
-            <ol className="space-y-5 text-[15px] leading-relaxed text-muted">
-              <li>
-                <strong className="text-ink">1. Apri Vendi.</strong> Confermi veicolo e punto.
-                Scegli il livello di prezzo tra quelli sbloccati sul tuo profilo (il ranking può
-                limitarti al livello più basso se le stelle sono basse).
-              </li>
-              <li>
-                <strong className="text-ink">2. Pubblichi.</strong> Il listing appare sulla mappa
-                per chi cerca nella zona. Restano attive le notifiche.
-              </li>
-              <li>
-                <strong className="text-ink">3. Aspetti la prenotazione.</strong> Quando qualcuno
-                prende il posto, sai che sta arrivando e in che stato è lo scambio.
-              </li>
-              <li>
-                <strong className="text-ink">4. Chiudi e incassi credito.</strong> A completamento
-                ricevi credito Parker da riusare al prossimo swap. Non è un prelievo in banca.
-              </li>
-              <li>
-                <strong className="text-ink">5. Valutazione.</strong> Il feedback post-scambio
-                alimenta il ranking — sistema di fiducia, non gamification.
-              </li>
+      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2">
+          <div>
+            <h2 className="font-display text-2xl font-bold sm:text-3xl">Percorso venditore</h2>
+            <ol className="mt-8 space-y-3 text-[15px] leading-relaxed text-muted">
+              {[
+                'Apri Vendi',
+                'Seleziona il veicolo',
+                'Scegli il livello disponibile',
+                'Pubblica il punto',
+                'Attendi la prenotazione',
+                'Completa',
+                'Ricevi credito',
+                'Valuta',
+              ].map((s, i) => (
+                <li key={s}>
+                  <strong className="text-ink">{i + 1}.</strong> {s}
+                </li>
+              ))}
             </ol>
-            <div className="overflow-hidden rounded-2xl">
-              <Image
-                src={IMAGES.keys}
-                alt="Partenza dall’auto"
-                width={1200}
-                height={900}
-                unoptimized
-                className="h-80 w-full object-cover"
-              />
-            </div>
           </div>
+          <AssetSlot label="step-seller.webp" />
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Se cerchi un posto — acquirente</h2>
-          <div className="mt-10 grid gap-8 lg:grid-cols-2 lg:items-start">
-            <div className="overflow-hidden rounded-2xl lg:order-2">
-              <Image
-                src={IMAGES.phoneNav}
-                alt="Navigazione sul telefono"
-                width={1200}
-                height={900}
-                unoptimized
-                className="h-80 w-full object-cover"
-              />
-            </div>
-            <ol className="space-y-5 text-[15px] leading-relaxed text-muted lg:order-1">
-              <li>
-                <strong className="text-ink">1. Apri Cerca.</strong> Sulla mappa vedi i listing
-                vicini: distanza, prezzo, stima di arrivo.
-              </li>
-              <li>
-                <strong className="text-ink">2. Controlli e confermi.</strong> Il prezzo è fisso e
-                visibile prima. Il pagamento esce dal credito già caricato sul portale.
-              </li>
-              <li>
-                <strong className="text-ink">3. Navighi al punto.</strong> Parti verso le
-                coordinate. Meno giri a vuoto, più arrivo mirato.
-              </li>
-              <li>
-                <strong className="text-ink">4. Completi lo scambio.</strong> Quando arrivi e il
-                posto si libera, chiudi. Eventuale valutazione.
-              </li>
-              <li>
-                <strong className="text-ink">5. Se non ce la fai.</strong> Annulla secondo le
-                regole di distanza e tempo: evita penali ranking nella finestra “ultimi minuti /
-                ancora lontano”.
-              </li>
+      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2">
+          <AssetSlot label="step-buyer.webp" className="lg:order-2" />
+          <div className="lg:order-1">
+            <h2 className="font-display text-2xl font-bold sm:text-3xl">Percorso acquirente</h2>
+            <ol className="mt-8 space-y-3 text-[15px] leading-relaxed text-muted">
+              {[
+                'Apri Cerca',
+                'Guarda pin, distanza e prezzo',
+                'Apri il dettaglio',
+                'Conferma con il credito',
+                'Segui la navigazione',
+                'Arriva',
+                'Completa',
+                'Valuta',
+              ].map((s, i) => (
+                <li key={s}>
+                  <strong className="text-ink">{i + 1}.</strong> {s}
+                </li>
+              ))}
             </ol>
           </div>
         </div>
       </section>
 
-      <section className="bg-ink px-5 py-16 text-white sm:py-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">Se devi annullare</h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-muted">
+            Se sei ancora lontano e manca tempo, puoi annullare senza penalità. Se sei molto vicino al
+            posto, lo scambio va completato oppure va aperta una segnalazione. Se annulli all’ultimo
+            momento pur essendo ancora lontano, ricevi il rimborso ma il ranking può diminuire.
+          </p>
+          <ul className="mt-6 space-y-3 text-sm text-muted">
+            <li>· Oltre 250 m e non negli ultimi 3 minuti: rimborso 100%, nessuna penale ranking.</li>
+            <li>· Entro 250 m: niente annullo — completa o apri un report.</li>
+            <li>· Oltre 250 m ma negli ultimi 3 minuti: rimborso 100%, ranking circa −15.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">
+            Quando qualcosa non torna, ParkHub non lascia lo scambio senza contesto.
+          </h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-muted">
+            Il report usa categorie predefinite e richiede foto. I casi vengono valutati e possono
+            incidere sul ranking della persona in torto.
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-ink px-5 py-16 text-white sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto grid max-w-site items-center gap-12 lg:grid-cols-2">
           <div>
             <h2 className="font-display text-2xl font-bold sm:text-3xl">Portale e app</h2>
-            <p className="mt-4 text-white/65 leading-relaxed">
+            <p className="mt-4 text-white/65">
               I pagamenti stanno sul web. Lo scambio sta sulla mappa. Stesso account ovunque.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <h3 className="font-display font-bold">Portale</h3>
-                <p className="mt-2 text-sm text-white/60">
-                  Registrazione, pacchetti, wallet, missioni, invita, ranking, profilo, supporto.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <h3 className="font-display font-bold">App</h3>
-                <p className="mt-2 text-sm text-white/60">
-                  Mappa, vendi, navigazione, notifiche, sessione in corso, wallet in lettura.
-                </p>
-              </div>
-            </div>
           </div>
-          <AppMapPreview />
-        </div>
-      </section>
-
-      <section className="px-5 py-16">
-        <div className="mx-auto max-w-3xl space-y-4 text-[15px] leading-relaxed text-muted">
-          <h2 className="font-display text-2xl font-bold text-ink">Cosa tenere a mente</h2>
-          <p>
-            Le strisce blu non sono incluse nel prezzo dello scambio. Il credito non si preleva in
-            banca. Il ranking misura affidabilità; le missioni danno premi solo-swap e non toccano
-            le stelle. Invita un amico premia solo dopo il primo scambio dell’invitato.
-          </p>
+          <AppMockup />
         </div>
       </section>
 
       <RelatedLinks
         items={[
-          { href: '/prezzi', label: 'Prezzi e pacchetti', desc: 'Prova, Carnet, Mensile, Semestrale, Annuale.' },
-          { href: '/missioni', label: 'Missioni', desc: 'Obiettivi e premi sullo scambio.' },
-          { href: '/invita', label: 'Invita un amico', desc: 'Codice, link, QR e bonus.' },
+          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti, bundle e livelli di scambio.' },
+          { href: '/ranking', label: 'Ranking', desc: 'Come le stelle influenzano la vendita.' },
+          { href: '/app', label: 'Scarica app', desc: 'Dove avviene lo scambio.' },
         ]}
       />
-      <CtaBand title="Pronto a fare il primo passo?" />
+      <CTASection title="Pronto a fare il primo passo?" />
       <SiteFooter />
-      <CookieBar />
+      <CookieBanner />
     </main>
   );
 }

@@ -1,270 +1,125 @@
 import type { Metadata } from 'next';
-import { SiteImage as Image } from '../components/site-image';
-import Link from 'next/link';
-import { SiteHeader, SiteFooter, CookieBar } from '../components/site-chrome';
-import { CtaBand, RelatedLinks } from '../components/page-chrome';
-import { portalPath } from '../lib/urls';
-import { IMAGES } from '../lib/images';
+import { SiteHeader } from '../components/site-header';
+import { SiteFooter, CookieBanner } from '../components/site-footer';
+import {
+  AssetSlot,
+  CTASection,
+  FeatureCard,
+  PageHero,
+  RelatedLinks,
+  SectionHeading,
+} from '../components/ui';
 
 export const metadata: Metadata = {
-  title: 'Ranking — Parker',
+  title: 'Ranking ParkHub — Affidabilità negli scambi',
   description:
-    'Guida al ranking Parker: stelle, affidabilità, cosa lo fa salire o scendere, effetti sulla vendita, differenza con le missioni.',
+    'Le stelle ParkHub misurano come ti comporti negli scambi. Non una classifica pubblica. Separato dalle missioni.',
 };
 
 const events = [
-  {
-    title: 'Scambio completato con valutazione positiva',
-    effect: 'Sostiene il punteggio',
-    detail:
-      'Dopo lo swap puoi lasciare una valutazione. Un feedback buono conferma che lo scambio è andato come previsto e sostiene lo score.',
-  },
-  {
-    title: 'Valutazione negativa',
-    effect: 'Punteggio in calo',
-    detail:
-      'Un feedback basso dopo lo scambio riduce lo score. Conta il comportamento reale sull’incontro, non le missioni o gli inviti.',
-  },
-  {
-    title: 'Annullamento acquirente in ritardo',
-    effect: 'Penale ranking',
-    detail:
-      'Se annulli quando sei ancora lontano (oltre la soglia di distanza) ma negli ultimi minuti di attesa del venditore, puoi prendere una penale sul punteggio. Fuori da quella finestra, annullo lontano = rimborso senza penale ranking.',
-  },
-  {
-    title: 'Venditore che cancella un posto già riservato',
-    effect: 'Penale ranking',
-    detail:
-      'Pubblicare e poi togliere un listing già preso danneggia chi stava arrivando. Il ranking registra questo comportamento.',
-  },
-  {
-    title: 'Segnalazione (report) approvata',
-    effect: 'Impatto su chi è in torto',
-    detail:
-      'Le segnalazioni passano da triage. Se approvate, possono colpire il ranking di chi ha sbagliato. Segnalare a caso non conviene: un report respinto può colpire chi ha segnalato male.',
-  },
-];
-
-const faq = [
-  {
-    q: 'Vedo la classifica degli altri?',
-    a: 'No. Vedi solo il tuo punteggio, le stelle e le motivazioni. Non c’è una leaderboard pubblica.',
-  },
-  {
-    q: 'Le missioni alzano le stelle?',
-    a: 'No. Missioni e ranking sono sistemi separati. Completare missioni non manipola l’affidabilità.',
-  },
-  {
-    q: 'Se ho poche stelle posso ancora vendere?',
-    a: 'Sì. Non sei bloccato. Sotto soglia (di default sotto 4★) puoi vendere solo al livello di prezzo più basso.',
-  },
-  {
-    q: 'Posso ancora invitare amici con ranking basso?',
-    a: 'Sì. Gli inviti restano sempre disponibili.',
-  },
+  { title: 'Report approvato contro il venditore', effect: 'circa −50' },
+  { title: 'Report respinto contro chi ha segnalato', effect: 'circa −30' },
+  { title: 'Valutazione post-scambio', effect: 'da −20 a +20' },
+  { title: 'Annullo acquirente in ritardo', effect: 'circa −15' },
+  { title: 'Venditore che cancella dopo prenotazione', effect: 'circa −10' },
 ];
 
 export default function RankingPage() {
   return (
-    <main className="min-h-screen bg-[#F5F6F8] text-ink">
+    <main className="min-h-screen bg-paper text-ink">
       <SiteHeader dark />
+      <PageHero
+        eyebrow="Affidabilità ParkHub"
+        title="Le stelle misurano come ti comporti negli scambi. Non quanto sei popolare."
+        lead="Il ranking è personale. Premia chi completa correttamente e penalizza chi fa perdere tempo agli altri."
+      />
 
-      <section className="relative overflow-hidden border-b border-ink/8 bg-ink px-5 pb-16 pt-28 text-white">
-        <Image
-          src={IMAGES.evening}
-          alt=""
-          fill
-          unoptimized
-          className="object-cover opacity-30"
-          sizes="100vw"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-ink/70" />
-        <div className="relative mx-auto max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Ranking</p>
-          <h1 className="mt-3 font-display text-4xl font-bold leading-tight sm:text-5xl">
-            Affidabilità a stelle — solo la tua
-          </h1>
-          <p className="mt-5 text-base leading-relaxed text-white/70">
-            Il ranking misura quanto sei affidabile negli scambi. Non è una classifica pubblica e
-            non si compra con le missioni. Serve a proteggere chi compra e chi vende quando il
-            posto si libera in strada.
-          </p>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-start">
-          <div className="space-y-5 text-[15px] leading-relaxed text-muted">
-            <h2 className="font-display text-2xl font-bold text-ink">Cos’è in pratica</h2>
-            <p>
-              Dietro le stelle c’è uno score interno. Circa cento punti corrispondono a una stella.
-              Il risultato resta tra 1 e 5 stelle. Lo vedi in Home (riepilogo) e in Account →
-              Reputazione (dettaglio con legenda e motivazioni).
-            </p>
-            <p>
-              Ogni variazione ha una ragione leggibile: non è un numero astratto. Se scendi, sai
-              perché. Se sali, sai cosa ha contato. L’obiettivo è rendere prevedibile lo scambio
-              tra sconosciuti al bordo strada.
-            </p>
-            <p>
-              Non c’è una classifica degli altri utenti. Non puoi “comprare” stelle con gamification
-              o inviti. Ranking e missioni sono intenzionalmente separati.
-            </p>
-          </div>
-          <div className="overflow-hidden rounded-2xl">
-            <Image
-              src={IMAGES.keys}
-              alt="Chiavi auto"
-              width={1200}
-              height={900}
-              unoptimized
-              className="h-72 w-full object-cover sm:h-80"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-ink/8 bg-white px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            Cosa cambia se le stelle scendono
-          </h2>
-          <p className="mt-3 max-w-2xl text-muted">
-            Il ranking non è un muro. È un freno progressivo sul prezzo di vendita quando
-            l’affidabilità cala.
-          </p>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            <article className="rounded-2xl border border-ink/8 bg-[#F5F6F8] p-6">
-              <h3 className="font-display text-lg font-bold">Venditore</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                Puoi sempre pubblicare un posto. Se sei sotto soglia (di default sotto 4★), puoi
-                vendere solo al <strong className="text-ink">livello di prezzo più basso</strong>.
-                Non sei bloccato: hai meno scelta sul prezzo fino a recuperare stelle.
-              </p>
-            </article>
-            <article className="rounded-2xl border border-ink/8 bg-[#F5F6F8] p-6">
-              <h3 className="font-display text-lg font-bold">Acquirente</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                Nessun blocco dal ranking sul cercare e prenotare. Continui a usare la mappa.
-                Eccezione solo in caso di sospensione o ban dell’account.
-              </p>
-            </article>
-            <article className="rounded-2xl border border-ink/8 bg-[#F5F6F8] p-6">
-              <h3 className="font-display text-lg font-bold">Inviti e missioni</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                Puoi sempre invitare amici. Completare missioni non alza le stelle. Il ranking resta
-                il sistema di fiducia sugli scambi.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Cosa lo fa muovere</h2>
-          <p className="mt-3 text-sm text-muted">
-            Esempi tipici. Gli importi esatti possono essere aggiornati in configurazione; in app
-            vedi sempre la motivazione accanto alla variazione.
-          </p>
-          <div className="mt-8 space-y-4">
-            {events.map((e) => (
-              <article
-                key={e.title}
-                className="rounded-2xl border border-ink/8 bg-white p-6 shadow-[0_4px_16px_rgba(11,18,32,0.03)]"
-              >
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="font-display text-lg font-bold">{e.title}</h3>
-                  <span className="text-xs font-bold uppercase tracking-wider text-teal">
-                    {e.effect}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{e.detail}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-ink/8 bg-white px-5 py-16">
-        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-2 lg:items-center">
-          <div className="overflow-hidden rounded-2xl">
-            <Image
-              src={IMAGES.phoneNav}
-              alt="Smartphone in auto"
-              width={1200}
-              height={900}
-              unoptimized
-              className="h-64 w-full object-cover sm:h-80"
-            />
-          </div>
+      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2 lg:items-center">
           <div>
-            <h2 className="font-display text-2xl font-bold">Come tenerlo alto</h2>
-            <ul className="mt-6 space-y-3 text-sm leading-relaxed text-muted">
-              <li className="flex gap-3">
-                <span className="text-teal">·</span>
-                Completa gli scambi che accetti; non cancellare listing già prenotati senza motivo
-                serio.
-              </li>
-              <li className="flex gap-3">
-                <span className="text-teal">·</span>
-                Se sei acquirente e non riesci ad arrivare, annulla per tempo — evita la finestra
-                “ultimi minuti / ancora lontano”.
-              </li>
-              <li className="flex gap-3">
-                <span className="text-teal">·</span>
-                Segnala solo problemi reali: il triage esiste per evitare abusi su entrambi i lati.
-              </li>
-              <li className="flex gap-3">
-                <span className="text-teal">·</span>
-                Lascia valutazioni oneste: aiutano chi viene dopo di te e rendono il sistema più
-                leggibile.
-              </li>
-            </ul>
+            <SectionHeading
+              title="Da 1 a 5 stelle"
+              lead="Dietro le stelle c’è uno score interno (circa 100 punti ≈ 1 stella). Lo vedi in Home e in Account → Reputazione, con la motivazione di ogni variazione."
+            />
+            <div className="mt-8 flex gap-2">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <div
+                  key={n}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white font-display text-lg font-bold text-teal-dark shadow-card"
+                >
+                  {n}
+                </div>
+              ))}
+            </div>
+          </div>
+          <AssetSlot label="ranking-city-user.webp" />
+        </div>
+      </section>
+
+      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <div className="mx-auto max-w-site">
+          <SectionHeading title="Cosa cambia se le stelle scendono" />
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            <FeatureCard
+              title="Venditore"
+              body="Puoi sempre pubblicare. Sotto soglia (default sotto 4★) solo al livello di prezzo base."
+            />
+            <FeatureCard
+              title="Acquirente"
+              body="Nessun blocco dal ranking sul cercare e prenotare. Eccezione: sospensione o ban."
+            />
+            <FeatureCard
+              title="Inviti e missioni"
+              body="Puoi sempre invitare. Completare missioni non alza le stelle."
+            />
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:py-20">
+      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="mx-auto max-w-3xl">
-          <h2 className="font-display text-2xl font-bold">Domande sul ranking</h2>
-          <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
-            {faq.map((item) => (
-              <div key={item.q} className="py-5">
-                <h3 className="font-semibold">{item.q}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{item.a}</p>
+          <SectionHeading
+            title="Eventi che incidono"
+            lead="I valori tipici sono configurabili. In app vedi sempre la motivazione accanto alla variazione."
+          />
+          <div className="mt-8 space-y-3">
+            {events.map((e) => (
+              <div
+                key={e.title}
+                className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-white p-5 shadow-card"
+              >
+                <h3 className="font-display font-bold">{e.title}</h3>
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-dark">
+                  {e.effect}
+                </span>
               </div>
             ))}
           </div>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={portalPath('/signup')}
-              className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3 text-sm font-bold text-ink hover:bg-[#00b896]"
-            >
-              Registrati
-            </a>
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-ink/15 px-6 py-3 text-sm font-semibold hover:bg-ink/5"
-            >
-              Torna alla home
-            </Link>
-          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-white px-5 py-16 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl font-bold">Cosa NON fa il ranking</h2>
+          <ul className="mt-6 space-y-2 text-sm text-muted">
+            <li>· non crea una classifica pubblica;</li>
+            <li>· non compra premi;</li>
+            <li>· non blocca gli inviti;</li>
+            <li>· non è la stessa cosa delle missioni.</li>
+          </ul>
         </div>
       </section>
 
       <RelatedLinks
         items={[
-          { href: '/missioni', label: 'Missioni', desc: 'Premi solo-swap, separati dal ranking.' },
-          { href: '/come-funziona', label: 'Come funziona', desc: 'Come gli scambi influenzano le stelle.' },
-          { href: '/invita', label: 'Invita un amico', desc: 'Gli inviti non dipendono dal ranking.' },
+          { href: '/missioni', label: 'Missioni', desc: 'Premi solo-swap, sistema separato.' },
+          { href: '/come-funziona', label: 'Come funziona', desc: 'Annulli e report.' },
+          { href: '/invita', label: 'Invita', desc: 'Gli inviti non dipendono dal ranking.' },
         ]}
       />
-
-      <CtaBand />
+      <CTASection />
       <SiteFooter />
-      <CookieBar />
+      <CookieBanner />
     </main>
   );
 }

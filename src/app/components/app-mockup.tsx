@@ -1,5 +1,5 @@
-/** Mock UI: listing sulla mappa — rende il prodotto concreto, non “landing vuota”. */
-export function AppMapPreview() {
+/** Mock UI: listing sulla mappa — rende il prodotto concreto. */
+export function AppMockup() {
   const spots = [
     { street: 'Via Roma 12', dist: '180 m', price: '€1,20', eta: '2 min', hot: true },
     { street: 'Piazza Garibaldi', dist: '320 m', price: '€2,00', eta: '4 min', hot: false },
@@ -10,14 +10,12 @@ export function AppMapPreview() {
     <div className="relative mx-auto w-full max-w-[320px]">
       <div className="absolute -inset-4 rounded-[2rem] bg-teal/15 blur-2xl" aria-hidden />
       <div className="relative overflow-hidden rounded-[2rem] border border-ink/15 bg-ink shadow-2xl shadow-ink/30">
-        {/* Status bar */}
         <div className="flex items-center justify-between px-5 pb-1 pt-3 text-[10px] font-semibold text-white/50">
           <span>9:41</span>
           <span className="h-1.5 w-16 rounded-full bg-white/20" />
           <span>5G</span>
         </div>
 
-        {/* Map area */}
         <div className="relative mx-3 h-44 overflow-hidden rounded-2xl bg-[#1a2438]">
           <div
             className="absolute inset-0 opacity-40"
@@ -44,9 +42,12 @@ export function AppMapPreview() {
               3 disponibili
             </span>
           </div>
+          {/* Floating cards */}
+          <div className="absolute left-3 top-3 rounded-lg bg-teal px-2 py-1 text-[9px] font-bold text-ink shadow">
+            Sto uscendo
+          </div>
         </div>
 
-        {/* Listings */}
         <div className="space-y-2 px-3 py-3">
           {spots.map((s) => (
             <div

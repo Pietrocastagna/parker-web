@@ -1,11 +1,5 @@
 import { SITE_BASE } from './urls';
 
-/**
- * Link store pubblici.
- * Imposta in CI quando le schede sono live:
- *   NEXT_PUBLIC_APP_STORE_URL=https://apps.apple.com/...
- *   NEXT_PUBLIC_PLAY_STORE_URL=https://play.google.com/store/apps/details?id=com.swappark.parker
- */
 export const APP_STORE_URL = (process.env.NEXT_PUBLIC_APP_STORE_URL || '').trim();
 export const PLAY_STORE_URL = (process.env.NEXT_PUBLIC_PLAY_STORE_URL || '').trim();
 export const ANDROID_PACKAGE = 'com.swappark.parker';
