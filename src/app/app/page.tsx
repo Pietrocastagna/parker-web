@@ -1,115 +1,104 @@
 import type { Metadata } from 'next';
-import { SiteHeader } from '../components/site-header';
+import { FloatingHeader } from '../components/site-header';
 import { SiteFooter, CookieBanner } from '../components/site-footer';
 import {
-  CTASection,
-  CreateAccountButton,
+  CreateAccountCTA,
+  EditorialHeading,
+  FinalCinematicCTA,
   PageHero,
   RelatedLinks,
-  SectionHeading,
 } from '../components/ui';
-import { AppMockup } from '../components/app-mockup';
+import { DeviceFrame, AppMapScreen } from '../components/ui-buttons';
 import { StoreButtons } from '../components/store-badges';
+import { AssetSlot } from '../components/site-asset';
 import { ANDROID_PACKAGE } from '../lib/stores';
 import { portalPath } from '../lib/urls';
 
 export const metadata: Metadata = {
   title: 'Scarica l’app ParkHub',
   description:
-    'L’app ParkHub è il cuore dello scambio: mappa, vendi, prenota, naviga. Stesso account del portale.',
+    'La strada è qui. Account e credito stanno dietro. Mappa, vendi, prenota, naviga. Stesso account del portale.',
 };
 
 export default function AppPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <SiteHeader dark />
+      <FloatingHeader />
       <PageHero
-        eyebrow="L’app per quando sei in strada."
-        title="Qui avviene lo scambio."
+        eyebrow="L’app per quando sei in strada"
+        title="La strada è qui. Account e credito stanno dietro."
         lead="Apri la mappa, trova un posto, prenotalo e raggiungilo. Oppure segnala il posto che stai lasciando."
+        asset="app-01-hero-city-map-device-stage.webp"
       >
-        <CreateAccountButton light />
+        <CreateAccountCTA light />
       </PageHero>
 
-      <section id="scarica" className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <SectionHeading
+      <section id="scarica" className="section-pad bg-white">
+        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-5">
+            <EditorialHeading
               title="Scarica ParkHub"
-              lead={`Su iPhone e Android. Package Android: ${ANDROID_PACKAGE}.`}
+              lead={`iPhone e Android. Package: ${ANDROID_PACKAGE}.`}
             />
             <StoreButtons className="mt-8" />
           </div>
-          <AppMockup />
+          <div className="lg:col-span-7">
+            <DeviceFrame className="max-w-[320px]">
+              <AppMapScreen />
+            </DeviceFrame>
+          </div>
         </div>
       </section>
 
-      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section className="section-pad bg-brand-mist/40">
         <div className="mx-auto max-w-site">
-          <SectionHeading title="App e portale: chi fa cosa" />
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <article className="rounded-card border border-teal/30 bg-teal-soft/30 p-7">
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-dark">App (cuore)</p>
+          <EditorialHeading title="App e portale" />
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            <article className="rounded-card border border-brand/30 bg-white p-7">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-deep">App</p>
               <h3 className="mt-2 font-display text-xl font-bold">Dove scambi</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted">
-                <li>· Mappa con posti in vendita</li>
-                <li>· Pubblicare il posto quando esci</li>
-                <li>· Prenotare e navigare</li>
-                <li>· Notifiche e stato dello scambio</li>
-                <li>· Wallet in lettura + link al portale</li>
-              </ul>
+              <p className="mt-3 text-sm text-muted">
+                Cerca · Navigatore · Vendi · Salva parcheggio · Veicoli · Gruppi · Preferiti · Wallet in lettura
+              </p>
             </article>
-            <article className="rounded-card border border-border bg-paper p-7">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted">Portale web</p>
+            <article className="rounded-card border border-line bg-white p-7">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted">Portale</p>
               <h3 className="mt-2 font-display text-xl font-bold">Dove gestisci il credito</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted">
-                <li>· Registrazione / login</li>
-                <li>· Acquisto pacchetti</li>
-                <li>· Missioni, invita, ranking</li>
-                <li>· Profilo, veicoli, supporto</li>
-              </ul>
+              <p className="mt-3 text-sm text-muted">
+                Account · Pacchetti · Wallet · Missioni · Invita · Ranking · Supporto
+              </p>
             </article>
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-14 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="font-display text-2xl font-bold">Dopo il download</h2>
-          <ol className="mt-6 space-y-3 text-sm leading-relaxed text-muted">
-            <li>
-              <strong className="text-ink">1.</strong> Accedi (o registrati).
-            </li>
-            <li>
-              <strong className="text-ink">2.</strong> Completa profilo e veicolo.
-            </li>
-            <li>
-              <strong className="text-ink">3.</strong> Apri il portale e carica credito.
-            </li>
-            <li>
-              <strong className="text-ink">4.</strong> Torna in app.
-            </li>
-            <li>
-              <strong className="text-ink">5.</strong> Cerca o pubblica.
-            </li>
-          </ol>
-          <a
-            href={portalPath('/signup')}
-            className="mt-8 inline-flex rounded-pill bg-teal px-6 py-3 text-sm font-bold text-ink"
-          >
-            Crea account sul portale
-          </a>
+      <section className="section-pad bg-warm-paper">
+        <div className="mx-auto grid max-w-site gap-8 lg:grid-cols-2 lg:items-center">
+          <div>
+            <EditorialHeading title="Dopo il download" />
+            <ol className="mt-6 space-y-3 text-sm text-muted">
+              <li><strong className="text-ink">1.</strong> Accedi</li>
+              <li><strong className="text-ink">2.</strong> Completa profilo e veicolo</li>
+              <li><strong className="text-ink">3.</strong> Carica credito sul portale</li>
+              <li><strong className="text-ink">4.</strong> Torna in app</li>
+              <li><strong className="text-ink">5.</strong> Cerca o pubblica</li>
+            </ol>
+            <a href={portalPath('/signup')} className="mt-8 inline-flex rounded-pill bg-brand px-6 py-3 text-sm font-bold text-ink">
+              Crea account sul portale
+            </a>
+          </div>
+          <AssetSlot label="app-04-download-city-evening-wide.webp" />
         </div>
       </section>
 
       <RelatedLinks
         items={[
-          { href: '/come-funziona', label: 'Come funziona', desc: 'Venditore e acquirente.' },
+          { href: '/come-funziona', label: 'Come funziona', desc: 'Flusso completo.' },
           { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti di credito.' },
           { href: '/about', label: 'About', desc: 'Perché esiste ParkHub.' },
         ]}
       />
-      <CTASection title="Scarica l’app e inizia a scambiare" body="Poi ricarica sul portale con lo stesso account." />
+      <FinalCinematicCTA />
       <SiteFooter />
       <CookieBanner />
     </main>

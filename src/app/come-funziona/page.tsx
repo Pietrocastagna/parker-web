@@ -1,90 +1,80 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { SiteHeader } from '../components/site-header';
+import { FloatingHeader } from '../components/site-header';
 import { SiteFooter, CookieBanner } from '../components/site-footer';
 import {
-  AssetSlot,
-  CTASection,
-  CreateAccountButton,
-  DownloadAppButton,
+  CreateAccountCTA,
+  DownloadParkHub,
+  EditorialHeading,
+  FinalCinematicCTA,
   PageHero,
   RelatedLinks,
-  SectionHeading,
-  StepCard,
 } from '../components/ui';
-import { AppMockup } from '../components/app-mockup';
+import { AssetSlot } from '../components/site-asset';
+import { SignalLine } from '../components/signal';
 
 export const metadata: Metadata = {
   title: 'Come funziona ParkHub — Cerca, prenota, raggiungi',
   description:
-    'Dal “sto uscendo” al posto prenotato. Prezzi fissi, navigazione e credito ParkHub. Flussi venditore e acquirente.',
+    'Dal “sto uscendo” al posto prenotato. Senza aste, senza chat. Flussi venditore e acquirente, annulli e report.',
 };
 
 export default function ComeFunzionaPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <SiteHeader dark />
+      <FloatingHeader />
       <PageHero
         eyebrow="Dal credito allo scambio"
-        title="Dal “sto uscendo” al posto prenotato. In pochi minuti."
-        lead="Niente aste, niente chat, niente trattative. ParkHub usa prezzi fissi e un flusso guidato per mettere in contatto chi esce e chi arriva."
+        title="Dal “sto uscendo” al posto prenotato. Senza aste, senza chat."
+        lead="ParkHub usa prezzi fissi e un flusso guidato per mettere in contatto chi esce e chi arriva."
+        asset="how-01-hero-two-drivers-signal-wide.webp"
       >
-        <DownloadAppButton />
-        <CreateAccountButton light />
+        <DownloadParkHub />
+        <CreateAccountCTA light />
       </PageHero>
 
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section className="section-pad bg-brand-mist/40">
         <div className="mx-auto max-w-site">
-          <SectionHeading title="Segnala → Prenota → Completa" />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            <StepCard step={1} title="Segnala" body="Pubblichi il posto mentre esci. Compari sulla mappa con il livello di prezzo disponibile." />
-            <StepCard step={2} title="Prenota" body="Chi cerca vede distanza e prezzo, conferma col credito. Tu ricevi notifica." />
-            <StepCard step={3} title="Completa" body="Navigazione fino al punto. A chiusura chi vende riceve credito; chi arriva parcheggia." />
+          <SignalLine className="mb-8 w-full max-w-md text-brand" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {['Segnala', 'Prenota', 'Completa'].map((t, i) => (
+              <div key={t} className="rounded-card border border-line bg-white p-6">
+                <p className="font-mono text-xs font-bold text-brand-deep">0{i + 1}</p>
+                <h3 className="mt-2 font-display text-xl font-bold">{t}</h3>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2">
-          <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">Percorso venditore</h2>
-            <ol className="mt-8 space-y-3 text-[15px] leading-relaxed text-muted">
-              {[
-                'Apri Vendi',
-                'Seleziona il veicolo',
-                'Scegli il livello disponibile',
-                'Pubblica il punto',
-                'Attendi la prenotazione',
-                'Completa',
-                'Ricevi credito',
-                'Valuta',
-              ].map((s, i) => (
-                <li key={s}>
-                  <strong className="text-ink">{i + 1}.</strong> {s}
-                </li>
-              ))}
+      <section className="section-pad bg-warm-paper">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <EditorialHeading title="Percorso venditore" />
+            <ol className="mt-8 space-y-3 text-sm text-muted">
+              {['Vendi', 'Veicolo', 'Livello', 'Pubblica', 'Prenotazione', 'Chiusura', 'Credito', 'Valuta'].map(
+                (s, i) => (
+                  <li key={s}>
+                    <strong className="text-ink">{i + 1}.</strong> {s}
+                  </li>
+                ),
+              )}
             </ol>
           </div>
-          <AssetSlot label="step-seller.webp" />
+          <div className="lg:col-span-7">
+            <AssetSlot label="how-02-seller-publish-context.webp" />
+          </div>
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2">
-          <AssetSlot label="step-buyer.webp" className="lg:order-2" />
-          <div className="lg:order-1">
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">Percorso acquirente</h2>
-            <ol className="mt-8 space-y-3 text-[15px] leading-relaxed text-muted">
-              {[
-                'Apri Cerca',
-                'Guarda pin, distanza e prezzo',
-                'Apri il dettaglio',
-                'Conferma con il credito',
-                'Segui la navigazione',
-                'Arriva',
-                'Completa',
-                'Valuta',
-              ].map((s, i) => (
+      <section className="section-pad bg-white">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7 lg:order-2">
+            <AssetSlot label="how-03-buyer-navigation-context.webp" />
+          </div>
+          <div className="lg:col-span-5 lg:order-1">
+            <EditorialHeading title="Percorso acquirente" />
+            <ol className="mt-8 space-y-3 text-sm text-muted">
+              {['Cerca', 'Dettaglio', 'Prenota', 'Naviga', 'Arriva', 'Completa', 'Valuta'].map((s, i) => (
                 <li key={s}>
                   <strong className="text-ink">{i + 1}.</strong> {s}
                 </li>
@@ -94,54 +84,42 @@ export default function ComeFunzionaPage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">Se devi annullare</h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-muted">
-            Se sei ancora lontano e manca tempo, puoi annullare senza penalità. Se sei molto vicino al
-            posto, lo scambio va completato oppure va aperta una segnalazione. Se annulli all’ultimo
-            momento pur essendo ancora lontano, ricevi il rimborso ma il ranking può diminuire.
-          </p>
-          <ul className="mt-6 space-y-3 text-sm text-muted">
-            <li>· Oltre 250 m e non negli ultimi 3 minuti: rimborso 100%, nessuna penale ranking.</li>
-            <li>· Entro 250 m: niente annullo — completa o apri un report.</li>
-            <li>· Oltre 250 m ma negli ultimi 3 minuti: rimborso 100%, ranking circa −15.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            Quando qualcosa non torna, ParkHub non lascia lo scambio senza contesto.
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-muted">
-            Il report usa categorie predefinite e richiede foto. I casi vengono valutati e possono
-            incidere sul ranking della persona in torto.
-          </p>
-        </div>
-      </section>
-
-      <section className="bg-ink px-5 py-16 text-white sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto grid max-w-site items-center gap-12 lg:grid-cols-2">
-          <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">Portale e app</h2>
-            <p className="mt-4 text-white/65">
-              I pagamenti stanno sul web. Lo scambio sta sulla mappa. Stesso account ovunque.
-            </p>
+      <section className="section-pad bg-ink text-white">
+        <div className="mx-auto max-w-site">
+          <EditorialHeading light title="Quando qualcosa cambia" />
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {[
+              ['Lontano + tempo', 'Annullo e rimborso 100%, nessuna penale ranking.'],
+              ['Vicino (≤250 m)', 'Completa lo scambio oppure apri un report.'],
+              ['Lontano ma ultimi 3 min', 'Rimborso 100% + possibile penale ranking.'],
+            ].map(([t, d]) => (
+              <div key={t} className="rounded-card border border-white/10 bg-white/5 p-6">
+                <h3 className="font-display text-lg font-bold">{t}</h3>
+                <p className="mt-2 text-sm text-white/65">{d}</p>
+              </div>
+            ))}
           </div>
-          <AppMockup />
+          <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h3 className="font-display text-2xl font-bold">Report</h3>
+              <p className="mt-3 text-sm text-white/65">
+                Foto obbligatorie, categorie predefinite, revisione admin. Può incidere sul ranking
+                di chi è in torto.
+              </p>
+            </div>
+            <AssetSlot label="how-05-report-evidence-context.webp" />
+          </div>
         </div>
       </section>
 
       <RelatedLinks
         items={[
-          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti, bundle e livelli di scambio.' },
-          { href: '/ranking', label: 'Ranking', desc: 'Come le stelle influenzano la vendita.' },
-          { href: '/app', label: 'Scarica app', desc: 'Dove avviene lo scambio.' },
+          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti e livelli.' },
+          { href: '/ranking', label: 'Ranking', desc: 'Stelle personali.' },
+          { href: '/app', label: 'Scarica app', desc: 'Inizia dalla mappa.' },
         ]}
       />
-      <CTASection title="Pronto a fare il primo passo?" />
+      <FinalCinematicCTA asset="how-04-handoff-two-cars-wide.webp" />
       <SiteFooter />
       <CookieBanner />
     </main>

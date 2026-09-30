@@ -1,95 +1,79 @@
 import type { Metadata } from 'next';
-import { SiteHeader } from '../components/site-header';
+import { FloatingHeader } from '../components/site-header';
 import { SiteFooter, CookieBanner } from '../components/site-footer';
 import {
-  AssetSlot,
-  CTASection,
+  EditorialHeading,
+  FinalCinematicCTA,
   PageHero,
-  ReferralReward,
+  ReferralEquation,
   RelatedLinks,
-  SectionHeading,
-  StepCard,
 } from '../components/ui';
+import { AssetSlot } from '../components/site-asset';
 import { portalPath } from '../lib/urls';
 
 export const metadata: Metadata = {
   title: 'Invita amici su ParkHub — Bonus referral',
   description:
-    'Condividi il codice ParkHub. Guadagni €2,50 quando l’amico completa il primo scambio. Blocco da 3 = €10.',
+    'Invita qualcuno che userà davvero ParkHub. Bonus al primo scambio: €2,50 + €2,50 + €5 = €10.',
 };
-
-const steps = [
-  { n: 1, t: 'Apri Invita', d: 'Sul portale e in Account in app: codice, link, QR.' },
-  { n: 2, t: 'Condividi link o QR', d: 'WhatsApp, messaggio, email o stampa.' },
-  { n: 3, t: 'L’amico si registra', d: 'Il codice si applica solo in registrazione.' },
-  { n: 4, t: 'Completa il primo scambio', d: 'Scaricare o creare l’account non basta.' },
-  { n: 5, t: 'Il bonus si sblocca', d: 'Tu ricevi €2,50 spendibili sugli swap.' },
-  { n: 6, t: 'Parte il nuovo blocco', d: 'Ogni 3 amici qualificati = €10 totali.' },
-];
 
 export default function InvitaPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <SiteHeader dark />
+      <FloatingHeader />
       <PageHero
-        eyebrow="Più amici, più ParkHub funziona."
-        title="Condividi il codice. Il bonus arriva quando il tuo amico fa il primo scambio."
-        lead="Il referral non premia il solo download. Premia l’uso reale: così cresce la mappa."
+        eyebrow="Più persone, più posti"
+        title="Invita qualcuno che userà davvero ParkHub. Il bonus arriva al primo scambio."
+        lead="Il referral non premia il solo download. Premia l’uso reale."
+        asset="invite-01-hero-friends-smartphone-wide.webp"
       />
 
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section className="section-pad bg-white">
         <div className="mx-auto max-w-site">
-          <SectionHeading title="Come funziona il reward" />
+          <EditorialHeading title="La formula" />
           <div className="mt-10">
-            <ReferralReward />
-          </div>
-          <p className="mt-6 text-sm text-muted">
-            €2,50 + €2,50 + €5 = €10 ogni blocco di 3. Poi il ciclo ricomincia. L’invitato non riceve
-            un bonus di ingresso da referral.
-          </p>
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto max-w-site">
-          <SectionHeading title="Sei passi" />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {steps.map((s) => (
-              <StepCard key={s.n} step={s.n} title={s.t} body={s.d} />
-            ))}
+            <ReferralEquation />
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section className="section-pad bg-brand-mist/40">
         <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2 lg:items-center">
           <div>
-            <h2 className="font-display text-2xl font-bold">Regole</h2>
-            <ul className="mt-6 space-y-2 text-sm text-muted">
-              <li>· codice valido solo in registrazione;</li>
-              <li>· bonus in attesa fino al primo scambio;</li>
-              <li>· spendibile solo sugli swap;</li>
-              <li>· non prelevabile.</li>
-            </ul>
-            <a
-              href={portalPath('/signup')}
-              className="mt-8 inline-flex rounded-pill bg-teal px-7 py-3 text-sm font-bold text-ink"
-            >
-              Registrati e apri Invita amici
+            <EditorialHeading
+              title="Come funziona"
+              lead="Codice solo in registrazione. Pending fino al primo swap. Solo swap, non prelevabile."
+            />
+            <ol className="mt-8 space-y-3 text-sm text-muted">
+              {[
+                'Apri Invita',
+                'Condividi link o QR',
+                'L’amico si registra',
+                'Completa il primo scambio',
+                'Il bonus si sblocca',
+                'Parte il nuovo blocco',
+              ].map((s, i) => (
+                <li key={s}>
+                  <strong className="text-ink">{i + 1}.</strong> {s}
+                </li>
+              ))}
+            </ol>
+            <a href={portalPath('/signup')} className="mt-8 inline-flex rounded-pill bg-brand px-7 py-3 text-sm font-bold text-ink">
+              Registrati e apri Invita
             </a>
           </div>
-          <AssetSlot label="invite-friends-city.webp" />
+          <AssetSlot label="invite-03-referral-qr-context.webp" />
         </div>
       </section>
 
       <RelatedLinks
         items={[
           { href: '/missioni', label: 'Missioni', desc: 'Altri premi solo-swap.' },
-          { href: '/come-funziona', label: 'Come funziona', desc: 'Cosa deve fare l’amico al primo swap.' },
-          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti se vuoi credito subito.' },
+          { href: '/come-funziona', label: 'Come funziona', desc: 'Il primo swap dell’amico.' },
+          { href: '/prezzi', label: 'Prezzi', desc: 'Credito subito.' },
         ]}
       />
-      <CTASection title="Invita e fai crescere la mappa" />
+      <FinalCinematicCTA title="Invita e fai crescere la mappa." />
       <SiteFooter />
       <CookieBanner />
     </main>

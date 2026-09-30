@@ -16,16 +16,16 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: 'ParkHub — Trova parcheggio da chi sta uscendo ora',
+    default: 'ParkHub — Smetti di girare. Qualcuno sta uscendo ora.',
     template: '%s · ParkHub',
   },
   description:
-    'ParkHub mette in contatto chi lascia un parcheggio con chi lo sta cercando. Trova posti vicino a te, prenota a prezzo fisso e raggiungili dall’app.',
+    'ParkHub collega chi sta lasciando un parcheggio con chi lo sta cercando. Trova posti pubblicati vicino a te, prenota a prezzo fisso e raggiungili con la navigazione in app.',
   applicationName: 'ParkHub',
   openGraph: {
-    title: 'ParkHub — Trova parcheggio da chi sta uscendo ora',
+    title: 'ParkHub — Smetti di girare. Qualcuno sta uscendo ora.',
     description:
-      'Scambia posti tra automobilisti. Prezzo fisso, navigazione in app, credito sul portale.',
+      'Il segnale che collega chi esce e chi cerca. Prezzo fisso, navigazione in app, credito sul portale.',
     type: 'website',
     locale: 'it_IT',
     siteName: 'ParkHub',

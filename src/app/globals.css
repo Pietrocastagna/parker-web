@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --ink: #0b1220;
-  --teal: #00c9a7;
-  --paper: #f5f7f8;
-  --border: #e6eaed;
-  --muted: #5a6570;
+  --brand: #00c9a7;
+  --brand-deep: #007f6d;
+  --brand-mist: #e7faf6;
+  --ink: #07131f;
+  --paper: #f4f6f4;
+  --warm-paper: #f7f4ee;
+  --line: rgba(7, 19, 31, 0.1);
 }
 
 html {
@@ -25,6 +27,10 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  .signal-pulse,
+  .live-dot {
+    animation: none !important;
+  }
 }
 
 body {
@@ -33,18 +39,62 @@ body {
 }
 
 ::selection {
-  background: rgba(0, 201, 167, 0.25);
+  background: rgba(0, 201, 167, 0.28);
+}
+
+@layer components {
+  .section-pad {
+    @apply px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24;
+  }
+  .section-pad-tight {
+    @apply px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-16;
+  }
+  .eyebrow {
+    @apply text-[12px] font-bold uppercase tracking-[0.16em] text-brand-deep;
+  }
+  .eyebrow-light {
+    @apply text-[12px] font-bold uppercase tracking-[0.16em] text-brand;
+  }
+  .display-h1 {
+    font-size: clamp(2.75rem, 6vw, 6.5rem);
+    @apply font-display font-bold leading-[0.98] tracking-tight;
+  }
+  .display-h2 {
+    font-size: clamp(2.125rem, 4.3vw, 4.5rem);
+    @apply font-display font-bold leading-[1.02] tracking-tight;
+  }
+  .lead {
+    @apply text-[1.15rem] leading-relaxed text-muted sm:text-[1.35rem];
+  }
 }
 
 @layer utilities {
-  .reveal {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  .signal-pulse {
+    animation: signalPulse 4.5s ease-in-out infinite;
   }
-  .reveal.is-visible {
+  .live-dot {
+    animation: liveBlink 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes signalPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.15;
+  }
+}
+
+@keyframes liveBlink {
+  0%,
+  100% {
     opacity: 1;
-    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.35;
   }
 }

@@ -1,73 +1,41 @@
 import { SITE_BASE } from './urls';
 
-const BASE = SITE_BASE;
-
 function asset(name: string): string {
-  return `${BASE}/assets/parkhub/${name}`;
+  return `${SITE_BASE}/assets/parkhub/${name}`;
 }
 
-/** Slot asset — collegare i WebP reali quando disponibili. */
+/** Naming convention V2: page-section-name-role-orientation.webp */
 export const IMAGES = {
-  hero: asset('hero-city-parkhub.webp'),
-  problem: asset('problem-city-loop.webp'),
-  stepSeller: asset('step-seller.webp'),
-  stepBuyer: asset('step-buyer.webp'),
-  stepComplete: asset('step-complete.webp'),
-  appBg: asset('app-city-background.webp'),
-  security: asset('security-user-car.webp'),
-  ranking: asset('ranking-city-user.webp'),
-  missions: asset('missions-city-user.webp'),
-  invite: asset('invite-friends-city.webp'),
-  cta: asset('cta-city-evening.webp'),
-  mockMap: asset('mockup-app-map.webp'),
-  mockSeller: asset('mockup-app-seller.webp'),
-  mockBooking: asset('mockup-app-booking.webp'),
-  mockWallet: asset('mockup-portal-wallet.webp'),
-  mockRanking: asset('mockup-ranking.webp'),
-  mockReferral: asset('mockup-referral.webp'),
+  home01: asset('home-01-hero-city-signal-wide.webp'),
+  home03: asset('home-03-problem-search-loop-wide.webp'),
+  home04a: asset('home-04-flow-publish-context.webp'),
+  home04b: asset('home-04-flow-booking-context.webp'),
+  home04c: asset('home-04-flow-handoff-context.webp'),
+  home05seller: asset('home-05-seller-leaving-car-portrait.webp'),
+  home05buyer: asset('home-05-buyer-arriving-car-portrait.webp'),
+  home07: asset('home-07-ecosystem-app-portal-stage.webp'),
+  home11: asset('home-11-trust-user-vehicle-wide.webp'),
+  home14: asset('home-14-referral-friends-street-wide.webp'),
+  home15a: asset('home-15-real-life-station.webp'),
+  home15b: asset('home-15-real-life-hospital.webp'),
+  home15c: asset('home-15-real-life-center.webp'),
+  home15d: asset('home-15-real-life-evening.webp'),
+  home17: asset('home-17-final-cta-blue-hour-wide.webp'),
+  how01: asset('how-01-hero-two-drivers-signal-wide.webp'),
+  pricing01: asset('pricing-01-hero-wallet-device-stage.webp'),
+  app01: asset('app-01-hero-city-map-device-stage.webp'),
+  ranking01: asset('ranking-01-hero-user-city-wide.webp'),
+  missions01: asset('missions-01-hero-active-city-user-wide.webp'),
+  invite01: asset('invite-01-hero-friends-smartphone-wide.webp'),
+  about01: asset('about-01-hero-city-handoff-wide.webp'),
 } as const;
 
 export const PACKAGES = [
-  {
-    name: 'Prova',
-    price: '€4,99',
-    credit: 'Ricevi €5,40 di credito',
-    hint: 'Per iniziare',
-    note: null as string | null,
-    featured: false,
-  },
-  {
-    name: 'Carnet 8',
-    price: '€8,99',
-    credit: 'Ricevi €9,60 di credito',
-    hint: 'Uso occasionale',
-    note: null,
-    featured: false,
-  },
-  {
-    name: 'Mensile',
-    price: '€23,90 / mese',
-    credit: 'Ricevi €24 / mese',
-    hint: 'Più scelto',
-    note: 'Rinnovo automatico',
-    featured: true,
-  },
-  {
-    name: 'Semestrale',
-    price: '€138,90',
-    credit: '€24/mese per 6 mesi',
-    hint: 'Continuità',
-    note: 'Rinnovo a scadenza attivo di default',
-    featured: false,
-  },
-  {
-    name: 'Annuale',
-    price: '€274,90',
-    credit: '€24/mese per 12 mesi',
-    hint: 'Massimo valore',
-    note: 'Rinnovo a scadenza attivo di default',
-    featured: false,
-  },
+  { name: 'Prova', price: '€4,99', credit: '€5,40 credito', hint: 'Per iniziare', note: null as string | null, featured: false },
+  { name: 'Carnet 8', price: '€8,99', credit: '€9,60 credito', hint: 'Occasionale', note: null, featured: false },
+  { name: 'Mensile', price: '€23,90 / mese', credit: '€24 credito/mese', hint: 'Più scelto', note: 'Rinnovo automatico', featured: true },
+  { name: 'Semestrale', price: '€138,90', credit: '€24/mese × 6', hint: 'Continuità', note: 'Rinnovo a scadenza default on', featured: false },
+  { name: 'Annuale', price: '€274,90', credit: '€24/mese × 12', hint: 'Massimo valore', note: 'Rinnovo a scadenza default on', featured: false },
 ] as const;
 
 export const BUNDLES = [
@@ -85,90 +53,65 @@ export const PRICE_TIERS = [
 ] as const;
 
 export const MISSIONS = [
-  {
-    title: 'Vendi 3 posti',
-    kind: 'Una volta',
-    prize: 'Un parcheggio gratis',
-  },
-  {
-    title: 'Ogni 10 vendite',
-    kind: 'Ripetibile',
-    prize: 'Un parcheggio gratis',
-  },
-  {
-    title: '5 scambi in una settimana',
-    kind: 'Settimanale',
-    prize: 'Un parcheggio gratis',
-  },
-  {
-    title: 'Streak di accessi',
-    kind: 'Badge',
-    prize: 'Badge, nessun credito',
-  },
+  { title: 'Vendi 3 posti', kind: 'Una volta', prize: 'Un parcheggio gratis' },
+  { title: 'Ogni 10 vendite', kind: 'Ripetibile', prize: 'Un parcheggio gratis' },
+  { title: '5 scambi in settimana', kind: 'Settimanale', prize: 'Un parcheggio gratis' },
+  { title: 'Streak di accessi', kind: 'Badge', prize: 'Badge, nessun credito' },
 ] as const;
 
 export const MILESTONES = [
-  {
-    title: '100 vendite nel trimestre',
-    prize: '10 parcheggi gratis',
-  },
-  {
-    title: '200 vendite nello stesso trimestre',
-    prize: '1 mese del piano mensile',
-  },
-  {
-    title: '500 vendite nell’anno',
-    prize: 'Gift card €100',
-  },
+  { title: '100 vendite nel trimestre', prize: '10 parcheggi gratis' },
+  { title: '200 nello stesso trimestre', prize: '1 mese piano mensile' },
+  { title: '500 vendite nell’anno', prize: 'Gift card €100' },
 ] as const;
 
 export const FAQS = [
   {
-    q: 'Che cosa fa ParkHub esattamente?',
-    a: 'ParkHub mette in contatto chi sta lasciando un parcheggio con chi lo sta cercando, nello stesso momento. Trovi un posto vicino sulla mappa, lo prenoti a prezzo fisso e ci arrivi guidato dall’app. Il credito si compra sul portale.',
+    q: 'Che cosa sto comprando esattamente?',
+    a: 'Compri credito ParkHub sul portale. Lo usi in app per prenotare posti pubblicati da altri automobilisti a prezzo fisso. Non stai comprando un box, né ticket strisce blu.',
   },
   {
     q: 'Dove funziona ParkHub?',
     a: 'In tutta Italia. Quanti posti vedi dipende da quanti utenti pubblicano nella tua zona e nella fascia oraria in cui cerchi.',
   },
   {
-    q: 'Quanto costa prenotare un posto?',
-    a: 'Il prezzo è fisso e visibile prima di confermare. Parte da €1,20 e arriva fino a €5,00 a seconda del livello scelto dal venditore.',
+    q: 'Quanto costa uno scambio?',
+    a: 'Il prezzo è fisso e visibile prima di confermare. Parte da €1,20 e arriva fino a €5,00 a seconda del livello del venditore.',
   },
   {
-    q: 'Devo pagare anche le strisce blu?',
-    a: 'Sì, se il posto è a pagamento sul suolo pubblico. Il prezzo dello scambio ParkHub non include il ticket del parcometro.',
+    q: 'Le strisce blu sono comprese?',
+    a: 'No. Se il posto è a pagamento sul suolo pubblico, il parcometro resta a carico tuo.',
   },
   {
-    q: 'Posso usare la carta direttamente nell’app?',
-    a: 'No. Il pagamento con carta avviene sul portale web. Nell’app usi il credito già disponibile nel wallet.',
+    q: 'Perché compro credito sul portale?',
+    a: 'I pagamenti con carta stanno sul web (Stripe). In app usi il wallet già carico: niente checkout mentre sei in strada.',
   },
   {
     q: 'Posso prelevare il credito?',
-    a: 'No. Il credito ParkHub resta nel circuito: lo usi per gli scambi. Chi vende riceve credito da riusare, non un bonifico bancario.',
+    a: 'No. Il credito resta nel circuito ParkHub e si riusa negli scambi. Non diventa un bonifico bancario.',
+  },
+  {
+    q: 'Cosa succede se annullo?',
+    a: 'Lontano e con tempo: rimborso senza penale ranking. Molto vicino: completi o apri un report. Lontano ma negli ultimi 3 minuti: rimborso e possibile penale ranking.',
   },
   {
     q: 'Come funziona il ranking?',
-    a: 'Le stelle misurano l’affidabilità negli scambi. Vedi solo il tuo punteggio. Con ranking sotto soglia puoi comunque pubblicare, ma al livello di prezzo base. Non è una classifica pubblica e non coincide con le missioni.',
+    a: 'Stelle personali di affidabilità, non una classifica pubblica. Sotto soglia puoi ancora vendere, ma al livello di prezzo base. Le missioni non modificano le stelle.',
   },
   {
-    q: 'Cosa succede se devo annullare?',
-    a: 'Se sei ancora lontano e non sei negli ultimi minuti di attesa, puoi annullare con rimborso senza penale ranking. Se sei molto vicino al posto, lo scambio va completato oppure apri una segnalazione. Se annulli all’ultimo momento pur essendo lontano, ricevi il rimborso ma il ranking può diminuire.',
-  },
-  {
-    q: 'Come funziona Invita un amico?',
-    a: 'Condividi codice, link o QR. L’amico lo usa solo in registrazione. Quando completa il primo scambio, tu ricevi €2,50. Ogni tre amici qualificati il blocco vale €10 (€2,50 + €2,50 + €5). Il bonus è spendibile solo sugli swap.',
+    q: 'Come funzionano i bonus invito?',
+    a: 'Condividi codice/link/QR. L’amico lo usa solo in registrazione. Al suo primo scambio tu ricevi €2,50. Ogni tre amici qualificati: €2,50 + €2,50 + €5 = €10.',
   },
   {
     q: 'Posso usare lo stesso account su app e portale?',
-    a: 'Sì. Un solo account: stesse email e password. Lo scambio è in app; i pacchetti di credito si comprano sul portale.',
+    a: 'Sì. Un solo account, stesso saldo. App per la strada; portale per credito e gestione.',
   },
 ] as const;
 
 export const NAV = [
   { href: '/come-funziona', label: 'Come funziona' },
   { href: '/prezzi', label: 'Prezzi' },
-  { href: '/missioni', label: 'Missioni' },
   { href: '/ranking', label: 'Ranking' },
+  { href: '/missioni', label: 'Missioni' },
   { href: '/invita', label: 'Invita' },
 ] as const;

@@ -1,79 +1,86 @@
 import type { Metadata } from 'next';
-import { SiteHeader } from '../components/site-header';
+import { FloatingHeader } from '../components/site-header';
 import { SiteFooter, CookieBanner } from '../components/site-footer';
 import {
-  AssetSlot,
-  CTASection,
-  MissionCard,
+  EditorialHeading,
+  FinalCinematicCTA,
   PageHero,
   RelatedLinks,
-  SectionHeading,
 } from '../components/ui';
+import { AssetSlot } from '../components/site-asset';
 import { MILESTONES, MISSIONS } from '../lib/content';
 import { portalPath } from '../lib/urls';
 
 export const metadata: Metadata = {
   title: 'Missioni ParkHub — Obiettivi e premi',
   description:
-    'Missioni ParkHub: vendi 3, ogni 10 vendite, 5 scambi a settimana, streak. Traguardi 100/200/500. Premi solo-swap.',
+    'Più offerta sulla mappa. Premi solo-swap, tetto €3/mese, traguardi 100/200/500. Non toccano il ranking.',
 };
 
 export default function MissioniPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <SiteHeader dark />
+      <FloatingHeader />
       <PageHero
-        eyebrow="Obiettivi semplici"
-        title="Aiuta la mappa a restare viva. ParkHub ti restituisce qualcosa."
-        lead="Le missioni ti spingono a pubblicare e scambiare con continuità. I premi in credito servono solo per gli swap e non toccano il ranking."
+        eyebrow="Obiettivi utili"
+        title="Più offerta sulla mappa. Più valore per tutti."
+        lead="Le missioni premiano comportamenti utili allo scambio, senza modificare il ranking."
+        asset="missions-01-hero-active-city-user-wide.webp"
       />
 
-      <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2 lg:items-center">
-          <SectionHeading
-            title="Missioni base"
-            lead="Credito solo-swap, scadenza 5–7 giorni, tetto €3/mese sui piccoli premi. Stelle separate. Badge senza valore economico."
-          />
-          <AssetSlot label="missions-city-user.webp" />
-        </div>
-        <div className="mx-auto mt-10 grid max-w-site gap-4 sm:grid-cols-2">
-          {MISSIONS.map((m) => (
-            <MissionCard key={m.title} {...m} />
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section className="section-pad bg-brand-mist/40">
         <div className="mx-auto max-w-site">
-          <SectionHeading title="Traguardi più lunghi" lead="Fuori dal tetto mensile dei premi piccoli. Calendario Roma." />
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {MILESTONES.map((m) => (
-              <article key={m.title} className="rounded-card border border-border bg-paper p-6">
-                <h3 className="font-display text-lg font-bold">{m.title}</h3>
-                <p className="mt-2 text-sm text-muted">Premio: {m.prize}</p>
-              </article>
+          <EditorialHeading
+            title="Missioni base"
+            lead="Credito solo-swap, scadenza 5–7 giorni, tetto €3/mese sui piccoli premi."
+          />
+          <div className="mt-10 space-y-4">
+            {MISSIONS.map((m, i) => (
+              <div key={m.title} className="rounded-card border border-line bg-white p-5 shadow-soft">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-brand-deep">{m.kind}</p>
+                    <h3 className="mt-1 font-display text-lg font-bold">{m.title}</h3>
+                  </div>
+                  <p className="text-sm text-muted">{m.prize}</p>
+                </div>
+                <div className="mt-4 h-2 overflow-hidden rounded-full bg-paper">
+                  <div className="h-full rounded-full bg-brand" style={{ width: `${28 + i * 16}%` }} />
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-14 text-center sm:px-8 lg:px-12">
-        <a
-          href={portalPath('/signup')}
-          className="inline-flex rounded-pill bg-ink px-7 py-3 text-sm font-bold text-white hover:bg-ink/90"
-        >
-          Registrati e vedi le missioni sul portale
-        </a>
+      <section className="section-pad bg-white">
+        <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <EditorialHeading title="Traguardi lunghi" lead="Fuori dal tetto mensile. Calendario Roma." />
+            <div className="mt-8 space-y-3">
+              {MILESTONES.map((m) => (
+                <div key={m.title} className="rounded-card border border-line bg-warm-paper p-5">
+                  <h3 className="font-display font-bold">{m.title}</h3>
+                  <p className="mt-1 text-sm text-muted">{m.prize}</p>
+                </div>
+              ))}
+            </div>
+            <a href={portalPath('/signup')} className="mt-8 inline-flex rounded-pill bg-ink px-6 py-3 text-sm font-bold text-white">
+              Vedi missioni sul portale
+            </a>
+          </div>
+          <AssetSlot label="missions-03-progress-lifestyle-wide.webp" />
+        </div>
       </section>
 
       <RelatedLinks
         items={[
-          { href: '/ranking', label: 'Ranking', desc: 'Sistema di fiducia separato.' },
-          { href: '/invita', label: 'Invita', desc: 'Altro modo di guadagnare credito solo-swap.' },
+          { href: '/ranking', label: 'Ranking', desc: 'Sistema separato.' },
+          { href: '/invita', label: 'Invita', desc: 'Altri bonus solo-swap.' },
           { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti di credito.' },
         ]}
       />
-      <CTASection />
+      <FinalCinematicCTA />
       <SiteFooter />
       <CookieBanner />
     </main>

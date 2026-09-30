@@ -2,9 +2,8 @@
 
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { SiteHeader } from '../components/site-header';
-import { SiteFooter, CookieBanner } from '../components/site-footer';
-import { TrustRow } from '../components/ui';
+import { ParkHubLogo } from '../components/parkhub-logo';
+import { LiveDot } from '../components/signal';
 import { StoreButtons } from '../components/store-badges';
 import { portalPath } from '../lib/urls';
 
@@ -14,9 +13,9 @@ function ReferralInner() {
   const name = (params.get('name') || '').trim();
 
   const headline = name
-    ? `${name} ti ha invitato a provare ParkHub.`
+    ? `Stai entrando tramite l’invito di ${name}.`
     : code
-      ? `Sei stato invitato su ParkHub con il codice ${code}.`
+      ? `Sei stato invitato su ParkHub.`
       : 'Sei stato invitato su ParkHub.';
 
   const signupUrl = code
@@ -24,67 +23,52 @@ function ReferralInner() {
     : portalPath('/signup');
 
   return (
-    <>
-      <section className="relative overflow-hidden bg-ink px-5 pb-16 pt-28 text-white sm:px-8 sm:pb-20 sm:pt-32 lg:px-12">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(0,201,167,0.2),_transparent_55%)]" />
-        <div className="relative mx-auto max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">
-            Sei stato invitato su ParkHub
+    <main className="flex min-h-screen flex-col bg-ink text-white">
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-5 py-16">
+        <ParkHubLogo variant="light" height={28} priority />
+        <p className="mt-10 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-brand">
+          <LiveDot /> Invito ParkHub
+        </p>
+        <h1 className="mt-4 font-display text-4xl font-bold leading-[1.05] sm:text-5xl">{headline}</h1>
+        <p className="mt-5 text-base leading-relaxed text-white/70">
+          Scarica l&apos;app e registrati. Il codice è già associato al tuo invito.
+        </p>
+        {code ? (
+          <p className="mt-5 inline-flex w-fit rounded-pill border border-brand/40 bg-brand/10 px-4 py-2 font-mono text-sm font-semibold text-brand">
+            {code}
           </p>
-          <h1 className="mt-3 font-display text-4xl font-bold leading-[1.05] sm:text-5xl">
-            {headline}
-          </h1>
-          <p className="mt-5 text-base leading-relaxed text-white/72 sm:text-lg">
-            Scarica l&apos;app e registrati usando il codice già associato al tuo invito.
-          </p>
-          {code ? (
-            <p className="mt-4 inline-flex rounded-pill border border-teal/40 bg-teal/10 px-4 py-2 text-sm font-semibold text-teal">
-              Codice: {code}
-            </p>
-          ) : null}
-          <div className="mt-8">
-            <StoreButtons variant="dark" />
-          </div>
-          <div className="mt-6">
-            <a
-              href={signupUrl}
-              className="inline-flex rounded-pill border border-white/25 px-7 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
-            >
-              Continua al portale
-            </a>
-          </div>
-          <TrustRow
-            light
-            items={[
-              'Codice già collegato',
-              'Nessun acquisto automatico',
-              'Bonus per chi invita solo dopo il tuo primo scambio',
-            ]}
-          />
-          <p className="mt-8 text-sm text-white/50">
-            Il codice referral può essere applicato solo durante la registrazione.
-          </p>
-        </div>
-      </section>
-    </>
+        ) : null}
+        <StoreButtons className="mt-8" variant="dark" />
+        <a
+          href={signupUrl}
+          className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-pill border border-white/20 px-7 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
+        >
+          Continua al portale
+        </a>
+        <ul className="mt-10 space-y-2 text-sm text-white/50">
+          <li>· codice già collegato</li>
+          <li>· nessun acquisto automatico</li>
+          <li>· bonus per chi invita solo dopo il tuo primo scambio</li>
+        </ul>
+        <p className="mt-8 text-xs text-white/35">
+          Il codice referral può essere applicato solo durante la registrazione.
+        </p>
+      </div>
+    </main>
   );
 }
 
+/** Landing referral minimale — no menu complesso (V2). */
 export default function ReferralPage() {
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <SiteHeader dark />
-      <Suspense
-        fallback={
-          <section className="bg-ink px-5 pb-16 pt-28 text-white">
-            <p className="text-sm text-white/60">Caricamento invito…</p>
-          </section>
-        }
-      >
-        <ReferralInner />
-      </Suspense>
-      <SiteFooter />
-      <CookieBanner />
-    </main>
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-ink text-white/60">
+          Caricamento invito…
+        </main>
+      }
+    >
+      <ReferralInner />
+    </Suspense>
   );
 }
