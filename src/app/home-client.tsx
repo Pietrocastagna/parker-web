@@ -25,7 +25,7 @@ import {
 } from './components/ui';
 import { Reveal } from './components/reveal';
 import { StoreButtons } from './components/store-badges';
-import { FAQS, MILESTONES, PACKAGES, PRICE_TIERS } from './lib/content';
+import { BALANCE_SOURCES, FAQS, LAUNCH_PROMO, MILESTONES, PACKAGES, PRICE_TIERS } from './lib/content';
 import { portalPath, siteHref } from './lib/urls';
 
 export default function HomePage() {
@@ -48,6 +48,18 @@ export default function HomePage() {
         <div className="relative mx-auto grid min-h-[min(92svh,960px)] max-w-site items-center gap-12 px-5 pb-28 pt-32 sm:px-8 lg:grid-cols-12 lg:px-12 lg:pb-36 lg:pt-40">
           <div className="lg:col-span-6">
             <Reveal>
+              {LAUNCH_PROMO.enabled ? (
+                <a
+                  href="#lancio"
+                  className="group mb-6 inline-flex max-w-full items-center gap-2.5 rounded-pill border border-brand/40 bg-white/85 py-1.5 pl-1.5 pr-4 text-[13px] font-semibold text-ink shadow-soft backdrop-blur transition hover:border-brand hover:bg-white"
+                >
+                  <span className="rounded-pill bg-brand px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink">Lancio</span>
+                  <span className="truncate">
+                    {LAUNCH_PROMO.parkings} parcheggi gratis ai primi {LAUNCH_PROMO.seatsLabel} iscritti
+                  </span>
+                  <span className="text-brand-deep transition-transform group-hover:translate-x-0.5">→</span>
+                </a>
+              ) : null}
               <SectionEyebrow>Parcheggi, in tempo reale. Tra persone.</SectionEyebrow>
               <h1 className="display-h1 text-balance mt-5">
                 Smetti di girare.
@@ -242,9 +254,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ───────── 04 SCROLL STORY ───────── */}
+      {/* ───────── 04 I QUATTRO PASSI ───────── */}
       <section className="relative bg-paper">
-        <SignalLine variant="vertical" className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-6 -translate-x-1/2 text-brand lg:block" />
         <ExchangeScrollStory />
       </section>
 
@@ -493,6 +504,96 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      {/* ───────── 08b OFFERTA DI LANCIO (temporanea: LAUNCH_PROMO.enabled) ───────── */}
+      {LAUNCH_PROMO.enabled ? (
+        <section id="lancio" className="relative scroll-mt-24 overflow-hidden bg-brand text-ink">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
+            <MapCanvas theme="light" dense className="h-full w-full" />
+          </div>
+          <div className="pointer-events-none absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-white/40 blur-[110px]" aria-hidden />
+          <div className="pointer-events-none absolute -bottom-32 right-0 h-[460px] w-[460px] rounded-full bg-brand-deep/30 blur-[120px]" aria-hidden />
+          <span
+            className="pointer-events-none absolute -right-6 bottom-[-0.18em] select-none font-mono text-[18rem] font-bold leading-none text-ink/10 sm:text-[26rem] lg:text-[32rem]"
+            aria-hidden
+          >
+            {LAUNCH_PROMO.parkings}
+          </span>
+
+          <div className="relative mx-auto grid max-w-site gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-28">
+            <div className="lg:col-span-6">
+              <Reveal>
+                <p className="inline-flex items-center gap-2 rounded-pill bg-ink px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand">
+                  <LiveDot /> Offerta di lancio · per un periodo limitato
+                </p>
+                <h2 className="display-h2 text-balance mt-5">
+                  I primi {LAUNCH_PROMO.seatsLabel} iscritti partono con {LAUNCH_PROMO.parkings} parcheggi.
+                </h2>
+                <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink/80">
+                  Crea l’account, verifica il telefono e trovi {LAUNCH_PROMO.parkings} parcheggi già pronti in app. {LAUNCH_PROMO.rule}
+                </p>
+                <ul className="mt-7 flex flex-wrap gap-2.5 text-[13px] font-semibold">
+                  {[
+                    'Dopo la verifica del telefono',
+                    '1 parcheggio per scambio',
+                    `Validità ${LAUNCH_PROMO.validityDays} giorni`,
+                    'Solo per prenotare posti',
+                  ].map((t) => (
+                    <li key={t} className="rounded-pill border border-ink/15 bg-white/60 px-3.5 py-1.5 backdrop-blur">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <PrimaryCTA href={portalPath('/signup')} tone="ink" className="whitespace-nowrap">
+                    Prendi i tuoi {LAUNCH_PROMO.parkings} parcheggi
+                  </PrimaryCTA>
+                  <p className="text-sm text-ink/70">
+                    Posti limitati: a {LAUNCH_PROMO.seatsLabel} iscritti l’offerta si chiude da sola.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-6">
+              <Reveal delay={120}>
+                <div className="rounded-stage bg-ink p-6 text-white shadow-device sm:p-8">
+                  <p className="eyebrow-light">Da dove arriva il saldo che spendi in app</p>
+                  <ul className="mt-5 divide-y divide-white/10">
+                    {BALANCE_SOURCES.map((s, i) => (
+                      <li key={s.title} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 font-mono text-xs font-bold text-brand">
+                          0{i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="font-display text-lg font-bold">{s.title}</p>
+                            <span className="rounded-pill border border-white/15 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white/60">{s.tag}</span>
+                          </div>
+                          <p className="mt-1 text-sm text-white/65">{s.body}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 rounded-2xl border border-brand/40 bg-brand/10 p-5">
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-ink">
+                        <LockIcon />
+                      </span>
+                      <div>
+                        <p className="font-display text-base font-bold">Bonus amici: solo parcheggi.</p>
+                        <p className="mt-1 text-sm text-white/70">
+                          Il credito che ricevi invitando un amico si spende esclusivamente per prenotare posti. Non si trasforma in buoni, non si scarica come voucher, non si preleva.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* ───────── 09 LIVELLI ───────── */}
       <section className="section-pad bg-white">
@@ -800,6 +901,14 @@ function TimerIcon() {
   return (
     <svg {...ic}>
       <path d="M10 2.5h4M12 6a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 9.5v4" />
+    </svg>
+  );
+}
+function LockIcon() {
+  return (
+    <svg {...ic} width={16} height={16} strokeWidth={2.4}>
+      <rect x="5" y="11" width="14" height="10" rx="2.5" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
     </svg>
   );
 }

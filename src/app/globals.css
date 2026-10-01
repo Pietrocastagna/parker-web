@@ -161,6 +161,15 @@ main {
   }
 }
 
+@keyframes stepProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

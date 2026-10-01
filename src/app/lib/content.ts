@@ -65,7 +65,44 @@ export const MILESTONES = [
   { title: '500 vendite nell’anno', prize: 'Gift card €100' },
 ] as const;
 
-export const FAQS = [
+/**
+ * Offerta di lancio (temporanea). Per toglierla dal sito basta mettere
+ * `enabled: false`: spariscono sezione home, pill hero e FAQ dedicata.
+ */
+export const LAUNCH_PROMO = {
+  enabled: true,
+  seats: 10_000,
+  seatsLabel: '10.000',
+  parkings: 10,
+  validityDays: 90,
+  /** Backend: parker-v2 `foundersCampaign.ts` — 10 coupon da €1,20, max 1 per swap. */
+  rule: 'Un parcheggio gratis per scambio, fino a 10 scambi, entro 90 giorni dalla verifica del telefono.',
+} as const;
+
+export const BALANCE_SOURCES = [
+  {
+    title: 'Pacchetto acquistato',
+    body: 'Prova, Carnet, piani Mensile/Semestrale/Annuale e bundle extra. Si comprano sul portale, si spendono in app.',
+    tag: 'Portale',
+  },
+  {
+    title: 'Gruppo',
+    body: 'Quote e bundle del gruppo (famiglia, team) condivisi tra i membri secondo le regole dell’admin.',
+    tag: 'Condiviso',
+  },
+  {
+    title: 'Bonus missioni',
+    body: 'Premi piccoli per comportamenti utili: solo swap, scadenza breve, tetto €3/mese.',
+    tag: 'Bonus',
+  },
+] as const;
+
+const LAUNCH_FAQ = {
+  q: 'Cos’è l’offerta di lancio dei 10 parcheggi?',
+  a: 'I primi 10.000 utenti che completano la verifica del telefono ricevono 10 parcheggi gratis: un parcheggio per scambio, fino a 10 scambi, entro 90 giorni. Si usano solo per prenotare posti in app; non sono proventi e non diventano buoni. Raggiunti i 10.000 iscritti l’offerta si chiude da sola.',
+} as const;
+
+const BASE_FAQS = [
   {
     q: 'Che cosa sto comprando esattamente?',
     a: 'Compri credito ParkHub sul portale. Lo usi in app per prenotare posti pubblicati da altri automobilisti a prezzo fisso. Non stai comprando un box, né ticket strisce blu.',
@@ -100,13 +137,17 @@ export const FAQS = [
   },
   {
     q: 'Come funzionano i bonus invito?',
-    a: 'Condividi codice/link/QR. L’amico lo usa solo in registrazione. Al suo primo scambio tu ricevi €2,50. Ogni tre amici qualificati: €2,50 + €2,50 + €5 = €10.',
+    a: 'Condividi codice/link/QR. L’amico lo usa solo in registrazione. Al suo primo scambio tu ricevi €2,50. Ogni tre amici qualificati: €2,50 + €2,50 + €5 = €10. Il bonus si spende solo per prenotare parcheggi: non si riscatta in buoni e non si preleva.',
   },
   {
     q: 'Posso usare lo stesso account su app e portale?',
     a: 'Sì. Un solo account, stesso saldo. App per la strada; portale per credito e gestione.',
   },
 ] as const;
+
+export const FAQS: readonly { q: string; a: string }[] = LAUNCH_PROMO.enabled
+  ? [LAUNCH_FAQ, ...BASE_FAQS]
+  : BASE_FAQS;
 
 export const NAV = [
   { href: '/come-funziona', label: 'Come funziona' },

@@ -42,39 +42,55 @@ const STEPS = [
 ] as const;
 
 const SCREENS = [SellScreen, MapSearchScreen, BookedScreen, CompleteScreen];
+const AUTO_MS = 4200;
 
+/**
+ * Sequenza dei 4 passi. Nessuno scroll-jacking e nessuna sezione sticky:
+ * la pagina scorre normalmente, i passi avanzano da soli (pausa su hover,
+ * stop definitivo al primo click dell'utente) oppure al click.
+ */
 export function ExchangeScrollStory() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [auto, setAuto] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [tick, setTick] = useState(0); // riavvia la barra di avanzamento
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const rect = el.getBoundingClientRect();
-        const total = el.offsetHeight - window.innerHeight;
-        if (total <= 0) return;
-        const progress = Math.min(1, Math.max(0, -rect.top / total));
-        setActive(Math.min(3, Math.floor(progress * 4)));
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      cancelAnimationFrame(raf);
-    };
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.35 });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!auto || paused || !inView) return;
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setTimeout(() => {
+      setActive((a) => (a + 1) % STEPS.length);
+      setTick((t) => t + 1);
+    }, AUTO_MS);
+    return () => window.clearTimeout(id);
+  }, [active, auto, paused, inView]);
+
+  const choose = (i: number) => {
+    setAuto(false);
+    setActive(i);
+    setTick((t) => t + 1);
+  };
+
   const step = STEPS[active];
+  const running = auto && !paused && inView;
 
   return (
-    <div ref={ref} className="relative lg:min-h-[240vh]">
-      <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
-        <div className="mx-auto grid w-full max-w-site gap-10 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-0">
+    <div ref={ref} className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div>
+        <div className="mx-auto grid w-full max-w-site gap-10 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-24">
           {/* testo */}
           <div className="lg:col-span-5">
             <SectionEyebrow>Dal segnale allo scambio</SectionEyebrow>
@@ -87,9 +103,9 @@ export function ExchangeScrollStory() {
                   <li key={s.n}>
                     <button
                       type="button"
-                      onClick={() => setActive(i)}
+                      onClick={() => choose(i)}
                       aria-current={on ? 'step' : undefined}
-                      className={`group flex w-full gap-5 rounded-2xl px-4 py-4 text-left transition-all duration-300 ${
+                      className={`group relative flex w-full gap-5 overflow-hidden rounded-2xl px-4 py-4 text-left transition-all duration-300 ${
                         on ? 'bg-white shadow-soft ring-1 ring-brand/30' : 'hover:bg-white/60'
                       }`}
                     >
@@ -117,11 +133,22 @@ export function ExchangeScrollStory() {
                           {s.body}
                         </span>
                       </span>
+                      {on && running ? (
+                        <span
+                          key={tick}
+                          className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-brand"
+                          style={{ animation: `stepProgress ${AUTO_MS}ms linear forwards` }}
+                          aria-hidden
+                        />
+                      ) : null}
                     </button>
                   </li>
                 );
               })}
             </ol>
+            <p className="mt-4 px-4 text-xs text-muted">
+              {auto ? 'Avanza da solo · tocca un passo per fermarti' : 'Tocca un passo per cambiare schermata'}
+            </p>
           </div>
 
           {/* stage */}
@@ -166,7 +193,7 @@ export function ExchangeScrollStory() {
                   key={s.n}
                   type="button"
                   aria-label={`Vai allo step ${s.title}`}
-                  onClick={() => setActive(i)}
+                  onClick={() => choose(i)}
                   className={`h-2 rounded-full transition-all ${i === active ? 'w-8 bg-brand' : 'w-2 bg-ink/15'}`}
                 />
               ))}
