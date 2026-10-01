@@ -5,6 +5,8 @@ const basePath = isGhPages ? `/${repo}` : '';
 
 const nextConfig = {
   reactStrictMode: true,
+  // build e dev in cartelle separate: `next build` mentre `next dev` gira non corrompe più la cache
+  distDir: process.env.NODE_ENV === 'production' ? '.next-build' : '.next',
   output: 'export',
   trailingSlash: true,
   images: {

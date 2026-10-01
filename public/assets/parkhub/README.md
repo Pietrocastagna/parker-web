@@ -38,4 +38,11 @@ Naming: `[page]-[section]-[name]-[role]-[orientation].webp`
 - about-01-hero-city-handoff-wide.webp
 - about-03-human-city-parking-wide.webp
 
-Finché i file mancano, `AssetSlot` mostra un placeholder gradient con il nome file.
+## Come funziona il fallback
+
+`scripts/gen-asset-manifest.mjs` (eseguito automaticamente in `npm run dev` e `npm run build`,
+oppure a mano con `npm run assets:manifest`) elenca i file presenti in questa cartella in
+`src/app/lib/asset-manifest.json`. `AssetSlot` legge il manifest: se il file c'è lo carica,
+altrimenti disegna subito una scena "mappa" coerente col brand, senza richieste 404 né flash.
+
+Basta copiare qui i WebP con il nome esatto e riavviare `npm run dev`.

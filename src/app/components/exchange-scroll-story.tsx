@@ -1,35 +1,47 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { DeviceFrame, AppMapScreen } from './ui-buttons';
-import { LiveDot } from './signal';
+import { PhoneFrame } from './device';
+import { BookedScreen, CompleteScreen, MapSearchScreen, SellScreen } from './map-canvas';
+import { FloatingStatusChip, LiveDot } from './signal';
+import { SectionEyebrow } from './ui';
 
 const STEPS = [
   {
     n: '01',
     title: 'Pubblica',
-    body: 'Stai andando via? Dillo alla mappa. Apri Vendi, scegli il posto e pubblicalo.',
+    lead: 'Stai andando via? Dillo alla mappa.',
+    body: 'Apri Vendi, scegli il posto e pubblicalo.',
     chip: 'Sto uscendo',
+    side: 'Venditore',
   },
   {
     n: '02',
     title: 'Appari',
-    body: 'Il tuo posto diventa visibile a chi è vicino. Distanza, prezzo e tempo stimato sono chiari prima della prenotazione.',
-    chip: 'Posto live',
+    lead: 'Il tuo posto diventa visibile a chi è vicino.',
+    body: 'Distanza, prezzo e tempo stimato sono chiari prima della prenotazione.',
+    chip: 'LIVE · posto pubblicato ora',
+    side: 'Acquirente',
   },
   {
     n: '03',
     title: 'Prenota',
-    body: 'Chi arriva lo blocca e parte verso di te. Ricevi lo stato dello scambio e sai che qualcuno è in arrivo.',
-    chip: 'Prenotato',
+    lead: 'Chi arriva lo blocca e parte verso di te.',
+    body: 'Ricevi lo stato dello scambio e sai che qualcuno è in arrivo.',
+    chip: 'Prenotato · arrivo in corso',
+    side: 'Entrambi',
   },
   {
     n: '04',
     title: 'Completa',
-    body: 'Uno esce. L’altro entra. Il credito si muove automaticamente.',
-    chip: 'Chiusura',
+    lead: 'Uno esce. L’altro entra.',
+    body: 'Il credito si muove automaticamente.',
+    chip: 'Scambio completato',
+    side: 'Entrambi',
   },
 ] as const;
+
+const SCREENS = [SellScreen, MapSearchScreen, BookedScreen, CompleteScreen];
 
 export function ExchangeScrollStory() {
   const ref = useRef<HTMLDivElement>(null);
@@ -38,58 +50,127 @@ export function ExchangeScrollStory() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    let raf = 0;
     const onScroll = () => {
-      const rect = el.getBoundingClientRect();
-      const total = el.offsetHeight - window.innerHeight;
-      if (total <= 0) return;
-      const progress = Math.min(1, Math.max(0, -rect.top / total));
-      setActive(Math.min(3, Math.floor(progress * 4)));
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        const total = el.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        const progress = Math.min(1, Math.max(0, -rect.top / total));
+        setActive(Math.min(3, Math.floor(progress * 4)));
+      });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   const step = STEPS[active];
 
   return (
-    <div ref={ref} className="relative min-h-[220vh]">
-      <div className="sticky top-24 mx-auto grid max-w-site gap-10 px-5 py-10 sm:px-8 lg:grid-cols-12 lg:px-12 lg:py-16">
-        <div className="lg:col-span-4">
-          <p className="eyebrow">Dal segnale allo scambio</p>
-          <h2 className="display-h2 mt-3 text-[2rem] sm:text-4xl">
-            Una partenza. Un arrivo. Un passaggio di pochi minuti.
-          </h2>
-          <div className="mt-10 space-y-4">
-            {STEPS.map((s, i) => (
-              <button
-                key={s.n}
-                type="button"
-                onClick={() => setActive(i)}
-                className={`w-full rounded-card border p-4 text-left transition ${
-                  i === active
-                    ? 'border-brand bg-brand-mist shadow-soft'
-                    : 'border-line bg-white/60 hover:border-brand/30'
-                }`}
-              >
-                <p className="font-mono text-xs font-bold text-brand-deep">{s.n}</p>
-                <p className="mt-1 font-display text-lg font-bold">{s.title}</p>
-                <p className="mt-1 text-sm text-muted">{s.body}</p>
-              </button>
-            ))}
+    <div ref={ref} className="relative lg:min-h-[240vh]">
+      <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
+        <div className="mx-auto grid w-full max-w-site gap-10 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-0">
+          {/* testo */}
+          <div className="lg:col-span-5">
+            <SectionEyebrow>Dal segnale allo scambio</SectionEyebrow>
+            <h2 className="display-h2 text-balance mt-3">Una partenza. Un arrivo. Un passaggio di pochi minuti.</h2>
+
+            <ol className="mt-10 space-y-2">
+              {STEPS.map((s, i) => {
+                const on = i === active;
+                return (
+                  <li key={s.n}>
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      aria-current={on ? 'step' : undefined}
+                      className={`group flex w-full gap-5 rounded-2xl px-4 py-4 text-left transition-all duration-300 ${
+                        on ? 'bg-white shadow-soft ring-1 ring-brand/30' : 'hover:bg-white/60'
+                      }`}
+                    >
+                      <span className="relative flex flex-col items-center">
+                        <span
+                          className={`flex h-9 w-9 items-center justify-center rounded-full font-mono text-xs font-bold transition ${
+                            on ? 'bg-brand text-ink' : 'bg-ink/5 text-ink/60 group-hover:bg-ink/10'
+                          }`}
+                        >
+                          {s.n}
+                        </span>
+                        {i < STEPS.length - 1 ? <span className={`mt-1 w-px flex-1 ${on ? 'bg-brand/50' : 'bg-line'}`} /> : null}
+                      </span>
+                      <span className="flex-1 pb-1">
+                        <span className="flex items-center justify-between gap-3">
+                          <span className="font-display text-lg font-bold">{s.title}</span>
+                          <span className={`text-[11px] font-bold uppercase tracking-wider ${on ? 'text-brand-deep' : 'text-ink/40'}`}>{s.side}</span>
+                        </span>
+                        <span className={`mt-1 block text-sm font-semibold ${on ? 'text-ink' : 'text-ink/70'}`}>{s.lead}</span>
+                        <span
+                          className={`block overflow-hidden text-sm text-muted transition-all duration-500 ${
+                            on ? 'mt-1 max-h-16 opacity-100' : 'max-h-0 opacity-0'
+                          }`}
+                        >
+                          {s.body}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
-        </div>
-        <div className="flex items-center justify-center lg:col-span-8">
-          <div className="relative w-full max-w-md">
-            <DeviceFrame>
-              <div className="px-4 pb-2 pt-1">
-                <div className="mb-3 inline-flex items-center gap-2 rounded-pill bg-brand/15 px-3 py-1 text-[11px] font-bold text-brand">
-                  <LiveDot />
-                  {step.chip}
-                </div>
+
+          {/* stage */}
+          <div className="relative lg:col-span-7">
+            <div className="relative mx-auto flex max-w-[560px] items-center justify-center rounded-stage bg-gradient-to-br from-brand-mist via-white to-paper p-6 ring-1 ring-line sm:p-10">
+              <div className="absolute inset-0 overflow-hidden rounded-stage">
+                <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-brand/20 blur-3xl" />
+                <div className="absolute -right-10 bottom-0 h-56 w-56 rounded-full bg-amber/10 blur-3xl" />
               </div>
-              <AppMapScreen />
-            </DeviceFrame>
+              <div className="absolute left-4 top-5 z-20 sm:left-8 sm:top-8">
+                <FloatingStatusChip tone={active === 1 ? 'brand' : active === 3 ? 'light' : 'dark'}>
+                  {active < 3 ? <LiveDot /> : null}
+                  {step.chip}
+                </FloatingStatusChip>
+              </div>
+              <PhoneFrame className="relative z-10 max-w-[280px] sm:max-w-[300px]" glow={false}>
+                <div key={active} className="h-full animate-[fadeIn_.45s_ease]">
+                  {(() => {
+                    const Screen = SCREENS[active];
+                    return <Screen />;
+                  })()}
+                </div>
+              </PhoneFrame>
+              <div className="absolute bottom-5 right-4 z-20 hidden rounded-2xl border border-line bg-white/90 px-4 py-3 text-xs shadow-float backdrop-blur sm:block">
+                <p className="font-bold">
+                  {active === 0 && 'Incassi €1,00'}
+                  {active === 1 && 'Prezzo fisso €1,20'}
+                  {active === 2 && '2 min · 180 m'}
+                  {active === 3 && 'Credito aggiornato'}
+                </p>
+                <p className="text-muted">
+                  {active === 0 && 'livello 1 venditore'}
+                  {active === 1 && 'nessuna trattativa'}
+                  {active === 2 && 'navigazione in app'}
+                  {active === 3 && 'proventi non scadono'}
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-center gap-2 lg:hidden">
+              {STEPS.map((s, i) => (
+                <button
+                  key={s.n}
+                  type="button"
+                  aria-label={`Vai allo step ${s.title}`}
+                  onClick={() => setActive(i)}
+                  className={`h-2 rounded-full transition-all ${i === active ? 'w-8 bg-brand' : 'w-2 bg-ink/15'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
