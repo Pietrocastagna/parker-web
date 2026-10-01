@@ -5,8 +5,8 @@ const basePath = isGhPages ? `/${repo}` : '';
 
 const nextConfig = {
   reactStrictMode: true,
-  // build e dev in cartelle separate: `next build` mentre `next dev` gira non corrompe più la cache
-  distDir: process.env.NODE_ENV === 'production' ? '.next-build' : '.next',
+  // NB: niente distDir custom — con output:'export' sposterebbe l'export fuori da `out/`,
+  // che è la cartella pubblicata dal workflow GitHub Pages.
   output: 'export',
   trailingSlash: true,
   images: {

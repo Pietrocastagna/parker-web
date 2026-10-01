@@ -63,10 +63,11 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-ink text-white">
-      <div className="absolute inset-0 opacity-60">
+      <div className="absolute inset-0 opacity-90">
         {asset ? <AssetSlot label={asset} fill tone="dark" /> : null}
       </div>
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(7,19,31,0.96)_0%,rgba(7,19,31,0.85)_45%,rgba(7,19,31,0.55)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(7,19,31,0.94)_0%,rgba(7,19,31,0.78)_42%,rgba(7,19,31,0.38)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" aria-hidden />
       <div className="absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full bg-brand/15 blur-[120px]" aria-hidden />
       <div className="relative mx-auto grid max-w-site items-center gap-10 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 lg:grid-cols-12 lg:px-12 lg:pb-24 lg:pt-40">
         <div className={visual ? 'lg:col-span-6' : 'lg:col-span-8'}>
