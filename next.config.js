@@ -5,6 +5,8 @@ const basePath = isGhPages ? `/${repo}` : '';
 
 const nextConfig = {
   reactStrictMode: true,
+  // NB: niente distDir custom — con output:'export' sposterebbe l'export fuori da `out/`,
+  // che è la cartella pubblicata dal workflow GitHub Pages.
   output: 'export',
   trailingSlash: true,
   images: {

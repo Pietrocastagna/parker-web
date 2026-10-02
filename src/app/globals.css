@@ -1,21 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --ink: #0b1220;
-  --teal: #00c9a7;
-  --mark: #f5c518;
-  --paper: #f7f8fa;
-  --muted: #5a6570;
-  --text: #0b1220;
-  --accent: #00c9a7;
-}
-
-* {
-  box-sizing: border-box;
+  --brand: #00c9a7;
+  --brand-deep: #007f6d;
+  --brand-mist: #e7faf6;
+  --ink: #07131f;
+  --paper: #f4f6f4;
+  --warm-paper: #f7f4ee;
+  --line: rgba(7, 19, 31, 0.1);
 }
 
 html {
@@ -23,16 +17,189 @@ html {
 }
 
 body {
+  @apply bg-paper font-sans text-ink antialiased;
   margin: 0;
-  font-family: Manrope, system-ui, sans-serif;
-  color: var(--ink);
-  background: var(--paper);
-  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1,
-h2,
-h3 {
-  font-family: Sora, Manrope, system-ui, sans-serif;
-  letter-spacing: -0.02em;
+/* niente scroll orizzontale da glow/device sporgenti; `clip` non rompe position: sticky */
+main {
+  overflow-x: clip;
+}
+
+::selection {
+  background: rgba(0, 201, 167, 0.28);
+}
+
+@layer components {
+  .section-pad {
+    @apply px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24;
+  }
+  .section-pad-tight {
+    @apply px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-16;
+  }
+  .eyebrow {
+    @apply text-[12px] font-bold uppercase tracking-[0.16em] text-brand-deep;
+  }
+  .eyebrow-light {
+    @apply text-[12px] font-bold uppercase tracking-[0.16em] text-brand;
+  }
+  .display-h1 {
+    font-size: clamp(2.75rem, 5vw, 5.25rem);
+    @apply font-display font-extrabold leading-[0.98] tracking-[-0.025em];
+  }
+  .display-h2 {
+    font-size: clamp(2rem, 3.6vw, 3.5rem);
+    @apply font-display font-extrabold leading-[1.04] tracking-[-0.02em];
+  }
+  .display-h3 {
+    font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+    @apply font-display font-bold leading-[1.1] tracking-[-0.015em];
+  }
+  .lead {
+    @apply text-[1.1rem] leading-relaxed text-muted sm:text-[1.25rem];
+  }
+  .link-arrow {
+    @apply inline-flex items-center gap-1.5 text-sm font-bold transition;
+  }
+  .link-arrow::after {
+    content: '→';
+    transition: transform 0.25s ease;
+  }
+  .link-arrow:hover::after {
+    transform: translateX(4px);
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-pill px-3.5 py-2 text-xs font-semibold;
+  }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+}
+
+@layer utilities {
+  .signal-pulse {
+    animation: signalPulse 4.5s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .live-dot {
+    animation: liveBlink 1.6s ease-in-out infinite;
+  }
+  .route-flow {
+    animation: routeFlow 1.6s linear infinite;
+  }
+  .float-slow {
+    animation: floatY 7s ease-in-out infinite;
+  }
+  .float-slower {
+    animation: floatY 9s ease-in-out infinite reverse;
+  }
+  .draw-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2.4s ease-out forwards;
+  }
+  /* usa `translate` (non `transform`) per non sovrascrivere translate/rotate di Tailwind */
+  .reveal {
+    opacity: 0;
+    translate: 0 18px;
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes signalPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.05;
+  }
+}
+
+@keyframes liveBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes routeFlow {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes stepProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    translate: 0 0;
+  }
 }

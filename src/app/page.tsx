@@ -1,5 +1,5 @@
-import RedirectToPortal from './redirect-to-portal';
+import HomePage from './home-client';
 
 export default function Page() {
-  return <RedirectToPortal path="/" />;
+  return <HomePage />;
 }

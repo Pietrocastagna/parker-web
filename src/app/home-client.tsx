@@ -1,1007 +1,923 @@
 'use client';
 
-import { useState } from 'react';
-import { SiteImage as Image } from './components/site-image';
 import Link from 'next/link';
-import { IMAGES } from './lib/images';
-import { portalPath, siteHref } from './lib/urls';
-import { AppMapPreview } from './components/app-map-preview';
-import { StoreBadges } from './components/store-badges';
-import { SiteHeader, SiteFooter, CookieBar } from './components/site-chrome';
+import { FloatingHeader } from './components/site-header';
+import { SiteFooter, CookieBanner } from './components/site-footer';
+import { AssetSlot } from './components/site-asset';
+import { DownloadParkHub, CreateAccountCTA, SecondaryCTA, PrimaryCTA } from './components/ui-buttons';
+import { FloatingStatusChip, LiveDot, SignalLine } from './components/signal';
+import { ExchangeScrollStory } from './components/exchange-scroll-story';
+import { PhoneFrame, LaptopFrame } from './components/device';
+import { MapCanvas, MapSearchScreen, NavigationScreen, PortalDashboardScreen, WalletScreen } from './components/map-canvas';
 import {
-  ParkingSpotIllustration,
-  SwapSignalIllustration,
-  SwapExchangeIllustration,
-  PaymentIllustration,
-  NavigationFeatIllustration,
-  NotificationIllustration,
-} from './components/illustrations';
-
-const packages = [
-  {
-    name: 'Prova',
-    price: '€4,99',
-    credit: '€5,40 di credito',
-    hint: 'Per iniziare',
-    points: [
-      'Circa 4 scambi al prezzo base da €1,20',
-      'Acquisto una tantum sul portale web',
-      'Ideale per capire se Parker ti serve',
-      'Credito pronto nel wallet dopo il pagamento',
-    ],
-    featured: true,
-  },
-  {
-    name: 'Carnet 8',
-    price: '€8,80',
-    credit: '€9,60 di credito',
-    hint: 'Uso occasionale',
-    points: [
-      'Più credito del pacchetto Prova',
-      'Una tantum, senza rinnovo automatico',
-      'Utile se scambi qualche volta al mese',
-      'Si compra solo dal portale',
-    ],
-    featured: false,
-  },
-  {
-    name: 'Mensile 20',
-    price: '€22',
-    credit: '€24 di credito / mese',
-    hint: 'Rinnovo automatico',
-    points: [
-      'Piano ricorrente: ogni mese il credito si rinnova',
-      'Pensato per chi usa Parker con regolarità',
-      'Disdici dal portale quando vuoi (fine periodo)',
-      'Stesso account in app e sul web',
-    ],
-    featured: false,
-  },
-  {
-    name: 'Semestrale',
-    price: '€120',
-    credit: 'equiv. €24 / mese × 6',
-    hint: 'Sei mesi',
-    points: [
-      'Un pagamento per sei mesi di continuità',
-      'Stesso ritmo di valore del mensile',
-      'Meno scadenze da ricordare',
-      'Gestione e storico sul portale',
-    ],
-    featured: false,
-  },
-  {
-    name: 'Annuale',
-    price: '€240',
-    credit: 'equiv. €24 / mese × 12',
-    hint: 'Tutto l’anno',
-    points: [
-      'Un pagamento per dodici mesi',
-      'Massima continuità sul credito',
-      'Per chi vive lo scambio come abitudine',
-      'Tutto gestito dal portale web',
-    ],
-    featured: false,
-  },
-];
-
-const situations = [
-  {
-    img: IMAGES.keys,
-    title: 'Mattina in uscita',
-    body: 'Esci di casa o dall’ufficio: metti in vendita il posto mentre parti. Qualcuno in arrivo nella tua zona lo vede sulla mappa e può prenotarlo subito.',
-  },
-  {
-    img: IMAGES.night,
-    title: 'Sera di rientro',
-    body: 'Torni tardi, traffico, poche luci libere. Apri Parker, vedi i listing vicini con prezzo e distanza, prenoti e navighi al punto invece di girare a vuoto.',
-  },
-  {
-    img: IMAGES.streetParked,
-    title: 'Centro e strade strette',
-    body: 'Nei centri storici e nelle zone a densità alta ogni posto conta. Lo scambio tra chi esce e chi arriva riduce i giri negli stessi isolati.',
-  },
-  {
-    img: IMAGES.train,
-    title: 'Appuntamento o stazione',
-    body: 'Hai un orario: ospedale, treno, riunione. Un posto prenotato a prezzo fisso vale più di dieci minuti di ronda e di stress.',
-  },
-];
-
-const features = [
-  {
-    title: 'Mappa con listing reali',
-    body: 'Vedi posti in vendita vicino a te: distanza, prezzo fisso, stima di arrivo. Se il posto non è più disponibile, sparisce. La qualità del servizio nella tua zona dipende da quanti utenti pubblicano.',
-    icon: <ParkingSpotIllustration width={160} height={110} />,
-  },
-  {
-    title: 'Prezzo fisso sullo scambio',
-    body: 'Niente aste e niente chat di negoziazione. Il venditore sceglie tra i livelli di prezzo disponibili; tu acquirente vedi l’importo prima di confermare e paghi col credito Parker.',
-    icon: <PaymentIllustration width={160} height={110} />,
-  },
-  {
-    title: 'Navigazione al punto',
-    body: 'Dopo la prenotazione parti verso le coordinate del posto. Meno “cerco e spero”, più arrivo mirato. Lo scambio resta tracciato fino al completamento.',
-    icon: <NavigationFeatIllustration width={160} height={110} />,
-  },
-  {
-    title: 'Notifiche sullo scambio',
-    body: 'Chi vende e chi compra restano allineati: prenotazione, arrivo, chiusura. Serve a ridurre i fraintendimenti al bordo strada.',
-    icon: <NotificationIllustration width={160} height={110} />,
-  },
-  {
-    title: 'Segnale “sto uscendo”',
-    body: 'Il valore di Parker è il timing. Pubblichi quando liberi; qualcuno prenota mentre sei ancora lì o appena partito. È lo scambio in tempo reale, non un annuncio statico.',
-    icon: <SwapSignalIllustration width={160} height={110} />,
-  },
-  {
-    title: 'Credito closed-loop',
-    body: 'Compri pacchetti sul portale, spendi in app, ricevi credito quando vendi. Il credito resta nel circuito Parker: lo riusi per gli scambi, non lo prelevi in banca.',
-    icon: <SwapExchangeIllustration width={160} height={110} />,
-  },
-];
-
-const missions = [
-  {
-    title: 'Vendi 3 posti',
-    body: 'Completa tre vendite: sblocchi un premio una tantum. Il premio è credito da usare solo sugli scambi, con scadenza breve (pochi giorni).',
-  },
-  {
-    title: 'Ogni 10 vendite',
-    body: 'Missione ripetibile e sostenibile: a ogni blocco di dieci vendite completate ricevi un premio swap. Serve a chi tiene viva l’offerta sulla mappa.',
-  },
-  {
-    title: '5 scambi in settimana',
-    body: 'Raggiungi cinque scambi nella settimana (come acquirente o nel mix previsto dalla missione) e ottieni un premio in credito solo-swap.',
-  },
-  {
-    title: 'Streak accessi',
-    body: 'Entra più giorni di fila: guadagni badge. Non è un premio in credito e non tocca le stelle del ranking. È un riconoscimento di presenza.',
-  },
-];
-
-const referralSteps = [
-  {
-    n: '1',
-    title: 'Apri Invita amici',
-    body: 'Nel portale trovi codice copiabile, link da condividere e QR. In app, la sezione è in Account. Scegli il canale che preferisci: WhatsApp, messaggio, stampa del QR.',
-  },
-  {
-    n: '2',
-    title: 'L’amico apre il link',
-    body: 'Se ha già l’app, il deep link porta alla registrazione con il codice già applicato. Se non ce l’ha, arriva a una landing che spiega che sta entrando tramite il tuo invito.',
-  },
-  {
-    n: '3',
-    title: 'Si registra con il codice',
-    body: 'Il codice si inserisce solo in registrazione. Dopo non si può più agganciare un referral: è una regola anti-abuso, non un optional.',
-  },
-  {
-    n: '4',
-    title: 'Completa il primo scambio',
-    body: 'Finché non conclude il primo swap, il tuo bonus resta in attesa. Scaricare l’app o creare l’account non basta: serve uno scambio reale.',
-  },
-  {
-    n: '5',
-    title: 'Tu ricevi €2,50',
-    body: 'Il bonus diventa spendibile subito per gli scambi. Solo chi invita lo riceve: l’invitato non ha un bonus di ingresso da referral.',
-  },
-  {
-    n: '6',
-    title: 'Blocco da 3 amici',
-    body: 'Ogni tre amici qualificati il blocco vale €10 totali (sul terzo arriva un extra). Ripetibile: 6 amici → €20, 9 → €30, e così via.',
-  },
-];
-
-const faqs = [
-  {
-    q: 'Cosa fa Parker oggi, in concreto?',
-    a: 'L’app collega chi sta liberando un posto e chi lo cerca: mappa, prenota, naviga. Sul portale crei l’account (stesso dell’app) e compri i pacchetti di credito. In questa fase non ci sono altri servizi oltre allo scambio tra automobilisti.',
-  },
-  {
-    q: 'La registrazione vale per app e portale?',
-    a: 'Sì. Un solo account: stesse email e password. Ti registri da app o da portale; poi accedi su entrambi. Lo scambio è in app; i pacchetti di credito si comprano sul portale.',
-  },
-  {
-    q: 'Dove scarico l’app?',
-    a: 'Dalla pagina Scarica app del sito, o cercando Parker su App Store e Google Play (package Android com.swappark.parker). Appena le schede store sono pubbliche i pulsanti puntano ai link ufficiali.',
-  },
-  {
-    q: 'Quanto costa uno scambio?',
-    a: 'Il prezzo lo vedi sul listing prima di confermare. Parte da €1,20. I pacchetti (Prova, Carnet, Mensile, Semestrale, Annuale) caricano il credito che usi per prenotare. Le strisce blu, se presenti, non sono incluse.',
-  },
-  {
-    q: 'Perché il credito si compra sul portale e non in app?',
-    a: 'Per tenere i pagamenti chiari e centralizzati sul web (carta via Stripe) e rispettare le regole degli store. In app usi il wallet: non compri credito mentre sei in strada.',
-  },
-  {
-    q: 'Posso prelevare i soldi sul conto corrente?',
-    a: 'No. Il credito Parker resta nel circuito: lo usi per gli scambi. Chi vende riceve credito da riusare, non un bonifico bancario.',
-  },
-  {
-    q: 'Cosa sono le missioni?',
-    a: 'Obiettivi (vendite, scambi settimanali, streak accessi) con premi in credito solo-swap o badge. I premi in credito scadono in pochi giorni e hanno un tetto mensile. Non modificano il ranking a stelle.',
-  },
-  {
-    q: 'Come funziona Invita un amico?',
-    a: 'Condividi codice, link o QR. L’amico lo usa in registrazione. Quando completa il primo scambio, tu ricevi €2,50. Ogni tre amici qualificati il blocco vale €10 totali. Dettaglio nella sezione Invita.',
-  },
-  {
-    q: 'Cos’è il ranking?',
-    a: 'Un sistema di stelle sulla tua affidabilità negli scambi. Vedi solo il tuo punteggio e le motivazioni. Se le stelle sono basse puoi comunque vendere, ma solo al livello di prezzo più basso. C’è una pagina dedicata.',
-  },
-  {
-    q: 'Parker sostituisce il parcometro?',
-    a: 'No. Parker gestisce lo scambio tra persone. Se il posto è a strisce blu, il ticket resta a carico tuo come sempre.',
-  },
-];
-
-function Photo({
-  src,
-  alt,
-  className,
-  priority,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-  priority?: boolean;
-}) {
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={1600}
-      height={1000}
-      unoptimized
-      priority={priority}
-      className={className}
-    />
-  );
-}
+  EditorialHeading,
+  FAQAccordion,
+  FinalCinematicCTA,
+  IdentityStack,
+  LevelLadder,
+  MissionProgress,
+  NotificationCard,
+  ReferralEquation,
+  ScoreFeed,
+  SectionEyebrow,
+  StarMeter,
+  WalletBuckets,
+} from './components/ui';
+import { Reveal } from './components/reveal';
+import { StoreButtons } from './components/store-badges';
+import { BALANCE_SOURCES, FAQS, LAUNCH_PROMO, MILESTONES, PACKAGES, PRICE_TIERS } from './lib/content';
+import { portalPath, siteHref } from './lib/urls';
 
 export default function HomePage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const monthly = PACKAGES.find((p) => p.featured)!;
+  const others = PACKAGES.filter((p) => !p.featured);
 
   return (
-    <main className="min-h-screen bg-[#F5F6F8] text-ink">
-      <SiteHeader />
+    <main className="min-h-screen bg-paper text-ink">
+      <FloatingHeader />
 
-      {/* —— Hero —— */}
-      <section className="relative min-h-[94svh] overflow-hidden bg-ink">
-        <Image
-          src={IMAGES.hero}
-          alt="Auto in sosta lungo una strada cittadina"
-          fill
-          priority
-          unoptimized
-          className="object-cover object-[center_40%]"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,18,32,0.94)_0%,rgba(11,18,32,0.8)_42%,rgba(11,18,32,0.48)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,18,32,0.45)_0%,transparent_30%,rgba(11,18,32,0.9)_100%)]" />
-
-        <div className="relative z-10 mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-28 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:pb-20 lg:pt-36">
-          <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-teal">
-              Scambio posti auto · tutta Italia
-            </p>
-            <h1 className="font-display text-[2.55rem] font-bold leading-[1.05] text-white sm:text-5xl lg:text-[3.35rem]">
-              Smetti di girare.
-              <span className="mt-1 block text-teal">Qualcuno sta uscendo ora.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-[1.08rem] leading-relaxed text-white/75">
-              Parker mette in contatto chi sta lasciando un parcheggio e chi lo sta cercando —
-              nello stesso momento. Lo scambio avviene in <strong className="text-white">app</strong>
-              : mappa, prenota, naviga. Il portale serve per account e credito. Stesso login
-              ovunque.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <a
-                href={siteHref('/app')}
-                className="inline-flex items-center justify-center rounded-full bg-teal px-7 py-3.5 text-sm font-bold text-ink hover:bg-[#00b896]"
-              >
-                Scarica l’app
-              </a>
-              <a
-                href={portalPath('/signup')}
-                className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
-              >
-                Crea account
-              </a>
-            </div>
-            <StoreBadges className="mt-6" variant="dark" />
-            <p className="mt-6 max-w-lg text-xs leading-relaxed text-white/45">
-              App = cuore dello scambio. Portale = pacchetti e gestione. Un solo account.
-            </p>
-          </div>
-          <div className="hidden justify-self-end lg:block">
-            <AppMapPreview />
-          </div>
+      {/* ───────── 01 HERO ───────── */}
+      <section className="relative z-10 bg-warm-paper">
+        <div className="absolute inset-0 overflow-hidden">
+          <AssetSlot label="home-01-hero-city-signal-wide.webp" fill tone="warm" priority />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,244,238,0.98)_0%,rgba(247,244,238,0.92)_38%,rgba(247,244,238,0.55)_62%,rgba(247,244,238,0.15)_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-warm-paper to-transparent" />
+          <div className="pointer-events-none absolute -left-40 top-20 h-[460px] w-[460px] rounded-full bg-brand/15 blur-[120px]" aria-hidden />
         </div>
-      </section>
 
-      {/* Strip passi */}
-      <section className="border-b border-ink/8 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-0 sm:grid-cols-4">
-          {[
-            ['Scarica l’app', 'Mappa e scambi sul telefono'],
-            ['Crea account', 'Stesso login su app e portale'],
-            ['Ricarica sul portale', 'Prova, Carnet o piano'],
-            ['Scambia in app', 'Cerca o vendi, naviga, chiudi'],
-          ].map(([t, d], i) => (
-            <div
-              key={t}
-              className={`px-5 py-7 ${i < 3 ? 'sm:border-r sm:border-ink/8' : ''}`}
-            >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-teal">
-                Passo {i + 1}
-              </p>
-              <p className="mt-1.5 font-display text-base font-bold">{t}</p>
-              <p className="mt-1 text-sm text-muted">{d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* —— Problema lungo —— */}
-      <section id="problema" className="px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Il problema</p>
-          <h2 className="mt-3 max-w-3xl font-display text-3xl font-bold leading-tight sm:text-4xl">
-            In Italia il posto spesso c’è già. Quello che manca è il segnale tra chi esce e chi
-            arriva.
-          </h2>
-
-          <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-start">
-            <div className="space-y-5 text-[15px] leading-relaxed text-muted">
-              <p>
-                Chi guida in città conosce la scena: stazione, ospedale, ufficio, centro storico,
-                zona mare nel weekend. Arrivi e inizi a girare. Passi due volte nello stesso
-                isolato. Qualcuno esce dal posto a cinquanta metri, ma tu sei dall’altra parte e
-                non lo sai. Dieci, quindici minuti dopo hai bruciato carburante, umore e spesso
-                anche l’orario dell’appuntamento.
-              </p>
-              <p>
-                Non è solo “sfortuna”. È un problema di informazione. Il posto esiste nel momento
-                in cui qualcuno lo libera. Senza un canale che colleghi uscita e arrivo in tempo
-                reale, l’opportunità dura pochi minuti e poi sparisce. Tu continui a cercare;
-                l’altro è già partito.
-              </p>
-              <p>
-                Gli strumenti che abbiamo oggi risolvono pezzi diversi del puzzle. Il parcometro
-                regola le strisce blu. Il garage vende un box o una sosta strutturata. Le mappe
-                generiche indicano densità o parcheggi noti. Nessuno di questi fa la cosa semplice
-                e urgente: <strong className="font-semibold text-ink">“sto uscendo adesso —
-                qualcuno vuole questo posto?”</strong>
-              </p>
-              <p>
-                Parker nasce da lì. Non inventa posti nuovi. Non sostituisce le regole della sosta
-                pubblica. Rende visibile chi sta liberando e permette a chi cerca di prenotare a
-                un prezzo fisso, con navigazione fino al punto. Meno giri a vuoto. Più scambio tra
-                persone.
-              </p>
-              <Link
-                href="/about"
-                className="inline-flex pt-2 text-sm font-bold text-teal hover:underline"
-              >
-                Leggi tutta la pagina About →
-              </Link>
-            </div>
-            <div className="grid gap-4">
-              <div className="overflow-hidden rounded-2xl">
-                <Photo
-                  src={IMAGES.traffic}
-                  alt="Auto in fila in cerca di parcheggio"
-                  className="h-56 w-full object-cover sm:h-64"
-                />
-              </div>
-              <div className="overflow-hidden rounded-2xl">
-                <Photo
-                  src={IMAGES.rainStreet}
-                  alt="Strada cittadina sotto la pioggia"
-                  className="h-44 w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {[
-              {
-                t: 'Tempo e carburante',
-                d: 'Ogni giro a vuoto costa più di quanto pensi: minuti, litri, stress. Uno scambio a prezzo chiaro spesso conviene già al primo tentativo fallito di trovare posto da soli.',
-              },
-              {
-                t: 'Finestra strettissima',
-                d: 'Quando qualcuno esce, il posto è libero per pochi istanti. Senza segnale condiviso, acquirente e venditore si perdono anche se sono nello stesso isolato.',
-              },
-              {
-                t: 'Strumenti incompleti',
-                d: 'Parcometro, garage e mappe generiche non collegano uscita e arrivo nello stesso minuto. Parker fa esattamente quello — e solo quello, in questa fase.',
-              },
-            ].map((x) => (
-              <article
-                key={x.t}
-                className="rounded-2xl border border-ink/8 bg-white p-6 shadow-[0_4px_20px_rgba(11,18,32,0.03)]"
-              >
-                <h3 className="font-display text-lg font-bold">{x.t}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{x.d}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Situazioni con foto */}
-      <section className="border-y border-ink/8 bg-white px-5 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Nella vita vera</p>
-            <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-              Quattro momenti in cui lo scambio ha senso
-            </h2>
-            <p className="mt-4 text-muted">
-              Non serve un “caso speciale”. Serve densità di persone che escono e arrivano negli
-              stessi orari. Ecco dove Parker diventa concreto.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            {situations.map((s) => (
-              <article
-                key={s.title}
-                className="overflow-hidden rounded-2xl border border-ink/8 bg-[#F5F6F8] shadow-[0_4px_20px_rgba(11,18,32,0.03)]"
-              >
-                <Photo src={s.img} alt={s.title} className="h-48 w-full object-cover" />
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold">{s.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* —— Come funziona —— */}
-      <section id="come-funziona" className="px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Come funziona</p>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-                Dal credito sullo scambio, passo dopo passo
-              </h2>
-            </div>
-            <p className="text-muted leading-relaxed">
-              Il ciclo tipico dura pochi minuti. Ti registri, carichi un pacchetto sul portale,
-              apri la mappa in app. Se esci: pubblichi. Se cerchi: prenoti e navighi. A chiusura,
-              il credito si muove tra i wallet. Niente aste.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: 'Segnali che esci',
-                body: 'Stai lasciando il posto? Lo metti in vendita. Compari sulla mappa con un prezzo scelto tra i livelli disponibili sul tuo account. Chi cerca nella zona lo vede subito.',
-                ill: <SwapSignalIllustration width={200} height={130} />,
-              },
-              {
-                title: 'Qualcuno prenota',
-                body: 'L’acquirente guarda distanza e prezzo, conferma col credito Parker. Tu ricevi notifica: qualcuno sta arrivando. Lo scambio entra nello stato tracciato.',
-                ill: <ParkingSpotIllustration width={200} height={130} />,
-              },
-              {
-                title: 'Arrivo e chiusura',
-                body: 'Navigazione fino al punto. A scambio completato chi ha venduto riceve credito da riusare; chi arriva parcheggia. Eventuale valutazione: alimenta il ranking.',
-                ill: <SwapExchangeIllustration width={200} height={130} />,
-              },
-            ].map((s, i) => (
-              <article key={s.title} className="rounded-2xl border border-ink/8 bg-white p-6">
-                <div className="mb-3 flex justify-center">{s.ill}</div>
-                <p className="text-xs font-bold text-teal">Passo {i + 1}</p>
-                <h3 className="mt-1 font-display text-xl font-bold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            <article className="overflow-hidden rounded-2xl border border-ink/8 bg-white">
-              <Photo
-                src={IMAGES.keys}
-                alt="Chiavi auto e partenza"
-                className="h-44 w-full object-cover"
-              />
-              <div className="p-7">
-                <h3 className="font-display text-xl font-bold">Se stai uscendo (venditore)</h3>
-                <ol className="mt-4 space-y-3 text-sm leading-relaxed text-muted">
-                  <li>
-                    <strong className="text-ink">1.</strong> Apri Vendi, conferma il veicolo e il
-                    punto. Scegli il livello di prezzo tra quelli sbloccati sul tuo profilo.
-                  </li>
-                  <li>
-                    <strong className="text-ink">2.</strong> Pubblichi: il listing appare sulla
-                    mappa. Aspetti la prenotazione restando raggiungibile dalle notifiche.
-                  </li>
-                  <li>
-                    <strong className="text-ink">3.</strong> Quando qualcuno prende il posto, sai
-                    che sta arrivando. A chiusura ricevi credito Parker da riusare.
-                  </li>
-                  <li>
-                    <strong className="text-ink">4.</strong> Se le stelle del ranking sono basse,
-                    puoi comunque vendere: resta disponibile il livello di prezzo più basso.
-                  </li>
-                </ol>
-              </div>
-            </article>
-            <article className="overflow-hidden rounded-2xl border border-ink/8 bg-white">
-              <Photo
-                src={IMAGES.phoneNav}
-                alt="Navigazione su smartphone"
-                className="h-44 w-full object-cover"
-              />
-              <div className="p-7">
-                <h3 className="font-display text-xl font-bold">Se cerchi un posto (acquirente)</h3>
-                <ol className="mt-4 space-y-3 text-sm leading-relaxed text-muted">
-                  <li>
-                    <strong className="text-ink">1.</strong> Apri Cerca sulla mappa. Vedi i listing
-                    vicini con distanza e prezzo.
-                  </li>
-                  <li>
-                    <strong className="text-ink">2.</strong> Controlli il totale prima di
-                    confermare. Il pagamento esce dal credito già caricato sul portale.
-                  </li>
-                  <li>
-                    <strong className="text-ink">3.</strong> Parti con la navigazione verso il
-                    punto. Completi lo scambio quando arrivi e il posto si libera.
-                  </li>
-                  <li>
-                    <strong className="text-ink">4.</strong> Se non riesci ad arrivare, annulla
-                    secondo le regole di distanza e tempo: evita penali ranking inutili.
-                  </li>
-                </ol>
-              </div>
-            </article>
-          </div>
-          <div className="mt-10">
-            <Link href="/come-funziona" className="text-sm font-bold text-teal hover:underline">
-              Apri la guida completa Come funziona →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Portale + app */}
-      <section className="bg-ink px-5 py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Portale e app</p>
-            <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-              Due superfici, un solo account
-            </h2>
-            <p className="mt-4 text-white/65 leading-relaxed">
-              Non è un dettaglio tecnico: è il modo in cui Parker tiene i pagamenti sul web e lo
-              scambio sulla mappa. Stesse credenziali ovunque.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            <article className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-              <Photo
-                src={IMAGES.laptop}
-                alt="Portale web su laptop"
-                className="h-48 w-full object-cover opacity-90"
-              />
-              <div className="p-7">
-                <h3 className="font-display text-xl font-bold">Sul portale web</h3>
-                <ul className="mt-4 space-y-2.5 text-sm text-white/70">
-                  <li>· Registrazione / login</li>
-                  <li>· Acquisto pacchetti (Prova, Carnet, Mensile, Semestrale, Annuale)</li>
-                  <li>· Wallet, movimenti, missioni</li>
-                  <li>· Invita amici (codice, link, QR)</li>
-                  <li>· Ranking / reputazione in dettaglio</li>
-                  <li>· Profilo, veicoli, supporto</li>
-                </ul>
-              </div>
-            </article>
-            <article className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-              <div className="flex justify-center bg-[#152033] py-8">
-                <AppMapPreview />
-              </div>
-              <div className="p-7">
-                <h3 className="font-display text-xl font-bold">In app</h3>
-                <ul className="mt-4 space-y-2.5 text-sm text-white/70">
-                  <li>· Mappa: cerca e prenota posti</li>
-                  <li>· Vendi: pubblica il posto quando esci</li>
-                  <li>· Navigazione fino al punto dello scambio</li>
-                  <li>· Notifiche e stato sessione in corso</li>
-                  <li>· Wallet in sola lettura + link al portale</li>
-                  <li>· Account, veicoli, invita amici, reputazione</li>
-                </ul>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Dettaglio prodotto</p>
-            <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-              Cosa c’è dentro Parker oggi
-            </h2>
-            <p className="mt-4 text-muted">
-              Funzioni dello scambio P2P. Niente elenco di servizi futuri: solo ciò che usi per
-              cercare, vendere e chiudere un posto.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <article
-                key={f.title}
-                className="flex flex-col rounded-2xl border border-ink/8 bg-white p-6"
-              >
-                <div className="mb-2 flex justify-center">{f.icon}</div>
-                <h3 className="font-display text-lg font-bold">{f.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{f.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="relative mt-12 overflow-hidden rounded-2xl">
-            <Photo
-              src={IMAGES.carsRow}
-              alt="Fila di auto parcheggiate in città"
-              className="h-56 w-full object-cover sm:h-72"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/55 to-transparent" />
-            <div className="absolute bottom-0 left-0 max-w-xl p-8">
-              <p className="font-display text-2xl font-bold text-white sm:text-3xl">
-                Più gente pubblica posti nella tua zona, più la mappa ha senso.
-              </p>
-              <p className="mt-3 text-sm text-white/70">
-                Parker funziona in tutta Italia: la densità locale decide quanti listing vedi.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* —— Prezzi —— */}
-      <section id="prezzi" className="border-y border-ink/8 bg-white px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-end">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Prezzi</p>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-                Pacchetti di credito sul portale
-              </h2>
-              <p className="mt-4 text-muted leading-relaxed">
-                Non c’è una ricarica libera a importo a piacere. Scegli un pacchetto o un piano,
-                paghi con carta sul portale, usi il credito in app. Uno scambio parte da €1,20: il
-                prezzo esatto dello scambio lo vedi sempre sul listing prima di confermare.
-              </p>
-            </div>
-            <div className="overflow-hidden rounded-2xl">
-              <Photo
-                src={IMAGES.mapHands}
-                alt="Persona che consulta una mappa"
-                className="h-48 w-full object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {packages.map((pkg) => (
-              <div
-                key={pkg.name}
-                className={`flex flex-col rounded-2xl border p-5 ${
-                  pkg.featured
-                    ? 'border-teal bg-ink text-white shadow-lg sm:col-span-2 lg:col-span-1'
-                    : 'border-ink/10 bg-[#F5F6F8]'
-                }`}
-              >
-                <p
-                  className={`text-[11px] font-bold uppercase tracking-wider ${
-                    pkg.featured ? 'text-teal' : 'text-muted'
-                  }`}
+        <div className="relative mx-auto grid min-h-[min(92svh,960px)] max-w-site items-center gap-12 px-5 pb-28 pt-32 sm:px-8 lg:grid-cols-12 lg:px-12 lg:pb-36 lg:pt-40">
+          <div className="lg:col-span-6">
+            <Reveal>
+              {LAUNCH_PROMO.enabled ? (
+                <a
+                  href="#lancio"
+                  className="group mb-6 inline-flex max-w-full items-center gap-2.5 rounded-pill border border-brand/40 bg-white/85 py-1.5 pl-1.5 pr-4 text-[13px] font-semibold text-ink shadow-soft backdrop-blur transition hover:border-brand hover:bg-white"
                 >
-                  {pkg.hint}
+                  <span className="rounded-pill bg-brand px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink">Lancio</span>
+                  <span className="truncate">
+                    {LAUNCH_PROMO.parkings} parcheggi gratis ai primi {LAUNCH_PROMO.seatsLabel} iscritti
+                  </span>
+                  <span className="text-brand-deep transition-transform group-hover:translate-x-0.5">→</span>
+                </a>
+              ) : null}
+              <SectionEyebrow>Parcheggi, in tempo reale. Tra persone.</SectionEyebrow>
+              <h1 className="display-h1 text-balance mt-5">
+                Smetti di girare.
+                <span className="mt-1 block bg-gradient-to-r from-brand-deep to-brand bg-clip-text text-transparent">
+                  Qualcuno sta uscendo ora.
+                </span>
+              </h1>
+              <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-ink/70 sm:text-xl">
+                ParkHub ti mostra chi sta lasciando un posto vicino a te. Lo prenoti, lo raggiungi e completi lo
+                scambio dall&apos;app.
+              </p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <DownloadParkHub tone="ink" />
+                <SecondaryCTA href={siteHref('/come-funziona')}>Guarda come funziona</SecondaryCTA>
+              </div>
+              <StoreButtons className="mt-6" />
+              <ul className="mt-10 grid max-w-md grid-cols-3 gap-4 text-[13px] font-semibold text-ink/75">
+                {[
+                  ['Prezzo visibile prima', <TagIcon key="t" />],
+                  ['Navigazione al punto', <RouteIcon key="r" />],
+                  ['Nessuna asta', <ShieldIcon key="s" />],
+                ].map(([t, icon]) => (
+                  <li key={t as string} className="flex items-center gap-2.5">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-brand-deep shadow-soft">{icon}</span>
+                    <span className="leading-tight">{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+
+          <div className="relative lg:col-span-6">
+            <div className="relative mx-auto h-[640px] w-full max-w-[560px] overflow-visible lg:h-[720px]">
+              {/* arco segnale: dall'auto che esce al pin */}
+              <SignalLine variant="arc" className="pointer-events-none absolute left-[2%] top-[6%] z-0 w-[70%] text-brand-deep" />
+
+              {/* auto che esce */}
+              <Reveal delay={200} className="absolute left-0 top-[9%] z-20 hidden sm:block float-slow">
+                <div className="flex items-center gap-3 rounded-2xl border border-line bg-white/95 p-3 pr-5 shadow-float backdrop-blur">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink text-brand">
+                    <CarIcon />
+                  </span>
+                  <div>
+                    <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-brand-deep">
+                      <LiveDot /> Sto uscendo
+                    </p>
+                    <p className="text-sm font-semibold">Via dei Tigli 12 · tra 1 min</p>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* telefono */}
+              <Reveal delay={80} className="absolute left-1/2 top-[13%] z-10 w-[300px] -translate-x-1/2 sm:w-[330px] lg:left-[50%]">
+                <PhoneFrame tilt={-3}>
+                  <MapSearchScreen />
+                </PhoneFrame>
+              </Reveal>
+
+              {/* prezzo */}
+              <Reveal delay={320} className="absolute right-0 top-[3%] z-20 hidden sm:block float-slower lg:-right-4">
+                <FloatingStatusChip tone="brand" className="!px-4 !py-2.5 !text-sm">
+                  <span className="font-mono text-base font-bold">€1,20</span> · 2 min · 180 m
+                </FloatingStatusChip>
+              </Reveal>
+
+              {/* prenotato */}
+              <Reveal delay={420} className="absolute bottom-[8%] left-[2%] z-20 hidden sm:block">
+                <div className="flex items-center gap-3 rounded-2xl bg-ink p-3 pr-5 text-white shadow-device">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-mist font-display text-sm font-bold text-brand-deep">M</span>
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-brand">Prenotato</p>
+                    <p className="text-sm font-semibold">Marco è in arrivo · 2 min</p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+
+        {/* strip 4 passi, sovrapposta al bordo */}
+        <div className="relative z-20 mx-auto -mb-14 max-w-site px-5 sm:px-8 lg:px-12">
+          <Reveal className="grid overflow-hidden rounded-card border border-line bg-white shadow-float sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ['Scarica l’app', 'iOS e Android', <PhoneIcon key="1" />],
+              ['Crea account', 'Uno per app e portale', <UserIcon key="2" />],
+              ['Ricarica sul portale', 'Scegli il pacchetto', <WalletIcon key="3" />],
+              ['Scambia in app', 'Trova o segnala un posto', <SwapIcon key="4" />],
+            ].map(([t, d, icon], i) => (
+              <div key={t as string} className="relative flex items-center gap-4 px-6 py-5 sm:border-l sm:border-line sm:first:border-l-0">
+                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-mist text-brand-deep">
+                  {icon}
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink font-mono text-[10px] font-bold text-brand">{i + 1}</span>
+                </span>
+                <div>
+                  <p className="text-[15px] font-bold">{t}</p>
+                  <p className="text-[13px] text-muted">{d}</p>
+                </div>
+                {i < 3 ? <span className="absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-1/2 text-ink/20 lg:block">›</span> : null}
+              </div>
+            ))}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── 02 LIVE SIGNAL BAR ───────── */}
+      <section className="relative overflow-hidden bg-ink pb-16 pt-28 text-white">
+        <div className="absolute inset-0 opacity-[0.18]">
+          <MapCanvas theme="dark" dense className="h-full w-full" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/60 to-ink" />
+        <div className="relative mx-auto max-w-site px-5 sm:px-8 lg:px-12">
+          <div className="grid items-center gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-8">
+              <div className="relative grid gap-6 sm:grid-cols-3">
+                <svg className="pointer-events-none absolute inset-x-[16%] top-5 hidden h-px w-[68%] sm:block" aria-hidden>
+                  <line x1="0" y1="0.5" x2="100%" y2="0.5" stroke="#00C9A7" strokeWidth="1.5" strokeDasharray="4 8" className="route-flow" opacity="0.7" />
+                </svg>
+                {[
+                  ['Uno sta uscendo', 'pubblica il posto', true],
+                  ['ParkHub li collega', 'navigazione + chiusura', false],
+                  ['Uno sta arrivando', 'prenota a prezzo fisso', true],
+                ].map(([a, b, dot], i) => (
+                  <Reveal key={a as string} delay={i * 120} className="relative">
+                    <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-brand/40 bg-ink">
+                      <span className={`h-3 w-3 rounded-full ${i === 1 ? 'bg-white' : 'bg-brand'}`} />
+                      {dot ? <span className="absolute inset-0 rounded-full border border-brand/40 signal-pulse" /> : null}
+                    </span>
+                    <p className="mt-4 font-display text-xl font-bold">{a}</p>
+                    <p className="mt-1 text-sm text-white/55">{b}</p>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+            <Reveal delay={300} className="lg:col-span-4">
+              <p className="font-display text-2xl font-bold leading-snug text-white/90">
+                Un posto si libera. Il segnale dura pochi minuti. <span className="text-brand">ParkHub lo rende visibile.</span>
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 03 PROBLEMA ───────── */}
+      <section className="section-pad relative overflow-hidden bg-warm-paper">
+        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-5">
+            <EditorialHeading
+              eyebrow="Il problema non è solo trovare un posto"
+              title="Il parcheggio cambia ogni minuto. Oggi tu lo scopri troppo tardi."
+              lead="Giri nello stesso isolato, mentre un’auto a cinquanta metri sta già lasciando il suo posto. Quell’occasione esiste per pochi secondi e nessuna mappa tradizionale te la segnala."
+            />
+            <Reveal delay={120}>
+              <blockquote className="mt-10 border-l-[3px] border-brand pl-6">
+                <p className="font-display text-2xl font-bold leading-snug text-ink sm:text-[1.75rem]">
+                  “Non serve creare nuovi posti. Serve vedere quelli che si stanno liberando.”
                 </p>
-                <h3 className="mt-2 font-display text-xl font-bold">{pkg.name}</h3>
-                <p className="mt-3 font-display text-3xl font-bold tracking-tight">{pkg.price}</p>
-                <p className={`mt-1 text-xs ${pkg.featured ? 'text-white/55' : 'text-muted'}`}>
-                  {pkg.credit}
+              </blockquote>
+              <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+                {[
+                  ['Tempo perso', <ClockIcon key="c" />],
+                  ['Finestra breve', <TimerIcon key="t" />],
+                  ['Segnale assente', <SignalOffIcon key="s" />],
+                ].map(([t, icon]) => (
+                  <li key={t as string} className="flex items-center gap-2 text-sm font-bold text-ink/80">
+                    <span className="text-brand-deep">{icon}</span>
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+          <div className="relative lg:col-span-7">
+            <Reveal>
+              <div className="relative">
+                <AssetSlot label="home-03-problem-search-loop-wide.webp" aspect="video" tone="dark" className="!rounded-stage shadow-soft" />
+                <div className="absolute left-5 top-5 hidden sm:block">
+                  <FloatingStatusChip tone="light">
+                    <span className="h-2 w-2 rounded-full bg-danger" /> Terzo giro dell’isolato
+                  </FloatingStatusChip>
+                </div>
+                <div className="absolute -bottom-8 -right-3 hidden w-[42%] overflow-hidden rounded-card border-[6px] border-warm-paper shadow-device sm:block lg:-right-8">
+                  <AssetSlot label="home-03-problem-search-loop-wide.webp" aspect="square" tone="mint" className="!rounded-none" />
+                  <div className="absolute inset-x-4 bottom-4">
+                    <FloatingStatusChip tone="brand">
+                      <LiveDot /> 50 m · si libera ora
+                    </FloatingStatusChip>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 04 I QUATTRO PASSI ───────── */}
+      <section className="relative bg-paper">
+        <ExchangeScrollStory />
+      </section>
+
+      {/* ───────── 05 DUE PERCORSI ───────── */}
+      <section className="section-pad relative overflow-hidden bg-ink text-white">
+        <div className="pointer-events-none absolute -right-40 top-0 h-[600px] w-[600px] rounded-full bg-brand/10 blur-[140px]" aria-hidden />
+        <div className="relative mx-auto max-w-site">
+          <EditorialHeading light align="center" eyebrow="Due persone, due percorsi" title="ParkHub funziona perché serve a entrambi." />
+          <div className="mt-14 grid gap-5 lg:grid-cols-12">
+            <Reveal as="article" className="relative overflow-hidden rounded-stage lg:col-span-7">
+              <div className="relative min-h-[560px]">
+                <AssetSlot label="home-05-seller-leaving-car-portrait.webp" fill tone="dark" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/10" />
+                <div className="absolute left-6 top-6">
+                  <FloatingStatusChip tone="brand">
+                    <LiveDot /> Stai uscendo
+                  </FloatingStatusChip>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10">
+                  <h3 className="display-h3 text-balance max-w-md">Il tuo posto può diventare utile prima ancora che tu sia partito.</h3>
+                  <FlowPills items={['Vendi', 'Pubblica', 'Attendi', 'Completa', 'Ricevi credito']} />
+                  <Link href="/come-funziona" className="link-arrow mt-7 text-brand">
+                    Vedi il percorso venditore
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal as="article" delay={120} className="relative overflow-hidden rounded-stage lg:col-span-5 lg:mt-20">
+              <div className="relative min-h-[480px]">
+                <AssetSlot label="home-05-buyer-arriving-car-portrait.webp" fill tone="dark" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/10" />
+                <div className="absolute left-6 top-6">
+                  <FloatingStatusChip tone="light">
+                    <span className="h-2 w-2 rounded-full bg-[#2563EB]" /> Stai arrivando
+                  </FloatingStatusChip>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-7 sm:p-9">
+                  <h3 className="display-h3 text-balance">Smetti di cercare a caso. Vai verso un posto che sai già dove si trova.</h3>
+                  <FlowPills items={['Cerca', 'Prenota', 'Naviga', 'Arriva', 'Completa']} />
+                  <Link href="/come-funziona" className="link-arrow mt-7 text-brand">
+                    Vedi il percorso acquirente
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 06 PRODUCT BENTO ───────── */}
+      <section className="section-pad bg-white">
+        <div className="mx-auto max-w-site">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <EditorialHeading eyebrow="Il prodotto" title="La città cambia. La mappa con te." />
+            <Reveal delay={100}>
+              <p className="max-w-sm text-muted lg:text-right">Niente annunci statici: solo posti che qualcuno sta lasciando adesso, con prezzo e distanza prima di prenotare.</p>
+            </Reveal>
+          </div>
+          <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:grid-rows-[auto_auto]">
+            {/* A mappa live */}
+            <Reveal className="relative overflow-hidden rounded-stage bg-ink text-white lg:col-span-7 lg:row-span-2">
+              <div className="absolute inset-0 opacity-40">
+                <MapCanvas theme="dark" dense className="h-full w-full" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-ink via-ink/70 to-ink/30" />
+              <div className="relative flex h-full flex-col justify-between gap-8 p-7 sm:p-9">
+                <div className="max-w-xs">
+                  <p className="eyebrow-light flex items-center gap-2">
+                    <LiveDot /> Mappa live
+                  </p>
+                  <h3 className="display-h3 mt-3">Posti pubblicati adesso, non annunci statici.</h3>
+                </div>
+                <div className="relative -mb-28 mt-4 self-end sm:-mb-32 sm:mt-0">
+                  <PhoneFrame className="w-[260px] sm:w-[290px]" glow={false} tilt={-6}>
+                    <MapSearchScreen />
+                  </PhoneFrame>
+                </div>
+              </div>
+            </Reveal>
+            {/* B prezzo */}
+            <Reveal delay={80} className="relative overflow-hidden rounded-card border border-line bg-brand-mist p-7 lg:col-span-5">
+              <p className="eyebrow">Prezzo</p>
+              <p className="mt-3 font-mono text-6xl font-bold tracking-tight text-ink">
+                <span className="text-3xl text-brand-deep">€</span>1,20
+              </p>
+              <p className="mt-2 text-muted">Lo vedi prima. Nessuna trattativa, nessuna asta.</p>
+              <span className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand/25 blur-2xl" aria-hidden />
+            </Reveal>
+            {/* C ETA */}
+            <Reveal delay={140} className="rounded-card border border-line bg-warm-paper p-7 lg:col-span-5">
+              <p className="eyebrow">Tempo stimato</p>
+              <div className="mt-3 flex items-baseline gap-3">
+                <p className="font-mono text-4xl font-bold">2 min</p>
+                <p className="font-mono text-xl text-muted">· 180 m</p>
+              </div>
+              <p className="mt-2 text-muted">Sai quanto sei lontano prima di partire.</p>
+            </Reveal>
+            {/* D navigazione */}
+            <Reveal delay={200} className="relative overflow-hidden rounded-card bg-ink p-7 text-white lg:col-span-4">
+              <div className="absolute inset-0 opacity-70">
+                <MapCanvas theme="dark" className="h-full w-full" route="M64 236 L148 236 L148 112 L316 112" pins={[{ x: 316, y: 110, hot: true }]} user={{ x: 64, y: 236 }} />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+              <div className="relative flex h-full min-h-[180px] flex-col justify-end">
+                <p className="eyebrow-light">Navigazione</p>
+                <p className="mt-2 font-display text-xl font-bold">Vai direttamente al punto.</p>
+              </div>
+            </Reveal>
+            {/* E notifica */}
+            <Reveal delay={260} className="relative overflow-hidden rounded-card border border-line bg-paper p-7 lg:col-span-8">
+              <div className="grid items-center gap-6 sm:grid-cols-2">
+                <div>
+                  <p className="eyebrow">Notifiche</p>
+                  <p className="mt-2 font-display text-xl font-bold">Sai quando l’altro sta arrivando.</p>
+                  <p className="mt-2 text-sm text-muted">Stato dello scambio in tempo reale. Niente chat di trattativa.</p>
+                </div>
+                <div className="float-slow">
+                  <NotificationCard />
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 07 APP + PORTALE ───────── */}
+      <section className="section-pad relative overflow-hidden bg-brand-mist">
+        <div className="pointer-events-none absolute -left-32 bottom-0 h-[500px] w-[500px] rounded-full bg-brand/20 blur-[120px]" aria-hidden />
+        <div className="relative mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-4">
+            <EditorialHeading eyebrow="Un ecosistema" title="In strada usi l’app. Tutto il resto lo gestisci dal portale." />
+            <Reveal delay={100}>
+              <div className="mt-8 grid grid-cols-2 gap-6 text-sm">
+                <div>
+                  <p className="font-display text-base font-bold">App</p>
+                  <ul className="mt-2 space-y-1.5 text-muted">
+                    {['Cerca', 'Vendi', 'Prenota', 'Naviga', 'Notifiche', 'Wallet in lettura'].map((x) => (
+                      <li key={x} className="flex items-center gap-2">
+                        <Check /> {x}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-display text-base font-bold">Portale</p>
+                  <ul className="mt-2 space-y-1.5 text-muted">
+                    {['Account', 'Pacchetti', 'Wallet e movimenti', 'Ranking', 'Missioni', 'Inviti', 'Supporto'].map((x) => (
+                      <li key={x} className="flex items-center gap-2">
+                        <Check /> {x}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-8 rounded-2xl border border-brand/30 bg-white/70 p-4 text-sm backdrop-blur">
+                <p className="font-bold text-ink">Un solo account. Stesso saldo.</p>
+                <p className="mt-1 text-muted">La carta si usa sul portale. In app usi il credito già disponibile.</p>
+              </div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <DownloadParkHub tone="ink" />
+                <SecondaryCTA href={portalPath('/login')}>Vai al portale</SecondaryCTA>
+              </div>
+            </Reveal>
+          </div>
+          <div className="relative lg:col-span-8">
+            <Reveal>
+              <div className="relative pb-16 pr-6 sm:pr-24">
+                <LaptopFrame>
+                  <PortalDashboardScreen />
+                </LaptopFrame>
+                <div className="absolute -bottom-2 right-0 w-[150px] sm:w-[200px]">
+                  <PhoneFrame glow={false} tilt={4}>
+                    <WalletScreen />
+                  </PhoneFrame>
+                </div>
+                <SignalLine variant="diagonal" className="pointer-events-none absolute bottom-24 right-32 hidden w-40 text-brand-deep sm:block" />
+                <div className="absolute left-6 top-6 hidden sm:block">
+                  <FloatingStatusChip tone="light">Stesso saldo · €18,40</FloatingStatusChip>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 08 PREZZI ───────── */}
+      <section className="section-pad bg-gradient-to-b from-white via-white to-brand-mist/50">
+        <div className="mx-auto max-w-site">
+          <EditorialHeading
+            eyebrow="Prezzi"
+            title="Parti con poco. Usa ParkHub quanto ti serve."
+            lead="Il credito si acquista sul portale. Poi lo usi in app quando prenoti un posto."
+          />
+          <div className="mt-12 grid gap-5 lg:grid-cols-12">
+            <Reveal as="article" className="relative overflow-hidden rounded-stage bg-ink p-8 text-white shadow-device lg:col-span-5 lg:p-10">
+              <div className="absolute inset-0 opacity-20">
+                <MapCanvas theme="dark" className="h-full w-full" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-ink via-ink/85 to-brand-ink/60" />
+              <div className="relative flex h-full flex-col">
+                <span className="inline-flex w-fit items-center gap-2 rounded-pill bg-brand px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink">{monthly.hint}</span>
+                <h3 className="mt-6 font-display text-3xl font-bold">{monthly.name}</h3>
+                <p className="mt-4 font-mono text-5xl font-bold tracking-tight">
+                  €23,90<span className="text-xl text-white/55"> / mese</span>
                 </p>
-                <ul className="mt-4 flex-1 space-y-2 text-sm">
-                  {pkg.points.map((pt) => (
-                    <li key={pt} className={pkg.featured ? 'text-white/70' : 'text-muted'}>
-                      · {pt}
+                <p className="mt-2 text-white/70">{monthly.credit}</p>
+                <ul className="mt-8 space-y-2.5 text-sm text-white/75">
+                  {['Rinnovo automatico, disdici quando vuoi', 'Credito pronto ogni mese in app', 'Scambi da €1,20 a prezzo fisso'].map((x) => (
+                    <li key={x} className="flex items-center gap-2.5">
+                      <Check light /> {x}
                     </li>
                   ))}
                 </ul>
+                <div className="mt-auto pt-10">
+                  <PrimaryCTA href={portalPath('/signup')}>Attiva sul portale</PrimaryCTA>
+                </div>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                t: 'Strisce blu separate',
-                d: 'Il prezzo dello scambio non include il ticket del parcometro. Se il posto è a pagamento sul suolo pubblico, lo gestisci come sempre.',
-              },
-              {
-                t: 'Mensile = autorinnovo',
-                d: 'Il piano Mensile 20 si rinnova finché non lo disdici dal portale. Semestrale e Annuale sono pagamenti per il periodo indicato.',
-              },
-              {
-                t: 'Limiti anti-abuso',
-                d: 'Esiste un tetto giornaliero sugli acquisti personali. I pacchetti una tantum non-mensili hanno regole di frequenza: i dettagli restano sul portale al checkout.',
-              },
-            ].map((x) => (
-              <div key={x.t} className="rounded-2xl border border-ink/8 bg-[#F5F6F8] p-5">
-                <h3 className="font-display font-bold">{x.t}</h3>
-                <p className="mt-2 text-sm text-muted">{x.d}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <Link
-              href="/prezzi"
-              className="mr-4 text-sm font-bold text-teal hover:underline"
-            >
-              Pagina Prezzi completa →
-            </Link>
-            <a
-              href={portalPath('/signup')}
-              className="inline-flex rounded-full bg-teal px-7 py-3.5 text-sm font-bold text-ink hover:bg-[#00b896]"
-            >
-              Registrati e scegli un pacchetto
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Missioni */}
-      <section id="missioni" className="px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Missioni</p>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-                Obiettivi chiari, premi sullo scambio
-              </h2>
-              <p className="mt-4 text-muted leading-relaxed">
-                Le missioni ti spingono a usare Parker in modo utile: vendere posti, completare
-                scambi, tornare con costanza. I premi in credito servono{' '}
-                <strong className="text-ink">solo per gli swap</strong>, scadono in pochi giorni e
-                hanno un tetto mensile. Non modificano stelle o ranking — sono sistemi separati.
-              </p>
-              <p className="mt-4 text-muted leading-relaxed">
-                Le trovi sul portale (e nel percorso account in app). Al completamento il premio
-                viene erogato in automatico quando le condizioni sono soddisfatte. Per i venditori
-                più attivi esistono anche traguardi più lunghi (trimestrali / annuali) con premi
-                dedicati: li vedi nel dettaglio missioni quando sei loggato.{' '}
-                <Link href="/missioni" className="font-bold text-teal hover:underline">
-                  Guida Missioni →
-                </Link>
-              </p>
-            </div>
-            <div className="overflow-hidden rounded-2xl">
-              <Photo
-                src={IMAGES.parkingLot}
-                alt="Parcheggio visto dall’alto"
-                className="h-72 w-full object-cover"
-              />
-            </div>
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {missions.map((m) => (
-              <article
-                key={m.title}
-                className="rounded-2xl border border-ink/8 bg-white p-6 shadow-[0_4px_16px_rgba(11,18,32,0.03)]"
-              >
-                <h3 className="font-display text-lg font-bold">{m.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{m.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ranking teaser + foto */}
-      <section className="relative overflow-hidden bg-ink px-5 py-20 sm:py-24">
-        <Image
-          src={IMAGES.skyline}
-          alt=""
-          fill
-          unoptimized
-          className="object-cover opacity-40"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-ink/80" />
-        <div className="relative mx-auto max-w-6xl text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">Ranking</p>
-          <h2 className="mt-3 max-w-2xl font-display text-3xl font-bold sm:text-4xl">
-            Le stelle misurano l’affidabilità — non una classifica pubblica
-          </h2>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Vedi solo il tuo punteggio e perché sale o scende: completamenti, annulli,
-            segnalazioni, valutazioni. Se le stelle sono basse puoi comunque vendere, ma solo al
-            livello di prezzo più basso. Le missioni non toccano il ranking. Invita amici resta
-            sempre disponibile.
-          </p>
-          <Link
-            href="/ranking"
-            className="mt-8 inline-flex rounded-full bg-teal px-6 py-3 text-sm font-bold text-ink hover:bg-[#00b896]"
-          >
-            Leggi la guida completa al ranking
-          </Link>
-        </div>
-      </section>
-
-      {/* Invita */}
-      <section id="invita" className="border-t border-ink/8 bg-white px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div className="overflow-hidden rounded-2xl">
-              <Photo
-                src={IMAGES.friends}
-                alt="Amici che condividono un momento"
-                className="h-80 w-full object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">
-                Invita un amico
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-                Condividi il codice. Guadagni quando scambia.
-              </h2>
-              <p className="mt-4 text-muted leading-relaxed">
-                Il referral Parker non premia il solo download. Premia quando l’amico entra con il
-                tuo invito e completa il <strong className="text-ink">primo scambio</strong>. Così
-                cresce la mappa con persone che usano davvero il prodotto — non solo account vuoti.
-              </p>
-              <p className="mt-3 text-muted leading-relaxed">
-                Tu ricevi €2,50 di credito bonus usabile sugli scambi. L’invitato non riceve un
-                bonus di ingresso da referral. Ogni tre amici qualificati il blocco vale €10
-                totali; il meccanismo è ripetibile.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {referralSteps.map((s) => (
-              <article
-                key={s.n}
-                className="rounded-2xl border border-ink/8 bg-[#F5F6F8] p-6"
-              >
-                <span className="font-display text-3xl font-bold text-teal/30">{s.n}</span>
-                <h3 className="mt-2 font-display text-lg font-bold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-10 rounded-2xl border border-ink/8 bg-[#F5F6F8] p-7 sm:p-8">
-            <h3 className="font-display text-xl font-bold">In sintesi</h3>
-            <div className="mt-4 grid gap-4 text-sm text-muted md:grid-cols-3">
-              <p>
-                <strong className="text-ink">Codice solo in registrazione.</strong> Dopo non si
-                aggancia più. Anti-abuso, non optional.
-              </p>
-              <p>
-                <strong className="text-ink">Bonus in attesa</strong> fino al primo swap
-                dell’amico. Poi spendibile subito sugli scambi.
-              </p>
-              <p>
-                <strong className="text-ink">Niente prelievo bancario.</strong> Come tutto il
-                credito Parker, resta nel circuito.
-              </p>
-            </div>
-            <a
-              href={portalPath('/signup')}
-              className="mt-6 inline-flex rounded-full bg-ink px-6 py-3 text-sm font-bold text-white hover:bg-ink/90"
-            >
-              Registrati e apri Invita amici
-            </a>
-            <Link
-              href="/invita"
-              className="mt-4 inline-flex text-sm font-bold text-teal hover:underline sm:mt-6 sm:ml-4"
-            >
-              Pagina Invita completa →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery band */}
-      <section className="px-5 py-16">
-        <div className="mx-auto grid max-w-6xl gap-3 sm:grid-cols-3">
-          {[
-            [IMAGES.streetParked, 'Auto in sosta'],
-            [IMAGES.parkingLot, 'Parcheggio'],
-            [IMAGES.street, 'Guida in città'],
-          ].map(([src, alt]) => (
-            <div key={alt} className="overflow-hidden rounded-2xl">
-              <Photo src={src} alt={alt} className="h-44 w-full object-cover sm:h-56" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="border-t border-ink/8 bg-white px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal">FAQ</p>
-          <h2 className="mt-3 font-display text-3xl font-bold">Domande frequenti</h2>
-          <p className="mt-3 text-sm text-muted">
-            Risposte su ciò che Parker fa oggi. Per il dettaglio ranking c’è la{' '}
-            <Link href="/ranking" className="font-semibold text-teal hover:underline">
-              pagina dedicata
-            </Link>
-            .
-          </p>
-          <div className="mt-10 divide-y divide-ink/10 border-y border-ink/10">
-            {faqs.map((item, i) => {
-              const open = openFaq === i;
-              return (
-                <button
-                  key={item.q}
-                  type="button"
-                  onClick={() => setOpenFaq(open ? null : i)}
-                  className="w-full py-5 text-left"
+            </Reveal>
+            <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+              {others.map((p, i) => (
+                <Reveal
+                  as="article"
+                  key={p.name}
+                  delay={i * 80}
+                  className="group rounded-card border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/50 hover:shadow-soft"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="pr-2 font-semibold leading-snug">{item.q}</span>
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal/15 text-sm font-bold text-teal">
-                      {open ? '−' : '+'}
-                    </span>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-muted">{p.hint}</p>
+                  <h3 className="mt-1 font-display text-xl font-bold">{p.name}</h3>
+                  <p className="mt-4 font-mono text-3xl font-bold tracking-tight">{p.price}</p>
+                  <p className="mt-1 text-sm text-muted">{p.credit}</p>
+                  {p.note ? <p className="mt-3 text-xs text-muted">{p.note}</p> : null}
+                  <p className="link-arrow mt-5 text-brand-deep opacity-0 transition group-hover:opacity-100">Scegli</p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+          <Reveal className="mt-8 flex flex-col gap-4 rounded-card border border-line bg-white/70 px-6 py-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+            <ul className="flex flex-wrap gap-x-7 gap-y-2 text-sm font-semibold text-ink/75">
+              <li className="flex items-center gap-2"><Check /> Scambio da €1,20</li>
+              <li className="flex items-center gap-2"><Check /> Strisce blu separate</li>
+              <li className="flex items-center gap-2"><Check /> Saldo visibile in app</li>
+            </ul>
+            <Link href="/prezzi" className="link-arrow text-brand-deep">
+              Confronta tutti i piani
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── 08b OFFERTA DI LANCIO (temporanea: LAUNCH_PROMO.enabled) ───────── */}
+      {LAUNCH_PROMO.enabled ? (
+        <section id="lancio" className="relative scroll-mt-24 overflow-hidden bg-brand text-ink">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
+            <MapCanvas theme="light" dense className="h-full w-full" />
+          </div>
+          <div className="pointer-events-none absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-white/40 blur-[110px]" aria-hidden />
+          <div className="pointer-events-none absolute -bottom-32 right-0 h-[460px] w-[460px] rounded-full bg-brand-deep/30 blur-[120px]" aria-hidden />
+          <span
+            className="pointer-events-none absolute -right-6 bottom-[-0.18em] select-none font-mono text-[18rem] font-bold leading-none text-ink/10 sm:text-[26rem] lg:text-[32rem]"
+            aria-hidden
+          >
+            {LAUNCH_PROMO.parkings}
+          </span>
+
+          <div className="relative mx-auto grid max-w-site gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-28">
+            <div className="lg:col-span-6">
+              <Reveal>
+                <p className="inline-flex items-center gap-2 rounded-pill bg-ink px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand">
+                  <LiveDot /> Offerta di lancio · per un periodo limitato
+                </p>
+                <h2 className="display-h2 text-balance mt-5">
+                  I primi {LAUNCH_PROMO.seatsLabel} iscritti partono con {LAUNCH_PROMO.parkings} parcheggi.
+                </h2>
+                <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink/80">
+                  Crea l’account, verifica il telefono e trovi {LAUNCH_PROMO.parkings} parcheggi già pronti in app. {LAUNCH_PROMO.rule}
+                </p>
+                <ul className="mt-7 flex flex-wrap gap-2.5 text-[13px] font-semibold">
+                  {[
+                    'Dopo la verifica del telefono',
+                    '1 parcheggio per scambio',
+                    `Validità ${LAUNCH_PROMO.validityDays} giorni`,
+                    'Solo per prenotare posti',
+                  ].map((t) => (
+                    <li key={t} className="rounded-pill border border-ink/15 bg-white/60 px-3.5 py-1.5 backdrop-blur">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <PrimaryCTA href={portalPath('/signup')} tone="ink" className="whitespace-nowrap">
+                    Prendi i tuoi {LAUNCH_PROMO.parkings} parcheggi
+                  </PrimaryCTA>
+                  <p className="text-sm text-ink/70">
+                    Posti limitati: a {LAUNCH_PROMO.seatsLabel} iscritti l’offerta si chiude da sola.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-6">
+              <Reveal delay={120}>
+                <div className="rounded-stage bg-ink p-6 text-white shadow-device sm:p-8">
+                  <p className="eyebrow-light">Da dove arriva il saldo che spendi in app</p>
+                  <ul className="mt-5 divide-y divide-white/10">
+                    {BALANCE_SOURCES.map((s, i) => (
+                      <li key={s.title} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 font-mono text-xs font-bold text-brand">
+                          0{i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="font-display text-lg font-bold">{s.title}</p>
+                            <span className="rounded-pill border border-white/15 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white/60">{s.tag}</span>
+                          </div>
+                          <p className="mt-1 text-sm text-white/65">{s.body}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 rounded-2xl border border-brand/40 bg-brand/10 p-5">
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-ink">
+                        <LockIcon />
+                      </span>
+                      <div>
+                        <p className="font-display text-base font-bold">Bonus amici: solo parcheggi.</p>
+                        <p className="mt-1 text-sm text-white/70">
+                          Il credito che ricevi invitando un amico si spende esclusivamente per prenotare posti. Non si trasforma in buoni, non si scarica come voucher, non si preleva.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  {open ? (
-                    <p className="mt-3 text-sm leading-relaxed text-muted">{item.a}</p>
-                  ) : null}
-                </button>
-              );
-            })}
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* ───────── 09 LIVELLI ───────── */}
+      <section className="section-pad bg-white">
+        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-4">
+            <EditorialHeading
+              eyebrow="I cinque livelli"
+              title="Più esperienza. Più livelli disponibili."
+              lead="Per sbloccare un livello servono sia le vendite richieste sia un ranking sufficiente. Sotto soglia resti al livello base."
+            />
+          </div>
+          <div className="lg:col-span-8">
+            <LevelLadder tiers={PRICE_TIERS} />
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative overflow-hidden bg-teal px-5 py-16 text-center text-ink sm:py-20">
-        <div className="relative mx-auto max-w-2xl">
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            Inizia dallo scambio. Una cosa alla volta.
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink/75">
-            Registrati, scegli un pacchetto sul portale, usa la mappa. Ranking, missioni e invita
-            amici ti accompagnano mentre usi il prodotto — non sono promesse separate.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a
-              href={portalPath('/signup')}
-              className="rounded-full bg-ink px-8 py-3.5 text-sm font-bold text-white hover:bg-ink/90"
-            >
-              Registrati
-            </a>
-            <a
-              href={portalPath('/login')}
-              className="rounded-full border border-ink/20 bg-white/40 px-8 py-3.5 text-sm font-semibold hover:bg-white/60"
-            >
-              Accedi
-            </a>
+      {/* ───────── 10 WALLET ───────── */}
+      <section className="section-pad relative overflow-hidden bg-graphite text-white">
+        <div className="pointer-events-none absolute -left-20 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-brand/10 blur-[140px]" aria-hidden />
+        <div className="relative mx-auto max-w-site">
+          <EditorialHeading
+            light
+            eyebrow="Il wallet"
+            title="Un saldo. Tre origini diverse. ParkHub decide automaticamente cosa usare prima."
+          />
+          <div className="mt-14">
+            <WalletBuckets />
+          </div>
+          <Reveal className="mt-12">
+            <Link href="/prezzi#wallet" className="link-arrow text-brand">
+              Come funziona il credito
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── 11 FIDUCIA ───────── */}
+      <section className="section-pad bg-warm-paper">
+        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-5">
+            <EditorialHeading
+              eyebrow="Fiducia, come sistema"
+              title="La fiducia non è un badge. È costruita nello scambio."
+              lead="Ogni account porta con sé un’identità verificata, un veicolo e una storia di scambi. Non serve fidarsi sulla parola."
+            />
+            <Reveal delay={120} className="mt-8">
+              <AssetSlot label="home-11-trust-user-vehicle-wide.webp" aspect="video" tone="warm" />
+              <p className="mt-5 rounded-2xl border border-line bg-white px-5 py-4 text-sm text-muted">
+                <strong className="text-ink">Ranking basso non significa account bloccato:</strong> limita il livello di vendita. Sospensione e ban sono misure separate.
+              </p>
+            </Reveal>
+          </div>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <IdentityStack />
           </div>
         </div>
       </section>
+
+      {/* ───────── 12 RANKING ───────── */}
+      <section className="section-pad relative overflow-hidden bg-white">
+        <span className="pointer-events-none absolute -right-10 -top-10 select-none font-display text-[22rem] font-extrabold leading-none text-brand-mist" aria-hidden>
+          ★
+        </span>
+        <div className="relative mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-5">
+            <EditorialHeading
+              eyebrow="Ranking"
+              title="Le stelle misurano affidabilità. Non popolarità."
+              lead="Nessuna classifica pubblica. Solo il tuo punteggio, che si muove con quello che fai davvero negli scambi."
+            />
+            <Reveal delay={120} className="mt-10">
+              <StarMeter value={4.6} />
+            </Reveal>
+            <Reveal delay={200} className="mt-8">
+              <Link href="/ranking" className="link-arrow text-brand-deep">
+                Capisci il ranking
+              </Link>
+            </Reveal>
+          </div>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <p className="eyebrow mb-4">Cosa muove il punteggio</p>
+            <ScoreFeed />
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 13 MISSIONI ───────── */}
+      <section className="section-pad bg-brand-mist/60">
+        <div className="mx-auto max-w-site">
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <EditorialHeading
+                eyebrow="Missioni, ma non da videogame"
+                title="La mappa funziona meglio quando più persone la tengono viva."
+                lead="Le missioni premiano comportamenti utili allo scambio, senza modificare il ranking."
+              />
+            </div>
+            <Reveal delay={100} className="lg:col-span-5">
+              <div className="rounded-card border border-line bg-white/80 p-5 text-sm backdrop-blur">
+                <p className="font-bold">Premi piccoli, regole chiare</p>
+                <p className="mt-1 text-muted">Tetto €3/mese sui premi piccoli. Scadenza 5–7 giorni. Spendibili solo negli scambi.</p>
+              </div>
+            </Reveal>
+          </div>
+          <div className="mt-12 grid gap-4 md:grid-cols-2">
+            <Reveal><MissionProgress kind="Una volta" title="Vendi 3 posti" prize="1 parcheggio gratis" value={2} max={3} expires="Scade tra 5 giorni" /></Reveal>
+            <Reveal delay={80}><MissionProgress kind="Ripetibile" title="Ogni 10 vendite" prize="1 parcheggio gratis" value={7} max={10} /></Reveal>
+            <Reveal delay={160}><MissionProgress kind="Settimanale" title="5 scambi in settimana" prize="1 parcheggio gratis" value={3} max={5} expires="Si azzera lunedì" /></Reveal>
+            <Reveal delay={240}><MissionProgress kind="Streak" title="Accedi 7 giorni di fila" prize="Badge" value={5} max={7} /></Reveal>
+          </div>
+          <Reveal className="mt-8 overflow-hidden rounded-card bg-ink text-white">
+            <div className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              {MILESTONES.map((m) => (
+                <div key={m.title} className="px-6 py-5">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-brand">Traguardo</p>
+                  <p className="mt-1 font-display font-bold">{m.title}</p>
+                  <p className="text-sm text-white/60">{m.prize}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal className="mt-8">
+            <Link href="/missioni" className="link-arrow text-brand-deep">
+              Vedi tutte le missioni
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── 14 REFERRAL ───────── */}
+      <section className="relative overflow-hidden bg-ink">
+        <AssetSlot label="home-14-referral-friends-street-wide.webp" fill tone="dark" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/40 to-ink/10" />
+        <div className="relative mx-auto grid max-w-site gap-10 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:px-12 lg:py-28">
+          <Reveal className="rounded-stage bg-white/95 p-8 shadow-device backdrop-blur sm:p-10 lg:col-span-7">
+            <SectionEyebrow>Invita</SectionEyebrow>
+            <h2 className="display-h2 text-balance mt-3 text-[2rem] sm:text-[2.6rem]">Più persone usano ParkHub, più la mappa diventa utile.</h2>
+            <p className="mt-4 text-muted">Invita un amico. Il bonus arriva solo quando completa davvero il suo primo scambio.</p>
+            <div className="mt-8">
+              <ReferralEquation />
+            </div>
+            <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+              <li>Codice in registrazione</li>
+              <li>· Pending fino al primo swap</li>
+              <li>· Solo swap, non prelevabile</li>
+            </ul>
+            <div className="mt-8">
+              <PrimaryCTA href={siteHref('/invita')} tone="ink">Invita un amico</PrimaryCTA>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────── 15 MOMENTI REALI ───────── */}
+      <section className="section-pad bg-white">
+        <div className="mx-auto max-w-site">
+          <EditorialHeading eyebrow="Momenti reali" title="Non cerchi parcheggio “in generale”. Lo cerchi quando hai fretta." />
+          <div className="mt-12 grid gap-4 md:grid-cols-12">
+            {[
+              ['home-15-real-life-station.webp', 'Stazione', 'Il treno non aspetta il tuo terzo giro dell’isolato.', 'md:col-span-7', 'dark'],
+              ['home-15-real-life-hospital.webp', 'Ospedale', 'Quando devi arrivare, il tempo conta più del parcheggio.', 'md:col-span-5', 'mint'],
+              ['home-15-real-life-center.webp', 'Centro', 'Strade strette, pochi posti, occasioni che durano secondi.', 'md:col-span-5', 'warm'],
+              ['home-15-real-life-evening.webp', 'Rientro serale', 'Vedi chi sta uscendo prima di passare davanti al posto.', 'md:col-span-7', 'dark'],
+            ].map(([img, t, d, span, tone], i) => (
+              <Reveal as="article" key={t} delay={i * 80} className={`group relative min-h-[300px] overflow-hidden rounded-stage ${span}`}>
+                <AssetSlot label={img} fill tone={tone as 'dark' | 'mint' | 'warm'} className="transition-transform duration-700 group-hover:scale-[1.03]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-7 text-white">
+                  <p className="eyebrow-light">{t}</p>
+                  <p className="mt-2 max-w-sm font-display text-xl font-bold leading-snug sm:text-2xl">{d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 16 FAQ ───────── */}
+      <section id="faq" className="section-pad bg-ink text-white">
+        <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12">
+          <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
+            <EditorialHeading light eyebrow="Domande frequenti" title="Prima di provarlo, è normale voler capire bene." />
+            <Reveal delay={100} className="mt-8">
+              <Link href="/faq" className="link-arrow text-brand">
+                Tutte le FAQ
+              </Link>
+            </Reveal>
+          </div>
+          <div className="lg:col-span-8">
+            <FAQAccordion items={FAQS} />
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── 17 CTA ───────── */}
+      <FinalCinematicCTA />
 
       <SiteFooter />
-      <CookieBar />
+      <CookieBanner />
     </main>
   );
 }
+
+/* ---------- piccoli helper locali ---------- */
+
+function FlowPills({ items }: { items: string[] }) {
+  return (
+    <ol className="mt-5 flex flex-wrap items-center gap-y-2 text-[13px] font-semibold">
+      {items.map((x, i) => (
+        <li key={x} className="flex items-center">
+          <span className="rounded-pill border border-white/15 bg-white/10 px-3 py-1 backdrop-blur">{x}</span>
+          {i < items.length - 1 ? <span className="mx-1.5 text-brand">→</span> : null}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function Check({ light = false }: { light?: boolean }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={light ? '#00C9A7' : '#007F6D'} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0">
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  );
+}
+
+const ic = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true };
+
+function TagIcon() {
+  return (
+    <svg {...ic}>
+      <path d="M20 12l-8 8-9-9V4h7l10 10z" />
+      <circle cx="7.5" cy="7.5" r="1.3" />
+    </svg>
+  );
+}
+function RouteIcon() {
+  return (
+    <svg {...ic}>
+      <circle cx="6" cy="19" r="2.5" />
+      <circle cx="18" cy="5" r="2.5" />
+      <path d="M8 18h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" />
+    </svg>
+  );
+}
+function ShieldIcon() {
+  return (
+    <svg {...ic}>
+      <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+function CarIcon() {
+  return (
+    <svg {...ic} width={22} height={22}>
+      <path d="M5 16l1.5-5h11L19 16" />
+      <rect x="3" y="11" width="18" height="6" rx="2" />
+      <circle cx="7.5" cy="17.5" r="1.5" />
+      <circle cx="16.5" cy="17.5" r="1.5" />
+    </svg>
+  );
+}
+function PhoneIcon() {
+  return (
+    <svg {...ic}>
+      <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+      <path d="M11 18h2" />
+    </svg>
+  );
+}
+function UserIcon() {
+  return (
+    <svg {...ic}>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5 20a7 7 0 0 1 14 0" />
+    </svg>
+  );
+}
+function WalletIcon() {
+  return (
+    <svg {...ic}>
+      <rect x="3" y="6" width="18" height="13" rx="2.5" />
+      <path d="M3 10h18M16 14.5h2" />
+    </svg>
+  );
+}
+function SwapIcon() {
+  return (
+    <svg {...ic}>
+      <path d="M4 8h13l-3-3M20 16H7l3 3" />
+    </svg>
+  );
+}
+function ClockIcon() {
+  return (
+    <svg {...ic}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </svg>
+  );
+}
+function TimerIcon() {
+  return (
+    <svg {...ic}>
+      <path d="M10 2.5h4M12 6a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 9.5v4" />
+    </svg>
+  );
+}
+function LockIcon() {
+  return (
+    <svg {...ic} width={16} height={16} strokeWidth={2.4}>
+      <rect x="5" y="11" width="14" height="10" rx="2.5" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+    </svg>
+  );
+}
+function SignalOffIcon() {
+  return (
+    <svg {...ic}>
+      <path d="M4 4l16 16M8.5 15.5a5 5 0 0 1 7-7M5 12a10 10 0 0 1 2.5-5.5M19 12a10 10 0 0 0-1-4.5" />
+    </svg>
+  );
+}
+
+export { CreateAccountCTA };

@@ -1,14 +1,39 @@
-# parker-web
+# ParkHub — sito pubblico
 
-Ex vetrina su GitHub Pages.
+Vetrina ufficiale **ParkHub**. Naming: ParkHub. Spec: monorepo `docs/PARKHUB-SITE-MASTER-SPEC.md`.
 
-**SoT web ufficiale:** [`parker-portal`](https://github.com/Pietrocastagna/parker-portal)  
-**Live:** https://parker-portal.vercel.app  
+## URL
 
-Questa repo reindirizza lì (stesso BE `parker-api` / Render).
+https://pietrocastagna.github.io/parker-web/
 
-| Superficie | URL |
-|------------|-----|
-| Sito + portali | https://parker-portal.vercel.app |
-| API | https://parker-api-jhmz.onrender.com |
-| Vecchio link GH Pages | https://pietrocastagna.github.io/parker-web/ → redirect |
+## Posizionamento
+
+- Tutta Italia
+- Solo scambio tra automobilisti
+- Swap da €1,20 · Prova €4,99 sul portale
+- Strisce blu non incluse · niente prelievo in banca
+- Carta solo sul portale
+
+## Dev
+
+```bash
+cp .env.example .env.local
+npm install
+npm run dev
+```
+
+## Env
+
+- `NEXT_PUBLIC_PORTAL_URL` — portale login/signup
+- `NEXT_PUBLIC_APP_STORE_URL` / `NEXT_PUBLIC_PLAY_STORE_URL` — store (opzionali)
+- `NEXT_PUBLIC_BASE_PATH` — impostato in CI a `/parker-web` per GitHub Pages
+- `GITHUB_PAGES=1` — attiva basePath in build
+
+## Asset
+
+Mettere i WebP in `public/assets/parkhub/` (vedi README nella cartella).  
+Logo ufficiale in `public/brand/`.
+
+## Referral landing
+
+`/referral/?code=CODICE` (opzionale `&name=Nome`)
