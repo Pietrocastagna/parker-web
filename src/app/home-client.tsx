@@ -26,7 +26,7 @@ import {
 import { Reveal } from './components/reveal';
 import { StoreButtons } from './components/store-badges';
 import { BALANCE_SOURCES, FAQS, LAUNCH_PROMO, MILESTONES, PACKAGES, PRICE_TIERS } from './lib/content';
-import { portalPath, siteHref } from './lib/urls';
+import { portalPath } from './lib/urls';
 
 export default function HomePage() {
   const monthly = PACKAGES.find((p) => p.featured)!;
@@ -73,7 +73,7 @@ export default function HomePage() {
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <DownloadParkHub tone="ink" />
-                <SecondaryCTA href={siteHref('/come-funziona')}>Guarda come funziona</SecondaryCTA>
+                <SecondaryCTA href={'/come-funziona'}>Guarda come funziona</SecondaryCTA>
               </div>
               <StoreButtons className="mt-6" />
               <ul className="mt-10 grid max-w-md grid-cols-3 gap-4 text-[13px] font-semibold text-ink/75">
@@ -742,7 +742,7 @@ export default function HomePage() {
               <li>· Solo swap, non prelevabile</li>
             </ul>
             <div className="mt-8">
-              <PrimaryCTA href={siteHref('/invita')} tone="ink">Invita un amico</PrimaryCTA>
+              <PrimaryCTA href={'/invita'} tone="ink">Invita un amico</PrimaryCTA>
             </div>
           </Reveal>
         </div>

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { portalPath, siteHref } from '../lib/urls';
+import { portalPath, appPath } from '../lib/urls';
 import { PhoneFrame } from './device';
 import { MapSearchScreen } from './map-canvas';
 
@@ -22,8 +22,14 @@ function Smart({ href, className, children }: { href: string; className: string;
       </a>
     );
   }
+  // Next.js Link già applica `basePath`: non passare URL con /parker-web prefissato.
+  const base = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+  let path = href;
+  if (base && (path === base || path.startsWith(`${base}/`))) {
+    path = path === base ? '/' : path.slice(base.length) || '/';
+  }
   return (
-    <Link href={href} className={className}>
+    <Link href={path} className={className}>
       {children}
     </Link>
   );
@@ -89,13 +95,13 @@ export function DownloadParkHub({
 }) {
   if (light) {
     return (
-      <SecondaryCTA href={siteHref('/app')} light className={className}>
+      <SecondaryCTA href={appPath('/app')} light className={className}>
         Scarica ParkHub
       </SecondaryCTA>
     );
   }
   return (
-    <PrimaryCTA href={siteHref('/app')} className={className} tone={tone}>
+    <PrimaryCTA href={appPath('/app')} className={className} tone={tone}>
       Scarica ParkHub
     </PrimaryCTA>
   );
