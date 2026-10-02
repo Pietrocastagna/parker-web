@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Parker — Smetti di girare. Qualcuno sta uscendo ora.',
+  title: 'ParkHub — Scambio parcheggi in tempo reale',
   description:
-    'Scambio di parcheggi in Italia. Pacchetti Prova, Carnet, Mensile, Semestrale, Annuale. Ranking, missioni, invita un amico. Credito sul portale.',
+    'Scambi di parcheggio tra utenti verificati. Sito e portali su parker-portal.vercel.app.',
   openGraph: {
-    title: 'Parker — Scambia parcheggi in Italia',
-    description:
-      'Smetti di girare. Pacchetti di credito, ranking, missioni, invita un amico. Solo scambio tra automobilisti.',
+    title: 'ParkHub',
+    description: 'Scambio parcheggi in tempo reale. Credito e account sul portale web.',
     type: 'website',
     locale: 'it_IT',
-    siteName: 'Parker',
+    siteName: 'ParkHub',
+    url: 'https://parker-portal.vercel.app',
   },
 };
 

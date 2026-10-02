@@ -1,22 +1,14 @@
 # parker-web
 
-Sito pubblico Parker. Vetrina → ingresso al portale (utente / admin).
+Ex vetrina su GitHub Pages.
 
-## Posizionamento
+**SoT web ufficiale:** [`parker-portal`](https://github.com/Pietrocastagna/parker-portal)  
+**Live:** https://parker-portal.vercel.app  
 
-- Tutta Italia
-- Solo scambio tra automobilisti
-- Swap da €1,20 · Prova €4,99 sul portale
-- Strisce blu non incluse · niente prelievo in banca
+Questa repo reindirizza lì (stesso BE `parker-api` / Render).
 
-## URL
-
-https://pietrocastagna.github.io/parker-web/
-
-## Dev
-
-```bash
-cp .env.example .env.local
-npm install
-npm run dev
-```
+| Superficie | URL |
+|------------|-----|
+| Sito + portali | https://parker-portal.vercel.app |
+| API | https://parker-api-jhmz.onrender.com |
+| Vecchio link GH Pages | https://pietrocastagna.github.io/parker-web/ → redirect |
