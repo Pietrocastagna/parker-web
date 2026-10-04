@@ -32,7 +32,7 @@ export default function PrezziPage() {
       <PageHero
         eyebrow="Credito ParkHub"
         title="Credito quando ti serve. Prezzo dello scambio sempre visibile."
-        lead="Scegli un pacchetto sul portale, tieni il saldo nel wallet e usalo in app. Nessun checkout mentre sei in strada."
+        lead="Scegli un pacchetto sul portale, tieni il saldo nel wallet e usalo in app. Ci sono limiti anti-abuso e piani diversi: il dettaglio lo vedi al checkout sul portale."
         asset="pricing-01-hero-wallet-device-stage.webp"
         visual={<PhoneStage screen="wallet" chip="Saldo €18,40 · pronto in app" />}
       >
@@ -117,7 +117,7 @@ export default function PrezziPage() {
 
       <section id="wallet" className="section-pad bg-graphite text-white">
         <div className="mx-auto max-w-site">
-          <EditorialHeading light eyebrow="Il wallet" title="Tre tasche. Ordine automatico." lead="Bonus → credito pacchetto → proventi vendita. Tu vedi un saldo solo; ParkHub sceglie cosa usare prima." />
+          <EditorialHeading light eyebrow="Il wallet" title="Credito per scambi. Guadagni a parte." lead="Il credito del pacchetto prenota i posti. Quando vendi accumuli guadagni: servono a ricaricare o ai buoni, non diventano posti da soli. Dettaglio e vincoli sul portale." />
           <div className="mt-14">
             <WalletBuckets />
           </div>
