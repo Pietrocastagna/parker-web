@@ -18,7 +18,7 @@ import { portalPath } from '../lib/urls';
 export const metadata: Metadata = {
   title: 'Scarica l’app ParkHub',
   description:
-    'La strada è qui. Account e credito stanno dietro. Mappa, vendi, prenota, naviga. Stesso account del portale.',
+    'La strada è qui. Account e P stanno dietro. Mappa, vendi, prenota, naviga. Stesso account del portale.',
 };
 
 const FEATURES = [
@@ -38,7 +38,7 @@ export default function AppPage() {
       <FloatingHeader />
       <PageHero
         eyebrow="L’app per quando sei in strada"
-        title="La strada è qui. Account e credito stanno dietro."
+        title="La strada è qui. Account e P stanno dietro."
         lead="Apri la mappa, trova un posto, prenotalo e raggiungilo. Oppure segnala il posto che stai lasciando."
         asset="app-01-hero-city-map-device-stage.webp"
         visual={<PhoneStage screen="map" chip="3 posti live vicino a te" secondary={{ screen: 'navigation', tilt: 6 }} />}
@@ -85,7 +85,7 @@ export default function AppPage() {
             <Reveal delay={100}>
               <article className="h-full rounded-card border border-line bg-ink p-8 text-white">
                 <p className="eyebrow-light">Portale</p>
-                <h3 className="mt-2 font-display text-2xl font-bold">Dove gestisci il credito</h3>
+                <h3 className="mt-2 font-display text-2xl font-bold">Dove gestisci i P</h3>
                 <p className="mt-3 text-white/65">Account · Pacchetti · Wallet · Missioni · Invita · Ranking · Supporto</p>
               </article>
             </Reveal>
@@ -98,7 +98,7 @@ export default function AppPage() {
           <div className="lg:col-span-5">
             <EditorialHeading eyebrow="Dopo il download" title="Cinque passi e sei sulla mappa." />
             <ol className="mt-8 space-y-3">
-              {['Accedi', 'Completa profilo e veicolo', 'Carica credito sul portale', 'Torna in app', 'Cerca o pubblica'].map((s, i) => (
+              {['Accedi', 'Completa profilo e veicolo', 'Compra P sul portale', 'Torna in app', 'Cerca o pubblica'].map((s, i) => (
                 <Reveal as="li" key={s} delay={i * 60}>
                   <div className="flex items-center gap-4 rounded-2xl border border-line bg-white px-4 py-3">
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink font-mono text-xs font-bold text-brand">{i + 1}</span>
@@ -120,7 +120,7 @@ export default function AppPage() {
       <RelatedLinks
         items={[
           { href: '/come-funziona', label: 'Come funziona', desc: 'Flusso completo.' },
-          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti di credito.' },
+          { href: '/prezzi', label: 'Prezzi', desc: 'Pacchetti digitali in P.' },
           { href: '/about', label: 'About', desc: 'Perché esiste ParkHub.' },
         ]}
       />

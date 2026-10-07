@@ -98,7 +98,7 @@ export function SellerFlowStory() {
       steps={[
         { title: 'Vendi', body: 'Apri Vendi: la posizione è già quella dell’auto.', chip: 'Sto uscendo', Screen: SellScreen },
         { title: 'Veicolo', body: 'Scegli con quale auto stai uscendo: chi arriva sa cosa cercare.', chip: 'Veicolo', Screen: VehicleScreen },
-        { title: 'Livello', body: 'Il tuo livello fissa il prezzo. L1 incassa €1,00; chi arriva paga €1,20.', chip: 'Livello 1', Screen: LevelScreen },
+        { title: 'Livello', body: 'Il tuo livello sblocca il listino in P. Al primo livello chi arriva paga 1 P; tu incassi €1,00.', chip: 'Listino 1 P', Screen: LevelScreen },
         { title: 'Pubblica', body: 'Il posto va sulla mappa. Resta visibile pochi minuti.', chip: 'LIVE · pubblicato', Screen: MapSearchScreen },
         { title: 'Prenotazione', body: 'Qualcuno lo blocca e parte. Vedi distanza e tempo d’arrivo.', chip: 'Prenotato · in arrivo', Screen: BookedScreen },
         { title: 'Chiusura', body: 'Lui entra, tu esci. I proventi finiscono nel wallet e non scadono.', chip: 'Completato', Screen: CompleteScreen },
@@ -116,7 +116,7 @@ export function BuyerFlowStory() {
       title="Stai arrivando. Prenoti, navighi, parcheggi."
       steps={[
         { title: 'Cerca', body: 'La mappa mostra chi sta uscendo adesso, con prezzo e distanza.', chip: '3 posti live', Screen: MapSearchScreen },
-        { title: 'Dettaglio', body: 'Chi è, che auto ha, tra quanto esce. Prezzo fisso, nessuna asta.', chip: '€1,20 · 180 m', Screen: ListingDetailScreen },
+        { title: 'Dettaglio', body: 'Chi è, che auto ha, tra quanto esce. Prezzo fisso, nessuna asta.', chip: '1 P · 180 m', Screen: ListingDetailScreen },
         { title: 'Prenota', body: 'Il saldo copre il prezzo. Il venditore sa che arrivi.', chip: 'Prenotato', Screen: BookedScreen },
         { title: 'Naviga', body: 'Indicazioni fino al punto esatto, dentro l’app.', chip: 'In navigazione', Screen: NavigationScreen },
         { title: 'Arriva', body: 'Entro 250 m confermi l’arrivo. Se sei lontano puoi annullare.', chip: 'A 120 m', Screen: NavigationScreen },

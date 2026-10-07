@@ -17,9 +17,9 @@ import { BUNDLES, PACKAGES, PRICE_TIERS } from '../lib/content';
 import { portalPath } from '../lib/urls';
 
 export const metadata: Metadata = {
-  title: 'Prezzi ParkHub — Pacchetti e credito',
+  title: 'Prezzi ParkHub — Pacchetti digitali in P',
   description:
-    'Credito quando ti serve. Prova €4,99, Carnet €8,99, Mensile €23,90. Bundle e livelli di scambio da €1,20.',
+    'Compri un pacchetto digitale di P sul portale. Prova +4 P, Carnet +8 P, Mensile +20 P. Listino swap da 1 P a 5 P.',
 };
 
 export default function PrezziPage() {
@@ -30,11 +30,11 @@ export default function PrezziPage() {
     <main className="min-h-screen bg-paper text-ink">
       <FloatingHeader />
       <PageHero
-        eyebrow="Credito ParkHub"
-        title="Credito quando ti serve. Prezzo dello scambio sempre visibile."
-        lead="Scegli un pacchetto sul portale, tieni il saldo nel wallet e usalo in app. Ci sono limiti anti-abuso e piani diversi: il dettaglio lo vedi al checkout sul portale."
+        eyebrow="Pacchetti digitali"
+        title="Compri P sul portale. Li spendi in app sullo scambio."
+        lead="Paghi in euro, ricevi un pacchetto di P. Il listino degli scambi è in P (1–5) e lo vedi prima di prenotare. Limiti e piani: dettaglio al checkout sul portale."
         asset="pricing-01-hero-wallet-device-stage.webp"
-        visual={<PhoneStage screen="wallet" chip="Saldo €18,40 · pronto in app" />}
+        visual={<PhoneStage screen="wallet" chip="Saldo 18 P · pronto in app" />}
       >
         <PrimaryCTA href={portalPath('/signup')}>Vai al portale</PrimaryCTA>
         <DownloadParkHub light />
@@ -42,7 +42,7 @@ export default function PrezziPage() {
 
       <section className="section-pad bg-gradient-to-b from-white to-brand-mist/30">
         <div className="mx-auto max-w-site">
-          <EditorialHeading eyebrow="Piani" title="Un piano per come usi la città." lead="Il Mensile è il più scelto: credito pronto ogni mese, disdici quando vuoi." />
+          <EditorialHeading eyebrow="Piani" title="Un piano per come usi la città." lead="Il Mensile è il più scelto: +20 P pronti ogni mese, disdici quando vuoi." />
           <div className="mt-12 grid gap-5 lg:grid-cols-12">
             <Reveal as="article" className="relative overflow-hidden rounded-stage bg-ink p-8 text-white shadow-device lg:col-span-5 lg:p-10">
               <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand/25 blur-3xl" aria-hidden />
@@ -56,7 +56,7 @@ export default function PrezziPage() {
                 <ul className="mt-8 space-y-2.5 text-sm text-white/75">
                   <li>· Rinnovo automatico, disdici quando vuoi</li>
                   <li>· Sblocca il catalogo bundle</li>
-                  <li>· Credito con scadenza secondo il piano</li>
+                  <li>· P con scadenza secondo il piano</li>
                 </ul>
                 <div className="mt-auto pt-10">
                   <PrimaryCTA href={portalPath('/signup')}>Attiva sul portale</PrimaryCTA>
@@ -76,7 +76,7 @@ export default function PrezziPage() {
             </div>
           </div>
           <Reveal className="mt-6 rounded-card border border-line bg-white/70 px-6 py-4 text-sm text-muted backdrop-blur">
-            Rimborso entro 14 giorni solo se il lotto di credito è intatto. Le strisce blu restano a carico tuo.
+            Rimborso entro 14 giorni solo se il lotto di P è intatto. Le strisce blu restano a carico tuo. Con N P paghi solo listini ≤ N P.
           </Reveal>
         </div>
       </section>
@@ -86,7 +86,7 @@ export default function PrezziPage() {
           <div className="lg:col-span-5">
             <EditorialHeading
               eyebrow="Bundle extra"
-              title="Ti serve più credito? Aggiungi un bundle."
+              title="Ti servono più P? Aggiungi un bundle."
               lead="Validità 30 giorni, niente rollover. Catalogo completo sbloccato con un piano attivo."
             />
           </div>
@@ -96,6 +96,7 @@ export default function PrezziPage() {
                 <div className="rounded-card border border-line bg-warm-paper p-6 text-center">
                   <p className="font-display text-sm font-bold text-muted">{b.name}</p>
                   <p className="mt-2 font-mono text-3xl font-bold">{b.price}</p>
+                  <p className="mt-1 text-sm font-semibold text-brand-deep">{b.credit}</p>
                   <p className="mt-1 text-xs text-muted">30 giorni</p>
                 </div>
               </Reveal>
@@ -107,7 +108,7 @@ export default function PrezziPage() {
       <section className="section-pad bg-warm-paper">
         <div className="mx-auto grid max-w-site gap-12 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-4">
-            <EditorialHeading eyebrow="Livelli di scambio" title="Cinque livelli. Prezzo sempre chiaro." lead="Il livello del venditore fissa il prezzo. Chi arriva lo vede prima di prenotare." />
+            <EditorialHeading eyebrow="Listino in P" title="Cinque listini. Sempre chiaro." lead="Il livello del venditore sblocca il listino in P (1–5). Chi arriva paga in P; chi vende incassa euro." />
           </div>
           <div className="lg:col-span-8">
             <LevelLadder tiers={PRICE_TIERS} />
@@ -117,7 +118,7 @@ export default function PrezziPage() {
 
       <section id="wallet" className="section-pad bg-graphite text-white">
         <div className="mx-auto max-w-site">
-          <EditorialHeading light eyebrow="Il wallet" title="Credito per scambi. Guadagni a parte." lead="Il credito del pacchetto prenota i posti. Quando vendi accumuli guadagni: servono a ricaricare o ai buoni, non diventano posti da soli. Dettaglio e vincoli sul portale." />
+          <EditorialHeading light eyebrow="Il wallet" title="P per gli scambi. Guadagni a parte." lead="I P del pacchetto prenotano i posti. Quando vendi accumuli guadagni in euro: servono a ricaricare o ai buoni, non diventano P da soli. Dettaglio e vincoli sul portale." />
           <div className="mt-14">
             <WalletBuckets />
           </div>
@@ -126,9 +127,9 @@ export default function PrezziPage() {
 
       <RelatedLinks
         items={[
-          { href: '/come-funziona', label: 'Come funziona', desc: 'Dal credito allo scambio.' },
-          { href: '/app', label: 'Scarica app', desc: 'Usa il credito sulla mappa.' },
-          { href: '/missioni', label: 'Missioni', desc: 'Premi solo-swap.' },
+          { href: '/come-funziona', label: 'Come funziona', desc: 'Dal pacchetto P allo scambio.' },
+          { href: '/app', label: 'Scarica app', desc: 'Spendi i P sulla mappa.' },
+          { href: '/missioni', label: 'Missioni', desc: 'Premi in P solo-swap.' },
         ]}
       />
       <FinalCinematicCTA title="Scegli un pacchetto e guarda chi sta uscendo." />

@@ -10,7 +10,7 @@ https://pietrocastagna.github.io/parker-web/
 
 - Tutta Italia
 - Solo scambio tra automobilisti
-- Swap da €1,20 · Prova €4,99 sul portale
+- Listino swap da 1 P · Prova €4,99 → +4 P sul portale
 - Strisce blu non incluse · niente prelievo in banca
 - Carta solo sul portale
 

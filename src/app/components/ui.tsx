@@ -195,7 +195,7 @@ export function LevelLadder({
                 }`}
                 style={{ height: `${56 + i * 34}px` }}
               >
-                <span className="absolute inset-x-0 bottom-3 font-display text-sm font-extrabold text-ink/80">L{t.level}</span>
+                <span className="absolute inset-x-0 bottom-3 font-display text-sm font-extrabold text-ink/80">{t.level}P</span>
               </div>
               <div className={`h-px ${light ? 'bg-white/20' : 'bg-line'}`} />
               {t.sales ? <p className={`mt-2 text-[11px] font-semibold ${light ? 'text-white/50' : 'text-muted'}`}>{t.sales} vendite</p> : null}
@@ -321,9 +321,9 @@ export function ScoreFeed({ light = false }: { light?: boolean }) {
 /** Tre tasche del wallet, sovrapposte come carte. */
 export function WalletBuckets() {
   const buckets = [
-    { n: '01', t: 'Bonus', v: '€2,50', d: 'Promo, missioni, referral. Scadenza breve. Solo per prenotare.', bg: 'from-[#F6B64A] to-[#E59A1F]', fg: 'text-ink', order: 'Prima sullo swap' },
-    { n: '02', t: 'Credito pacchetto', v: '€14,90', d: 'Piani e pacchetti. Serve a prenotare posti in app.', bg: 'from-brand to-brand-deep', fg: 'text-ink', order: 'Credito scambi' },
-    { n: '03', t: 'Guadagni da vendite', v: '€1,00', d: 'Quando vendi. Per ricaricare o buoni — non diventano posti da soli.', bg: 'from-[#2a3a4d] to-ink-2', fg: 'text-white', order: 'A parte' },
+    { n: '01', t: 'Bonus P', v: '2 P', d: 'Promo, missioni, referral. Scadenza breve. Solo per prenotare.', bg: 'from-[#F6B64A] to-[#E59A1F]', fg: 'text-ink', order: 'Prima sullo swap' },
+    { n: '02', t: 'Pacchetto P', v: '12 P', d: 'Pacchetto digitale comprato sul portale. Si spende in P sugli scambi.', bg: 'from-brand to-brand-deep', fg: 'text-ink', order: 'P per scambi' },
+    { n: '03', t: 'Guadagni da vendite', v: '€1,00', d: 'Quando vendi. Per ricaricare o buoni — non diventano P da soli.', bg: 'from-[#2a3a4d] to-ink-2', fg: 'text-white', order: 'A parte' },
   ];
   return (
     <div className="grid gap-8 lg:grid-cols-12 lg:items-center">

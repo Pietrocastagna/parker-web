@@ -161,9 +161,9 @@ export function MapSearchScreen() {
         <MapCanvas
           className="absolute inset-0 h-full w-full"
           pins={[
-            { x: 150, y: 120, price: '€1,20', hot: true },
-            { x: 240, y: 70, price: '€2,00' },
-            { x: 100, y: 210, price: '€1,20' },
+            { x: 150, y: 120, price: '1 P', hot: true },
+            { x: 240, y: 70, price: '2 P' },
+            { x: 100, y: 210, price: '1 P' },
           ]}
           user={{ x: 190, y: 190 }}
         />
@@ -181,8 +181,8 @@ export function MapSearchScreen() {
         </div>
         <div className="mt-2.5 space-y-2">
           {[
-            ['Via dei Tigli 12', '180 m · 2 min', '€1,20', true],
-            ['Piazza Europa', '320 m · 4 min', '€2,00', false],
+            ['Via dei Tigli 12', '180 m · 2 min', '1 P', true],
+            ['Piazza Europa', '320 m · 4 min', '2 P', false],
           ].map(([s, d, p, hot]) => (
             <div
               key={s as string}
@@ -225,7 +225,7 @@ export function SellScreen() {
           </div>
           <div className="text-right">
             <p className="text-[10px] text-white/55">chi arriva paga</p>
-            <p className="font-mono text-[13px] font-bold">€1,20</p>
+            <p className="font-mono text-[13px] font-bold">1 P</p>
           </div>
         </div>
       </div>
@@ -265,7 +265,7 @@ export function BookedScreen() {
           </div>
           <div className="text-right">
             <p className="font-mono text-[15px] font-bold">2 min</p>
-            <p className="font-mono text-[10px] text-ink/50">€1,20</p>
+            <p className="font-mono text-[10px] text-ink/50">1 P</p>
           </div>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
@@ -323,8 +323,8 @@ export function CompleteScreen() {
             <span className="font-mono font-bold text-success">+ €1,00</span>
           </div>
           <div className="mt-2 flex items-center justify-between text-[12px]">
-            <span className="text-ink/60">Saldo</span>
-            <span className="font-mono font-bold">€19,40</span>
+            <span className="text-ink/60">P disponibili</span>
+            <span className="font-mono font-bold">16 P</span>
           </div>
         </div>
         <div className="mt-4 flex gap-1.5">
@@ -346,12 +346,12 @@ export function WalletScreen() {
       <StatusBar />
       <div className="px-4 pt-1">
         <p className="text-[11px] font-semibold text-ink/50">Wallet</p>
-        <p className="font-mono text-[30px] font-bold leading-none">€18,40</p>
+        <p className="font-mono text-[30px] font-bold leading-none">18 P</p>
       </div>
       <div className="mx-4 mt-4 space-y-2">
         {[
-          ['Bonus', '€2,50', 'scade tra 12 g', 'bg-amber/15 text-amber'],
-          ['Credito pacchetto', '€14,90', 'Mensile · rinnovo 12/11', 'bg-brand/15 text-brand-deep'],
+          ['Bonus', '2 P', 'scade tra 12 g', 'bg-amber/15 text-amber'],
+          ['Pacchetto P', '15 P', 'Mensile · rinnovo 12/11', 'bg-brand/15 text-brand-deep'],
           ['Proventi vendita', '€1,00', 'non scadono', 'bg-ink/10 text-ink'],
         ].map(([t, v, d, c]) => (
           <div key={t} className="flex items-center gap-3 rounded-xl bg-white px-3 py-2.5 shadow-soft">
@@ -364,7 +364,7 @@ export function WalletScreen() {
           </div>
         ))}
       </div>
-      <p className="mx-4 mt-3 text-[10px] text-ink/50">La carta si usa sul portale. In app usi il credito già disponibile.</p>
+      <p className="mx-4 mt-3 text-[10px] text-ink/50">La carta si usa sul portale. In app usi i P già disponibili.</p>
     </div>
   );
 }
@@ -417,10 +417,10 @@ export function LevelScreen() {
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[10px] text-white/55">Livello attuale</p>
-            <p className="font-display text-[26px] font-bold leading-none">L1</p>
+            <p className="font-display text-[26px] font-bold leading-none">1&nbsp;P</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-white/55">incassi per scambio</p>
+            <p className="text-[10px] text-white/55">tu incassi</p>
             <p className="font-mono text-[18px] font-bold text-brand">€1,00</p>
           </div>
         </div>
@@ -429,10 +429,10 @@ export function LevelScreen() {
             <span key={n} className={`flex-1 rounded-t ${n === 1 ? 'bg-brand' : 'bg-white/15'}`} style={{ height: 10 + n * 6 }} />
           ))}
         </div>
-        <p className="mt-2 text-[10px] text-white/55">12 vendite · ranking 4,6 ★ · prossimo livello a 20</p>
+        <p className="mt-2 text-[10px] text-white/55">12 vendite · ranking 4,6 ★ · prossimo listino 2 P a 20</p>
       </div>
       <div className="mx-4 mt-3 rounded-xl bg-white px-3 py-2.5 text-[11px] text-ink/60 shadow-soft">
-        Chi arriva pagherà <span className="font-mono font-bold text-ink">€1,20</span>. Prezzo fisso, nessuna trattativa.
+        Chi arriva paga <span className="font-mono font-bold text-ink">1 P</span>. Listino fisso, nessuna trattativa.
       </div>
       <div className="mt-auto px-4 pb-4">
         <div className="rounded-pill bg-ink py-2.5 text-center text-[12px] font-bold text-brand">Continua</div>
@@ -446,7 +446,7 @@ export function ListingDetailScreen() {
     <div className="flex h-full flex-col bg-white text-ink">
       <StatusBar />
       <div className="relative mx-3 h-32 overflow-hidden rounded-2xl">
-        <MapCanvas className="h-full w-full" pins={[{ x: 190, y: 140, price: '€1,20', hot: true }]} user={{ x: 300, y: 230 }} />
+        <MapCanvas className="h-full w-full" pins={[{ x: 190, y: 140, price: '1 P', hot: true }]} user={{ x: 300, y: 230 }} />
       </div>
       <div className="px-4 pt-3">
         <div className="flex items-start justify-between">
@@ -454,7 +454,7 @@ export function ListingDetailScreen() {
             <h4 className="font-display text-[18px] font-bold leading-tight">Via dei Tigli 12</h4>
             <p className="text-[11px] text-ink/55">180 m · 2 min a piedi dall’auto</p>
           </div>
-          <p className="font-mono text-[20px] font-bold">€1,20</p>
+          <p className="font-mono text-[20px] font-bold">1 P</p>
         </div>
         <div className="mt-3 flex items-center gap-2.5 rounded-xl bg-paper px-3 py-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-mist font-display text-[12px] font-bold text-brand-deep">G</span>
@@ -470,7 +470,7 @@ export function ListingDetailScreen() {
         </ul>
       </div>
       <div className="mt-auto px-4 pb-4">
-        <div className="rounded-pill bg-brand py-2.5 text-center text-[12px] font-bold text-ink">Prenota · €1,20</div>
+        <div className="rounded-pill bg-brand py-2.5 text-center text-[12px] font-bold text-ink">Prenota · 1 P</div>
       </div>
     </div>
   );
@@ -509,15 +509,15 @@ export function PortalDashboardScreen() {
       <div className="flex-1 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-semibold text-ink/50">Saldo disponibile</p>
-            <p className="font-mono text-[26px] font-bold leading-none">€18,40</p>
+            <p className="text-[10px] font-semibold text-ink/50">P disponibili</p>
+            <p className="font-mono text-[26px] font-bold leading-none">18 P</p>
           </div>
           <span className="rounded-pill bg-brand px-3 py-1.5 text-[10px] font-bold text-ink">Ricarica</span>
         </div>
         <div className="mt-3 grid grid-cols-3 gap-2">
           {[
-            ['Bonus', '€2,50'],
-            ['Credito', '€14,90'],
+            ['Bonus', '2 P'],
+            ['Pacchetto', '15 P'],
             ['Proventi', '€1,00'],
           ].map(([t, v]) => (
             <div key={t} className="rounded-xl bg-white p-2.5 shadow-soft">
@@ -527,12 +527,12 @@ export function PortalDashboardScreen() {
           ))}
         </div>
         <div className="mt-3 rounded-xl bg-white p-3 shadow-soft">
-          <p className="text-[10px] font-bold">Pacchetti</p>
+          <p className="text-[10px] font-bold">Pacchetti digitali</p>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {[
-              ['Prova', '€4,99'],
-              ['Mensile', '€23,90'],
-              ['Carnet 8', '€8,99'],
+              ['Prova', '+4 P'],
+              ['Mensile', '+20 P'],
+              ['Carnet 8', '+8 P'],
             ].map(([t, v], i) => (
               <div key={t} className={`rounded-lg border p-2 ${i === 1 ? 'border-brand bg-brand-mist' : 'border-line'}`}>
                 <p className="text-[9px] text-ink/60">{t}</p>

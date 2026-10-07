@@ -121,7 +121,7 @@ export default function HomePage() {
               {/* prezzo */}
               <Reveal delay={320} className="absolute right-0 top-[3%] z-20 hidden sm:block float-slower lg:-right-4">
                 <FloatingStatusChip tone="brand" className="!px-4 !py-2.5 !text-sm">
-                  <span className="font-mono text-base font-bold">€1,20</span> · 2 min · 180 m
+                  <span className="font-mono text-base font-bold">1&nbsp;P</span> · 2 min · 180 m
                 </FloatingStatusChip>
               </Reveal>
 
@@ -276,7 +276,7 @@ export default function HomePage() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10">
                   <h3 className="display-h3 text-balance max-w-md">Il tuo posto può diventare utile prima ancora che tu sia partito.</h3>
-                  <FlowPills items={['Vendi', 'Pubblica', 'Attendi', 'Completa', 'Ricevi credito']} />
+                  <FlowPills items={['Vendi', 'Pubblica', 'Attendi', 'Completa', 'Incassa €']} />
                   <Link href="/come-funziona" className="link-arrow mt-7 text-brand">
                     Vedi il percorso venditore
                   </Link>
@@ -337,11 +337,11 @@ export default function HomePage() {
             </Reveal>
             {/* B prezzo */}
             <Reveal delay={80} className="relative overflow-hidden rounded-card border border-line bg-brand-mist p-7 lg:col-span-5">
-              <p className="eyebrow">Prezzo</p>
+              <p className="eyebrow">Listino</p>
               <p className="mt-3 font-mono text-6xl font-bold tracking-tight text-ink">
-                <span className="text-3xl text-brand-deep">€</span>1,20
+                1<span className="text-3xl text-brand-deep"> P</span>
               </p>
-              <p className="mt-2 text-muted">Lo vedi prima. Nessuna trattativa, nessuna asta.</p>
+              <p className="mt-2 text-muted">In P, lo vedi prima. Nessuna trattativa, nessuna asta.</p>
               <span className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand/25 blur-2xl" aria-hidden />
             </Reveal>
             {/* C ETA */}
@@ -412,7 +412,7 @@ export default function HomePage() {
               </div>
               <div className="mt-8 rounded-2xl border border-brand/30 bg-white/70 p-4 text-sm backdrop-blur">
                 <p className="font-bold text-ink">Un solo account. Stesso saldo.</p>
-                <p className="mt-1 text-muted">La carta si usa sul portale. In app usi il credito già disponibile.</p>
+                <p className="mt-1 text-muted">La carta si usa sul portale. In app usi i P già disponibili.</p>
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <DownloadParkHub tone="ink" />
@@ -433,7 +433,7 @@ export default function HomePage() {
                 </div>
                 <SignalLine variant="diagonal" className="pointer-events-none absolute bottom-24 right-32 hidden w-40 text-brand-deep sm:block" />
                 <div className="absolute left-6 top-6 hidden sm:block">
-                  <FloatingStatusChip tone="light">Stesso saldo · €18,40</FloatingStatusChip>
+                  <FloatingStatusChip tone="light">Stesso saldo · 18 P</FloatingStatusChip>
                 </div>
               </div>
             </Reveal>
@@ -447,7 +447,7 @@ export default function HomePage() {
           <EditorialHeading
             eyebrow="Prezzi"
             title="Parti con poco. Usa ParkHub quanto ti serve."
-            lead="Il credito si acquista sul portale. Poi lo usi in app quando prenoti un posto."
+            lead="Sul portale compri un pacchetto digitale di P. Poi li spendi in app quando prenoti un posto."
           />
           <div className="mt-12 grid gap-5 lg:grid-cols-12">
             <Reveal as="article" className="relative overflow-hidden rounded-stage bg-ink p-8 text-white shadow-device lg:col-span-5 lg:p-10">
@@ -463,7 +463,7 @@ export default function HomePage() {
                 </p>
                 <p className="mt-2 text-white/70">{monthly.credit}</p>
                 <ul className="mt-8 space-y-2.5 text-sm text-white/75">
-                  {['Rinnovo automatico, disdici quando vuoi', 'Credito pronto ogni mese in app', 'Scambi da €1,20 a prezzo fisso'].map((x) => (
+                  {['Rinnovo automatico, disdici quando vuoi', '+20 P pronti ogni mese in app', 'Listino swap da 1 P a 5 P'].map((x) => (
                     <li key={x} className="flex items-center gap-2.5">
                       <Check light /> {x}
                     </li>
@@ -494,9 +494,9 @@ export default function HomePage() {
           </div>
           <Reveal className="mt-8 flex flex-col gap-4 rounded-card border border-line bg-white/70 px-6 py-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
             <ul className="flex flex-wrap gap-x-7 gap-y-2 text-sm font-semibold text-ink/75">
-              <li className="flex items-center gap-2"><Check /> Scambio da €1,20</li>
+              <li className="flex items-center gap-2"><Check /> Listino da 1 P</li>
               <li className="flex items-center gap-2"><Check /> Strisce blu separate</li>
-              <li className="flex items-center gap-2"><Check /> Saldo visibile in app</li>
+              <li className="flex items-center gap-2"><Check /> Saldo P visibile in app</li>
             </ul>
             <Link href="/prezzi" className="link-arrow text-brand-deep">
               Confronta tutti i piani
@@ -583,7 +583,7 @@ export default function HomePage() {
                       <div>
                         <p className="font-display text-base font-bold">Bonus amici: solo parcheggi.</p>
                         <p className="mt-1 text-sm text-white/70">
-                          Il credito che ricevi invitando un amico si spende esclusivamente per prenotare posti. Non si trasforma in buoni, non si scarica come voucher, non si preleva.
+                          I P bonus che ricevi invitando un amico si spendono solo per prenotare posti. Non diventano buoni, voucher o prelievo.
                         </p>
                       </div>
                     </div>
@@ -625,7 +625,7 @@ export default function HomePage() {
           </div>
           <Reveal className="mt-12">
             <Link href="/prezzi#wallet" className="link-arrow text-brand">
-              Come funziona il credito
+              Come funzionano i P
             </Link>
           </Reveal>
         </div>

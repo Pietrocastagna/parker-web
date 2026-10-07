@@ -77,7 +77,7 @@ export function RankingStage() {
         </div>
         <div className="rounded-2xl bg-white/5 p-4">
           <p className="text-[11px] font-bold uppercase tracking-wider text-brand">Livello venditore</p>
-          <p className="mt-1 font-semibold text-white">L1 → L2 a 20 vendite</p>
+          <p className="mt-1 font-semibold text-white">1 P → 2 P a 20 vendite</p>
           <p className="font-mono text-xs text-white/50">12 / 20</p>
         </div>
       </div>

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ParkHub — Smetti di girare. Qualcuno sta uscendo ora.',
     description:
-      'Il segnale che collega chi esce e chi cerca. Prezzo fisso, navigazione in app, credito sul portale.',
+      'Il segnale che collega chi esce e chi cerca. Listino in P, navigazione in app, pacchetti digitali sul portale.',
     type: 'website',
     locale: 'it_IT',
     siteName: 'ParkHub',

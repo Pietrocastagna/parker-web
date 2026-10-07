@@ -35,7 +35,7 @@ const STEPS = [
     n: '04',
     title: 'Completa',
     lead: 'Uno esce. L’altro entra.',
-    body: 'Il credito si muove automaticamente.',
+    body: 'I P si muovono automaticamente.',
     chip: 'Scambio completato',
     side: 'Entrambi',
   },
@@ -175,7 +175,7 @@ export function ExchangeScrollStory() {
               <div className="absolute bottom-5 right-4 z-20 hidden rounded-2xl border border-line bg-white/90 px-4 py-3 text-xs shadow-float backdrop-blur sm:block">
                 <p className="font-bold">
                   {active === 0 && 'Incassi €1,00'}
-                  {active === 1 && 'Prezzo fisso €1,20'}
+                  {active === 1 && 'Prezzo fisso 1 P'}
                   {active === 2 && '2 min · 180 m'}
                   {active === 3 && 'Credito aggiornato'}
                 </p>

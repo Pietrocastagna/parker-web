@@ -25,7 +25,7 @@ export default function ComeFunzionaPage() {
     <main className="min-h-screen bg-paper text-ink">
       <FloatingHeader />
       <PageHero
-        eyebrow="Dal credito allo scambio"
+        eyebrow="Dal pacchetto P allo scambio"
         title="Dal “sto uscendo” al posto prenotato. Senza aste, senza chat."
         lead="ParkHub usa prezzi fissi e un flusso guidato per mettere in contatto chi esce e chi arriva. Due persone, un segnale, pochi minuti."
         asset="how-01-hero-two-drivers-signal-wide.webp"
@@ -42,7 +42,7 @@ export default function ComeFunzionaPage() {
             {[
               ['Segnala', 'Chi esce pubblica il posto in pochi tap. Il segnale dura pochi minuti.', 'Venditore'],
               ['Prenota', 'Chi arriva lo blocca a prezzo fisso e parte con la navigazione.', 'Acquirente'],
-              ['Completa', 'Uno esce, l’altro entra. Il credito si sposta da solo.', 'Entrambi'],
+              ['Completa', 'Uno esce, l’altro entra. I P si spostano da soli.', 'Entrambi'],
             ].map(([t, d, who], i) => (
               <Reveal key={t} delay={i * 90}>
                 <div className="relative overflow-hidden rounded-card border border-line bg-warm-paper p-7">

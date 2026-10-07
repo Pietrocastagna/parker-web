@@ -23,14 +23,14 @@ export const metadata: Metadata = {
 function MissionsStage() {
   return (
     <div className="mx-auto w-full max-w-[520px] space-y-3">
-      <MissionProgress kind="Una volta" title="Vendi 3 posti" prize="1 parcheggio gratis" value={2} max={3} expires="Scade tra 5 giorni" />
-      <MissionProgress kind="Settimanale" title="5 scambi in settimana" prize="1 parcheggio gratis" value={3} max={5} expires="Si azzera lunedì" />
+      <MissionProgress kind="Una volta" title="Vendi 3 posti" prize="+1 P" value={2} max={3} expires="Scade tra 5 giorni" />
+      <MissionProgress kind="Settimanale" title="5 scambi in settimana" prize="+1 P" value={3} max={5} expires="Si azzera lunedì" />
       <div className="flex items-center justify-between rounded-card bg-brand p-5 text-ink">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-wider">Bonus disponibile</p>
-          <p className="font-display text-xl font-bold">1 parcheggio gratis</p>
+          <p className="font-display text-xl font-bold">+1 P da spendere</p>
         </div>
-        <p className="font-mono text-2xl font-bold">€1,20</p>
+        <p className="font-mono text-2xl font-bold">1 P</p>
       </div>
     </div>
   );

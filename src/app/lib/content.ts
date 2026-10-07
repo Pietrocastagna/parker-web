@@ -30,37 +30,39 @@ export const IMAGES = {
   about01: asset('about-01-hero-city-handoff-wide.webp'),
 } as const;
 
+/** Pacchetti digitali: paghi in € sul portale, ricevi P spendibili in swap (1 P = €1,20 di valore). */
 export const PACKAGES = [
-  { name: 'Prova', price: '€4,99', credit: '€5,40 credito', hint: 'Per iniziare', note: null as string | null, featured: false },
-  { name: 'Carnet 8', price: '€8,99', credit: '€9,60 credito', hint: 'Occasionale', note: null, featured: false },
-  { name: 'Mensile', price: '€23,90 / mese', credit: '€24 credito/mese', hint: 'Più scelto', note: 'Rinnovo automatico', featured: true },
-  { name: 'Semestrale', price: '€138,90', credit: '€24/mese × 6', hint: 'Continuità', note: 'Rinnovo a scadenza default on', featured: false },
-  { name: 'Annuale', price: '€274,90', credit: '€24/mese × 12', hint: 'Massimo valore', note: 'Rinnovo a scadenza default on', featured: false },
+  { name: 'Prova', price: '€4,99', credit: '+4 P', hint: 'Per iniziare', note: null as string | null, featured: false },
+  { name: 'Carnet 8', price: '€8,99', credit: '+8 P', hint: 'Occasionale', note: null, featured: false },
+  { name: 'Mensile', price: '€23,90 / mese', credit: '+20 P / mese', hint: 'Più scelto', note: 'Rinnovo automatico', featured: true },
+  { name: 'Semestrale', price: '€138,90', credit: '+20 P/mese × 6', hint: 'Continuità', note: 'Rinnovo a scadenza default on', featured: false },
+  { name: 'Annuale', price: '€274,90', credit: '+20 P/mese × 12', hint: 'Massimo valore', note: 'Rinnovo a scadenza default on', featured: false },
 ] as const;
 
 export const BUNDLES = [
-  { name: 'Bundle 8', price: '€9,99' },
-  { name: 'Bundle 20', price: '€24,99' },
-  { name: 'Bundle 50', price: '€59,99' },
+  { name: 'Bundle 8', price: '€9,99', credit: '+8 P' },
+  { name: 'Bundle 20', price: '€24,99', credit: '+20 P' },
+  { name: 'Bundle 50', price: '€59,99', credit: '+50 P' },
 ] as const;
 
+/** Listino swap: chi compra paga in P; chi vende incassa euro. */
 export const PRICE_TIERS = [
-  { level: 1, sales: '0–19', buyer: '€1,20', seller: '€1,00', fee: '€0,20' },
-  { level: 2, sales: '20–49', buyer: '€2,00', seller: '€1,60', fee: '€0,40' },
-  { level: 3, sales: '50–99', buyer: '€3,00', seller: '€2,60', fee: '€0,40' },
-  { level: 4, sales: '100–149', buyer: '€4,00', seller: '€3,60', fee: '€0,40' },
-  { level: 5, sales: '150+', buyer: '€5,00', seller: '€4,50', fee: '€0,50' },
+  { level: 1, sales: '0–19', buyer: '1 P', seller: '€1,00', fee: '€0,20' },
+  { level: 2, sales: '20–49', buyer: '2 P', seller: '€1,60', fee: '€0,40' },
+  { level: 3, sales: '50–99', buyer: '3 P', seller: '€2,60', fee: '€0,40' },
+  { level: 4, sales: '100–149', buyer: '4 P', seller: '€3,60', fee: '€0,40' },
+  { level: 5, sales: '150+', buyer: '5 P', seller: '€4,50', fee: '€0,50' },
 ] as const;
 
 export const MISSIONS = [
-  { title: 'Vendi 3 posti', kind: 'Una volta', prize: 'Un parcheggio gratis' },
-  { title: 'Ogni 10 vendite', kind: 'Ripetibile', prize: 'Un parcheggio gratis' },
-  { title: '5 scambi in settimana', kind: 'Settimanale', prize: 'Un parcheggio gratis' },
-  { title: 'Streak di accessi', kind: 'Badge', prize: 'Badge, nessun credito' },
+  { title: 'Vendi 3 posti', kind: 'Una volta', prize: '+1 P' },
+  { title: 'Ogni 10 vendite', kind: 'Ripetibile', prize: '+1 P' },
+  { title: '5 scambi in settimana', kind: 'Settimanale', prize: '+1 P' },
+  { title: 'Streak di accessi', kind: 'Badge', prize: 'Badge, nessun P' },
 ] as const;
 
 export const MILESTONES = [
-  { title: '100 vendite nel trimestre', prize: '10 parcheggi gratis' },
+  { title: '100 vendite nel trimestre', prize: '+10 P' },
   { title: '200 nello stesso trimestre', prize: '1 mese piano mensile' },
   { title: '500 vendite nell’anno', prize: 'Gift card €100' },
 ] as const;
@@ -75,14 +77,14 @@ export const LAUNCH_PROMO = {
   seatsLabel: '10.000',
   parkings: 10,
   validityDays: 90,
-  /** Backend: parker-v2 `foundersCampaign.ts` — 10 coupon da €1,20, max 1 per swap. */
-  rule: 'Un parcheggio gratis per scambio, fino a 10 scambi, entro 90 giorni dalla verifica del telefono.',
+  /** Backend: parker-v2 `foundersCampaign.ts` — 10 coupon da 1 P, max 1 per swap. */
+  rule: 'Un P gratis per scambio, fino a 10 scambi, entro 90 giorni dalla verifica del telefono.',
 } as const;
 
 export const BALANCE_SOURCES = [
   {
-    title: 'Pacchetto acquistato',
-    body: 'Prova, Carnet, piani Mensile/Semestrale/Annuale e bundle extra. Si comprano sul portale, si spendono in app.',
+    title: 'Pacchetto digitale (P)',
+    body: 'Prova, Carnet, piani Mensile/Semestrale/Annuale e bundle: paghi in euro sul portale e ricevi P da spendere in app sugli scambi.',
     tag: 'Portale',
   },
   {
@@ -92,20 +94,20 @@ export const BALANCE_SOURCES = [
   },
   {
     title: 'Bonus missioni',
-    body: 'Premi piccoli per comportamenti utili: solo swap, scadenza breve, tetto €3/mese.',
+    body: 'Premi in P per comportamenti utili: solo swap, scadenza breve, tetto mensile.',
     tag: 'Bonus',
   },
 ] as const;
 
 const LAUNCH_FAQ = {
   q: 'Cos’è l’offerta di lancio dei 10 parcheggi?',
-  a: 'I primi 10.000 utenti che completano la verifica del telefono ricevono 10 parcheggi gratis: un parcheggio per scambio, fino a 10 scambi, entro 90 giorni. Si usano solo per prenotare posti in app; non sono proventi e non diventano buoni. Raggiunti i 10.000 iscritti l’offerta si chiude da sola.',
+  a: 'I primi 10.000 utenti che completano la verifica del telefono ricevono +10 P gratis: 1 P per scambio, fino a 10 scambi, entro 90 giorni. Si usano solo per prenotare posti in app; non sono proventi e non diventano buoni. Raggiunti i 10.000 iscritti l’offerta si chiude da sola.',
 } as const;
 
 const BASE_FAQS = [
   {
     q: 'Che cosa sto comprando esattamente?',
-    a: 'Compri credito ParkHub sul portale. Lo usi in app per prenotare posti pubblicati da altri automobilisti a prezzo fisso. Non stai comprando un box, né ticket strisce blu.',
+    a: 'Un pacchetto digitale di P sul portale (paghi in euro). I P li usi in app per prenotare posti pubblicati da altri automobilisti a listino fisso in P. Non stai comprando un box, né ticket strisce blu.',
   },
   {
     q: 'Dove funziona ParkHub?',
@@ -113,19 +115,19 @@ const BASE_FAQS = [
   },
   {
     q: 'Quanto costa uno scambio?',
-    a: 'Il prezzo è fisso e visibile prima di confermare. Parte da €1,20 e arriva fino a €5,00 a seconda del livello del venditore.',
+    a: 'Il listino è in P, fisso e visibile prima di confermare: da 1 P a 5 P a seconda del livello del venditore. Serve avere abbastanza P (es. con 4 P non puoi prendere un posto a 5 P).',
   },
   {
     q: 'Le strisce blu sono comprese?',
     a: 'No. Se il posto è a pagamento sul suolo pubblico, il parcometro resta a carico tuo.',
   },
   {
-    q: 'Perché compro credito sul portale?',
-    a: 'I pagamenti con carta stanno sul web (Stripe). In app usi il wallet già carico: niente checkout mentre sei in strada.',
+    q: 'Perché compro i P sul portale?',
+    a: 'I pagamenti con carta stanno sul web (Stripe). In app usi i P già caricati: niente checkout mentre sei in strada.',
   },
   {
-    q: 'Posso prelevare il credito?',
-    a: 'No. Il credito resta nel circuito ParkHub e si riusa negli scambi. Non diventa un bonifico bancario.',
+    q: 'Posso prelevare i P?',
+    a: 'No. I P restano nel circuito ParkHub e si riusano negli scambi. Non diventano un bonifico bancario. I guadagni da vendita (euro) sono un bucket separato.',
   },
   {
     q: 'Cosa succede se annullo?',
@@ -133,15 +135,15 @@ const BASE_FAQS = [
   },
   {
     q: 'Come funziona il ranking?',
-    a: 'Stelle personali di affidabilità, non una classifica pubblica. Sotto soglia puoi ancora vendere, ma al livello di prezzo base. Le missioni non modificano le stelle.',
+    a: 'Stelle personali di affidabilità, non una classifica pubblica. Sotto soglia puoi ancora vendere, ma al livello di listino base. Le missioni non modificano le stelle.',
   },
   {
     q: 'Come funzionano i bonus invito?',
-    a: 'Condividi codice/link/QR. L’amico lo usa solo in registrazione. Al suo primo scambio tu ricevi €2,50. Ogni tre amici qualificati: €2,50 + €2,50 + €5 = €10. Il bonus si spende solo per prenotare parcheggi: non si riscatta in buoni e non si preleva.',
+    a: 'Condividi codice/link/QR. L’amico lo usa solo in registrazione. Al suo primo scambio tu ricevi un bonus spendibile solo per prenotare posti (non pacchetti, non buoni, non prelievo).',
   },
   {
     q: 'Posso usare lo stesso account su app e portale?',
-    a: 'Sì. Un solo account, stesso saldo. App per la strada; portale per credito e gestione.',
+    a: 'Sì. Un solo account, stesso saldo. App per la strada; portale per pacchetti P e gestione.',
   },
 ] as const;
 
