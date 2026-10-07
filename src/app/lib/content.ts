@@ -30,7 +30,7 @@ export const IMAGES = {
   about01: asset('about-01-hero-city-handoff-wide.webp'),
 } as const;
 
-/** Pacchetti digitali: paghi in € sul portale, ricevi P spendibili in swap (1 P = €1,20 di valore). */
+/** Pacchetti digitali: paghi in € sul portale, ricevi P spendibili in swap. Non esporre conversioni P→€ all’utente. */
 export const PACKAGES = [
   { name: 'Prova', price: '€4,99', credit: '+4 P', hint: 'Per iniziare', note: null as string | null, featured: false },
   { name: 'Carnet 8', price: '€8,99', credit: '+8 P', hint: 'Occasionale', note: null, featured: false },
@@ -115,7 +115,7 @@ const BASE_FAQS = [
   },
   {
     q: 'Quanto costa uno scambio?',
-    a: 'Il listino è in P, fisso e visibile prima di confermare: da 1 P a 5 P a seconda del livello del venditore. Serve avere abbastanza P (es. con 4 P non puoi prendere un posto a 5 P).',
+    a: 'Il listino è in P, fisso e visibile prima di confermare: da 1 P a 5 P a seconda del livello del venditore. Serve avere abbastanza P (es. con 4 P non puoi prendere un posto a 5 P). Chi vende a 1 P incassa 1 €.',
   },
   {
     q: 'Le strisce blu sono comprese?',
